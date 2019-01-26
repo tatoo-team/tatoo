@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE parser SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/parser.dtd">
+<parser>
+ <!-- Priorities -->
+ 
+ <!-- Terminals -->
+   <terminal id="directivesdecl"/>
+   <terminal id="importsdecl"/>
+   <terminal id="prioritiesdecl"/>
+   <terminal id="tokensdecl"/>
+   <terminal id="blanksdecl"/>
+   <terminal id="commentsdecl"/>
+   <terminal id="branchesdecl"/>
+   <terminal id="startsdecl"/>
+   <terminal id="errordecl"/>
+   <terminal id="typesdecl"/>
+   <terminal id="attributesdecl"/>
+   <terminal id="versionsdecl"/>
+   <terminal id="productionsdecl"/>
+  
+   <terminal id="number"/>
+   <terminal id="id"/>
+   <terminal id="qualifiedid"/>
+   <terminal id="eof"/>
+   <terminal id="quoted_name"/>
+   
+   <terminal id="regexquote"/>
+   <terminal id="regexdoublequote"/>
+   <terminal id="lbracket"/>
+   <terminal id="rbracket"/>
+   <terminal id="lsqbracket"/>
+   <terminal id="rsqbracket"/>
+   <terminal id="lpar"/>
+   <terminal id="rpar"/>
+   <terminal id="assign"/>
+   <terminal id="dollar"/>
+   <terminal id="pipe"/>
+   <terminal id="slash"/>
+   <terminal id="qmark"/>
+   <terminal id="star"/>
+   <terminal id="plus"/>
+   <terminal id="quote"/>
+   <terminal id="doublequote"/>
+   <terminal id="semicolon"/>
+   <terminal id="colon"/>
+   
+   <terminal id="assoc"/>
+   <!-- terminal id="error"/ -->
+    
+ <!-- Errors -->
+    <!-- error id="error"/ -->
+
+ <!-- Versions -->
+  
+ <!-- Starts -->
+ <start id="start"/>
+    
+ <!-- Productions -->
+    
+    <production id="start_def">
+        <lhs id="start"/>
+        <rhs>
+          <right id="directives_lhs" optional="true"/>
+          <right id="imports_lhs" optional="true"/>
+          <right id="priorities_lhs" optional="true"/>
+          <right id="token_lhs"/>
+          <right id="blank_lhs" optional="true"/>
+          <right id="comment_lhs" optional="true"/>
+          <right id="branch_lhs" optional="true"/>
+          <right id="error_lhs" optional="true"/>
+          <right id="versions" optional="true"/>
+          <right id="types_lhs" optional="true"/>
+          <right id="attributes" optional="true"/>
+          <right id="start_non_terminals" optional="true"/>
+          <right id="production_lhs"/>
+        </rhs>
+    </production>
+    
+    <production id="directives_def">
+      <lhs id="directives_lhs"/>
+      <rhs>
+        <right id="directivesdecl"/>
+        <right id="colon"/>
+        <list id="directive_list" empty="true" element="directive" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="directive_def">
+      <lhs id="directive"/>
+      <rhs>
+        <right id="id"/>
+      </rhs>
+    </production>
+    
+    <production id="token_def">
+      <lhs id="token_lhs"/>
+      <rhs>
+        <right id="tokensdecl"/>
+        <right id="colon"/>
+        <list id="tokens_list" empty="true" element="lexem" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="production_def">
+      <lhs id="production_lhs"/>
+      <rhs>
+        <right id="productionsdecl"/>
+        <right id="colon"/>
+        <list id="decls" empty="true" element="decl" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="blank_def">
+      <lhs id="blank_lhs"/>
+      <rhs>
+        <right id="blanksdecl"/>
+        <right id="colon"/>
+        <list id="blanks_list" empty="true" element="blank_lexem" associativity="left"/>
+        </rhs>
+    </production>
+    
+    <production id="comment_def">
+      <lhs id="comment_lhs"/>
+      <rhs>
+        <right id="commentsdecl"/>
+        <right id="colon"/>
+        <list id="comments_list" empty="true" element="comment_lexem" associativity="left"/>
+        </rhs>
+    </production>
+    
+    <production id="branch_def">
+      <lhs id="branch_lhs"/>
+      <rhs>
+        <right id="branchesdecl"/>
+        <right id="colon"/>
+        <list id="banches_list" empty="true" element="branch_lexem" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="imports_def">
+      <lhs id="imports_lhs"/>
+      <rhs>
+        <right id="importsdecl"/>
+        <right id="colon"/>
+        <list id="import_list" empty="true" element="import_" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="import_def">
+      <lhs id="import_"/>
+      <rhs>
+        <right id="qualifiedid"/>
+      </rhs>
+    </production>
+    
+    <production id="priorities_def">
+      <lhs id="priorities_lhs"/>
+      <rhs>
+        <right id="prioritiesdecl"/>
+        <right id="colon"/>
+        <list id="priority_list" empty="true" element="priority" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="priority_def">
+      <lhs id="priority"/>
+      <rhs>
+        <right id="id"/>
+        <right id="assign"/>
+        <right id="number"/>
+        <right id="assoc"/>
+      </rhs>
+    </production>
+    
+    <production id="versions_def">
+      <lhs id="versions"/>
+      <rhs>
+        <right id="versionsdecl"/>
+        <right id="colon"/>
+        <list id="version_list" empty="true" element="version" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="version_def">
+      <lhs id="version"/>
+      <rhs>
+        <right id="id"/>
+        <right id="parent_version" optional="true"/>
+      </rhs>
+    </production>
+    
+    <production id="types_def">
+      <lhs id="types_lhs"/>
+      <rhs>
+        <right id="typesdecl"/>
+        <right id="colon"/>
+        <list id="vartypedef_list" empty="true" element="vartypedef" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="vartype_def">
+      <lhs id="vartypedef"/>
+      <rhs>
+        <right id="variable"/>
+        <right id="type"/>
+      </rhs>
+    </production>
+    
+    <production id="variable_terminal">
+        <lhs id="variable"/>
+        <rhs>
+          <right id="quote"/>
+          <right id="id"/>
+          <right id="quote"/>
+        </rhs>
+    </production>
+    
+    <production id="variable_nonterminal">
+        <lhs id="variable"/>
+        <rhs>
+          <right id="id"/>
+        </rhs>
+    </production>
+    
+    <production id="attributes_def">
+      <lhs id="attributes"/>
+      <rhs>
+        <right id="attributesdecl"/>
+        <right id="colon"/>
+        <list id="attribute_list" empty="true" element="attribute" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="attribute_def">
+      <lhs id="attribute"/>
+      <rhs>
+        <right id="id"/>
+        <right id="type"/>
+      </rhs>
+    </production>
+    
+    <production id="parent_version_def">
+      <lhs id="parent_version"/>
+      <rhs>
+        <right id="colon"/>
+        <right id="id"/>
+      </rhs>
+    </production>
+    
+    <production id="lexem_macro">
+      <lhs id="lexem"/>
+      <rhs>
+        <right id="dollar"/>
+        <right id="id"/>
+        <right id="assign"/>
+        <right id="regex"/>
+      </rhs>
+    </production>
+    
+    <production id="lexem_terminal">
+      <lhs id="lexem"/>
+      <rhs>
+        <right id="id"/>
+        <right id="alias" optional="true"/>
+        <right id="type" optional="true"/>
+        <right id="regex_terminal_decl" optional="true"/>
+        <right id="terminal_or_prod_priority" optional="true"/>
+      </rhs>
+    </production>
+    
+    <production id="alias_def">
+      <lhs id="alias"/>
+      <rhs>
+        <right id="lpar"/>
+        <right id="quoted_name"/>
+        <right id="rpar"/>
+      </rhs>
+    </production>   
+    
+    <production id="regex_terminal_decl">
+      <lhs id="regex_terminal_decl"/>
+      <rhs>
+        <right id="assign"/>
+          <right id="regex"/>
+      </rhs>
+    </production>
+    
+    <production id="comment_lexem_macro">
+      <lhs id="comment_lexem"/>
+      <rhs>
+        <right id="dollar"/>
+        <right id="id"/>
+        <right id="assign"/>
+        <right id="regex"/>
+      </rhs>
+    </production>
+    
+    <production id="comment_lexem_terminal">
+      <lhs id="comment_lexem"/>
+      <rhs>
+        <right id="id"/>
+        <right id="assign"/>
+        <right id="regex"/>
+      </rhs>
+    </production>
+    
+    <production id="blank_lexem_macro">
+      <lhs id="blank_lexem"/>
+      <rhs>
+        <right id="dollar"/>
+        <right id="id"/>
+        <right id="assign"/>
+        <right id="regex"/>
+      </rhs>
+    </production>
+    
+    <production id="blank_lexem_terminal">
+      <lhs id="blank_lexem"/>
+      <rhs>
+        <right id="id"/>
+        <right id="assign"/>
+        <right id="regex"/>
+      </rhs>
+    </production>
+    
+    <production id="regex_quote">
+      <lhs id="regex"/>
+      <rhs>
+        <right id="quote"/>
+        <right id="regexquote"/>
+        <right id="quote"/>
+      </rhs>
+    </production>
+    
+    <production id="regex_doublequote">
+      <lhs id="regex"/>
+      <rhs>
+        <right id="doublequote"/>
+        <right id="regexdoublequote"/>
+        <right id="doublequote"/>
+      </rhs>
+    </production>
+    
+    <production id="branch_lexem_terminal">
+      <lhs id="branch_lexem"/>
+      <rhs>
+        <right id="id"/>
+        <right id="type" optional="true"/>
+        <right id="terminal_or_prod_priority" optional="true"/>
+      </rhs>
+    </production>
+    
+    <production id="branch_eof_terminal">
+      <lhs id="branch_lexem"/>
+      <rhs>
+        <right id="eof"/>
+        <right id="terminal_or_prod_priority" optional="true"/>
+      </rhs>
+    </production>
+    
+    <production id="terminal_or_prod_priority">
+      <lhs id="terminal_or_prod_priority"/>
+      <rhs>
+          <right id="lsqbracket"/>
+          <right id="id"/>
+          <right id="rsqbracket"/>
+      </rhs>
+    </production>
+ 
+    <production id="type_def">
+      <lhs id="type"/>
+      <rhs>
+        <right id="colon"/>
+        <right id="qualifiedid"/>
+      </rhs>
+    </production>
+    
+    <production id="start_non_terminals_def">
+      <lhs id="start_non_terminals"/>
+      <rhs>
+        <right id="startsdecl"/>
+        <right id="colon"/>
+        <list id="starts_list" empty="false" element="startid" associativity="left"/>
+      </rhs>
+    </production>
+    
+    <production id="startid_def">
+      <lhs id="startid"/>
+      <rhs>
+        <right id="id"/>
+      </rhs>
+    </production>
+    
+    <production id="error_def">
+      <lhs id="error_lhs"/>
+      <rhs>
+        <right id="errordecl"/>
+        <right id="colon"/>
+        <right id="id"/>
+      </rhs>
+    </production>
+ 
+    <production id="decl_productions">
+        <lhs id="decl"/>
+        <rhs>
+          <right id="id"/>
+          <right id="type" optional="true"/> <!--  TODO remove this -->
+          <right id="plus" optional="true"/>
+          <right id="assign"/>
+          <list id="prods" empty="false" element="prod" separator="pipe" associativity="left"/>
+          <right id="semicolon"/>
+        </rhs>
+    </production>
+    
+    <production id="prod_production">
+        <lhs id="prod"/>
+        <rhs>
+          <list id="varlist" empty="true" element="var" associativity="left"/>
+          <right id="terminal_or_prod_priority" optional="true"/>
+          <right id="production_id" optional="true"/>
+        </rhs>
+    </production>
+    
+    <production id="production_id">
+      <lhs id="production_id"/>
+      <rhs>
+          <right id="lbracket"/>
+          <right id="id"/>
+          <right id="production_version" optional="true"/>
+          <right id="rbracket"/>
+      </rhs>
+    </production>
+    
+    <production id="production_version">
+      <lhs id="production_version"/>
+      <rhs>
+          <right id="colon"/>
+          <right id="id"/>
+      </rhs>
+    </production>
+    
+    <production id="var_group">
+        <lhs id="var"/>
+        <rhs>
+          <right id="lpar"/>
+          <list id="vargroup" empty="false" element="var" associativity="left"/>
+          <right id="rpar"/>
+        </rhs>
+    </production>
+    
+    <production id="var_terminal">
+        <lhs id="var"/>
+        <rhs>
+          <right id="quoted_name"/>
+          <right id="qmark" optional="true"/>
+        </rhs>
+    </production>
+    
+    <production id="var_nonterminal">
+        <lhs id="var"/>
+        <rhs>
+          <right id="id"/>
+          <right id="qmark" optional="true"/>
+        </rhs>
+    </production>
+    
+    <production id="var_terminal_star">
+        <lhs id="var"/>
+        <rhs>
+          <right id="quoted_name"/>
+          <right id="separator" optional="true"/>
+          <right id="star"/>
+        </rhs>
+    </production>
+    
+    <production id="var_terminal_plus">
+        <lhs id="var"/>
+        <rhs>
+          <right id="quoted_name"/>
+          <right id="separator" optional="true"/>
+          <right id="plus"/>
+        </rhs>
+    </production>
+    
+    <production id="var_nonterminal_star">
+        <lhs id="var"/>
+        <rhs>
+          <right id="id"/>
+          <right id="separator" optional="true"/>
+          <right id="star"/>
+        </rhs>
+    </production>
+    
+    <production id="var_nonterminal_plus">
+        <lhs id="var"/>
+        <rhs>
+          <right id="id"/>
+          <right id="separator" optional="true"/>
+          <right id="plus"/>
+        </rhs>
+    </production>
+    
+    <production id="separator_terminal">
+        <lhs id="separator"/>
+        <rhs>
+          <right id="slash"/>
+          <right id="quote"/>
+          <right id="id"/>
+          <right id="quote"/>
+        </rhs>
+    </production>
+    
+    <production id="separator_non_terminal">
+        <lhs id="separator"/>
+        <rhs>
+          <right id="slash"/>
+          <right id="id"/>
+        </rhs>
+    </production>
+</parser>

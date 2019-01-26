@@ -1,0 +1,13 @@
+
+void testVoid() {
+  return;
+}
+
+int testInt() {
+  return 3;
+}
+
+{
+  testInt(); 
+  testVoid();
+}

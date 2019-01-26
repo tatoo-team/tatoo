@@ -1,0 +1,13 @@
+{
+  int count=0;
+  label: while(count<10) {
+    if (count==3) {
+      count=count +2;
+      continue label;
+    }
+    print count;
+    if (count==7)
+      break;
+    count=count+1;
+  }
+}

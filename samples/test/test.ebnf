@@ -1,0 +1,59 @@
+// simple test grammar
+imports:
+ 
+priorities:
+plus_minus= 1 left
+star= 2 left
+equals= 0 nonassoc
+
+tokens:
+  $number= "[0-9]+"
+  $eoln= "\r?\n"
+  $space= "( |\t)*"
+ 
+  value:int= "{number}"
+  comma:boolean= ','
+  plus= '\+'                   [plus_minus]
+  minus= '-'                 [plus_minus]
+  star= '\*'                    [star]
+  equals= '='               [equals]
+  semicolon= ';'
+  lpar= '\('
+  rpar= '\)'
+  eoln= "{eoln}"
+ 
+blanks:
+ space= "{space}"
+ 
+comments:
+ comment="#([^\r\n])*(\r)?\n"  
+
+error:
+ error
+
+versions:
+  v1 
+  v2:v1
+
+starts:
+ start
+ expr
+
+productions:
+start = line* {start_def}
+      ;
+      
+line = expr 'comma'? 'semicolon' 'eoln'      {line_expr}
+     | expr 'eoln'                                             {line_expr2:v2}
+     | 'error' 'semicolon' 'eoln'                        {line_error}
+     ;
+ 
+expr:int = 'value'               
+         | expr 'plus' expr         [plus_minus]
+         | expr 'minus' expr      [plus_minus]
+         | expr 'star' expr          [star]
+         | expr 'equals' expr     [equals]
+         | 'lpar' expr 'rpar'    
+         | 'lpar' 'error' 'rpar' 
+         ;
+	

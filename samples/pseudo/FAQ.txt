@@ -1,0 +1,46 @@
+Pseudo Language FAQ:
+
+Q: why another language ?
+A: pseudo is a simple language introduced to teach algorithmics
+     to first grade classes.
+     
+Q: why not using C to teach algorithmics
+A: because you want to teach recursive type,
+     so you need to teach first malloc, free, pointer arithmetics. 
+
+Q: why not using Python to teach algorithmics
+A: because Python is too powerful, most of the data structures
+     you want to implement are already implemented in the language.
+     Moreover you can use lambda expressions, comprehensions etc.
+     to manipulate data structures. 
+
+Q: why not using Java to teach algorithmics
+A: you need to learn object oriented concept before
+     using correctly Java and its gigantic API. 
+
+Q: why i++ doesn't compile ?
+A: because you can write i++ + ++i;
+     Furthermore, it simplifies the 'definite assignment' pass
+     (i.e. the pass that test that all local variable is assigned)
+     because you cannot make an assignment in a condition.
+     
+Q: why there is no way to catch an exception ?
+A: because if you can catch exception you need to decide
+     if exceptions must be catch or throws like in Java or
+     can be unchecked like in C#. I don't want to make that choice :)
+     In pseudo, exceptions are used to signal unrecoverable errors.
+     Furthermore, catching exceptions over-complexifies dead code detection.
+     
+Q: why the compiler emit a warning when a function is not reachable
+     from the main block ?
+A: i think its a good idea to test any code written.  
+
+Q: why there is no printf
+A: because your language need to support varags, function with a variable
+    number of arguments. I think it's simpler to use '+' to concatenate arguments.
+
+Q: why there is no cast, because in C, C# or Java a cast have different meaning.
+A: In pseudo, if you want to convert a int to a double or vice-versa you can
+     use convertToInt/convertToChar/convertToDouble, if you want to see a reference to an
+     any as a reference to a type, you can use 'as' and 'instanceof' if you want
+     to test.     

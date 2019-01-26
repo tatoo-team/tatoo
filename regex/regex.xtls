@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tools SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/tools.dtd">
+
+<tools>
+ <rule id="dot" terminal="dot"/>
+ <rule id="hat" terminal="hat"/>
+ <rule id="quote" terminal="quote"/>
+ <rule id="comma" terminal="comma"/>
+ <rule id="star" terminal="star"/>
+ <rule id="plus" terminal="plus"/>
+ <rule id="minus" terminal="minus"/>
+ <rule id="question" terminal="question"/>
+ <rule id="lbrak" terminal="lbrak"/>
+ <rule id="rbrak" terminal="rbrak"/>
+ <rule id="lbrac" terminal="lbrac"/>
+ <rule id="rbrac" terminal="rbrac"/>
+ <rule id="lpar" terminal="lpar"/>
+ <rule id="rpar" terminal="rpar"/>
+ <rule id="pipe" terminal="pipe"/>
+ <rule id="integer" terminal="integer"/>
+ <rule id="macro" terminal="name"/>
+ <rule id="dollar" terminal="dollar"/>
+ <rule id="slash" terminal="slash"/>
+
+ <rule id="eoln" terminal="specialLetter"/>
+ <rule id="cr" terminal="specialLetter"/>
+ <rule id="formfeed" terminal="specialLetter"/>
+ <rule id="backspace" terminal="specialLetter"/>
+ <rule id="tab" terminal="specialLetter"/>
+ <rule id="unicodeChar" terminal="specialLetter"/>
+ 
+ <rule id="normalChar" terminal="normalLetter"/>
+ <rule id="escapedChar" terminal="normalLetter"/>
+ <rule id="stringChar" terminal="stringLetter"/>
+ <rule id="stringEscapedChar" terminal="stringLetter"/>
+ <rule id="intervalChar" terminal="intervalLetter"/>
+ <rule id="intervalEscapedChar" terminal="intervalLetter"/>
+
+ 
+ <import type="fr.umlv.tatoo.cc.lexer.regex.Regex"/>
+ <import type="java.util.ArrayList"/>
+ <import type="fr.umlv.tatoo.cc.lexer.charset.CharacterInterval"/>
+ 
+ <terminal id="specialLetter" type="char"/>
+ <terminal id="normalLetter" type="char"/>
+ <terminal id="stringLetter" type="char"/>
+ <terminal id="intervalLetter" type="char"/>
+ <terminal id="integer" type="int"/>
+ <terminal id="name" type="String"/>
+ 
+ <non-terminal id="regex" type="Regex"/>
+ <non-terminal id="main" type="Regex"/>
+ <non-terminal id="follow" type="Regex"/>
+ 
+ <non-terminal id="specialOrNormalLetter" type="char"/>
+ 
+ <non-terminal id="string" type="Regex"/>
+	<non-terminal id="specialOrStringLetter" type="Regex"/>
+ 
+ <non-terminal id="intervals" type="ArrayList&lt;CharacterInterval&gt;"/>
+ <non-terminal id="interval" type="CharacterInterval"/>
+ <non-terminal id="specialOrIntervalLetter" type="char"/>
+ 
+ <non-terminal id="hatOpt" type="boolean"/>
+</tools>

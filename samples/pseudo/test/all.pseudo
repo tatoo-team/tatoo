@@ -1,0 +1,20 @@
+struct Point {
+  int x;
+  int y;
+}
+
+void init(Point point, int x, int y) {
+  point.x=x;
+  point.y=y;
+}
+
+void display(Point p) {
+  print p.x;
+  print p.y;
+}
+
+{
+  let p=new Point();
+  init(p,1,2);
+  display(p);
+}

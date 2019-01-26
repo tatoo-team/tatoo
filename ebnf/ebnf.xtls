@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tools SYSTEM "http://tatoo.univ-mlv.fr/dtd/4.0/tools.dtd">
+<tools>
+    <rule id="lbracket" terminal="lbracket"/>
+    <rule id="rbracket" terminal="rbracket"/>
+    <rule id="lsqbracket" terminal="lsqbracket"/>
+    <rule id="rsqbracket" terminal="rsqbracket"/>
+    <rule id="lpar" terminal="lpar"/>
+    <rule id="rpar" terminal="rpar"/>
+    <rule id="assign" terminal="assign"/>
+    <rule id="pipe" terminal="pipe"/>
+    <rule id="dollar" terminal="dollar"/>
+    <rule id="slash" terminal="slash"/>
+    <rule id="quote" terminal="quote"/>
+    <rule id="doublequote" terminal="doublequote"/>
+    <rule id="star" terminal="star"/>
+    <rule id="plus" terminal="plus"/>
+    <rule id="qmark" terminal="qmark"/>
+    <rule id="colon" terminal="colon"/>
+    <rule id="semicolon" terminal="semicolon"/>
+    <rule id="quoted_name" terminal="quoted_name"/>
+    
+    <rule id="assoc" terminal="assoc"/>
+    
+    <rule id="id" terminal="id"/>
+    <rule id="number" terminal="number"/>
+    <rule id="qualifiedid" terminal="qualifiedid"/>
+    <rule id="eof" terminal="eof"/>
+    <rule id="regexquote" terminal="regexquote"/>
+    <rule id="regexdoublequote" terminal="regexdoublequote"/>
+    
+    <rule id="space"/>
+    <rule id="comment" spawn="true"/>
+    
+    <rule id="directivesdecl" terminal="directivesdecl"/>
+    <rule id="importsdecl" terminal="importsdecl"/>
+    <rule id="prioritiesdecl" terminal="prioritiesdecl"/>
+    <rule id="tokensdecl" terminal="tokensdecl"/>
+    <rule id="blanksdecl" terminal="blanksdecl"/>
+    <rule id="commentsdecl" terminal="commentsdecl"/>
+    <rule id="branchesdecl" terminal="branchesdecl"/>
+    <rule id="errordecl" terminal="errordecl"/>
+    <rule id="versionsdecl" terminal="versionsdecl"/>
+    <rule id="typesdecl" terminal="typesdecl"/>
+    <rule id="attributesdecl" terminal="attributesdecl"/>
+    <rule id="startsdecl" terminal="startsdecl"/>
+    <rule id="productionsdecl" terminal="productionsdecl"/>
+
+    <import type="java.util.List"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.DirectiveDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.VariableDefAST"/>
+    <import type="fr.umlv.tatoo.runtime.node.Node"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.ImportDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.UnquotedIdVarAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.NonTerminalDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.PriorityDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.PriorityVarAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.ProductionDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.ProductionIdAndVersionDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.RootDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.SimpleNodeAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.StartNonTerminalSetDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.TerminalDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.TokenAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.TypeVarAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.AttributeDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.VariableTypeDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.VariableVarAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.VersionDefAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.VersionVarAST"/>
+    <import type="fr.umlv.tatoo.cc.ebnf.ast.AliasDefAST"/>
+    
+    <terminal id="quoted_name" type="TokenAST&lt;String&gt;"/>
+    <terminal id="id" type="TokenAST&lt;String&gt;"/>
+	<terminal id="qualifiedid" type="TokenAST&lt;String&gt;"/>
+	<terminal id="eof" type="TokenAST&lt;String&gt;"/>
+	<terminal id="number" type="TokenAST&lt;Double&gt;"/>
+	<terminal id="regexquote" type="TokenAST&lt;String&gt;"/>
+	<terminal id="regexdoublequote" type="TokenAST&lt;String&gt;"/>
+	<terminal id="assoc" type="TokenAST&lt;String&gt;"/>
+	<terminal id="qmark" type="TokenAST&lt;?&gt;"/>
+	<terminal id="plus" type="TokenAST&lt;?&gt;"/>
+	
+	<terminal id="lbracket" type="TokenAST&lt;?&gt;"/>
+    <terminal id="rbracket" type="TokenAST&lt;?&gt;"/>
+    <terminal id="lsqbracket" type="TokenAST&lt;?&gt;"/>
+    <terminal id="rsqbracket" type="TokenAST&lt;?&gt;"/>
+    <terminal id="lpar" type="TokenAST&lt;?&gt;"/>
+    <terminal id="rpar" type="TokenAST&lt;?&gt;"/>
+    <terminal id="assign" type="TokenAST&lt;?&gt;"/>
+    <!-- BUG FIXME terminal id="pipe" type="TokenAST&lt;?&gt;"/ -->
+    <terminal id="dollar" type="TokenAST&lt;?&gt;"/>
+    <terminal id="slash" type="TokenAST&lt;?&gt;"/>
+    <terminal id="quote" type="TokenAST&lt;?&gt;"/>
+    <terminal id="doublequote" type="TokenAST&lt;?&gt;"/>
+    <terminal id="star" type="TokenAST&lt;?&gt;"/>
+    <terminal id="plus" type="TokenAST&lt;?&gt;"/>
+    <terminal id="colon" type="TokenAST&lt;?&gt;"/>
+    <terminal id="semicolon" type="TokenAST&lt;?&gt;"/>
+	
+	<terminal id="directivesdecl" type="TokenAST&lt;?&gt;"/>
+	<terminal id="importsdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="prioritiesdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="tokensdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="blanksdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="commentsdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="branchesdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="typesdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="attributesdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="startsdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="errordecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="versionsdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="productionsdecl" type="TokenAST&lt;?&gt;"/>
+    <terminal id="iddecl"  type="TokenAST&lt;?&gt;"/>
+    <terminal id="prioritydecl"  type="TokenAST&lt;?&gt;"/>
+    <terminal id="versiondecl"  type="TokenAST&lt;?&gt;"/>
+    <terminal id="quoted_name" type="TokenAST&lt;String&gt;"/>
+    
+    <non-terminal id="directive" type="DirectiveDefAST"/>
+    <non-terminal id="alias" type="AliasDefAST"/>
+    <non-terminal id="type" type="TypeVarAST"/>
+    <non-terminal id="regex" type="SimpleNodeAST&lt;String&gt;"/>
+    <non-terminal id="regex_terminal_decl" type="SimpleNodeAST&lt;String&gt;"/>
+    <non-terminal id="var" type="Node"/>
+    <non-terminal id="variable" type="VariableVarAST"/>
+    <non-terminal id="startid" type="UnquotedIdVarAST"/>
+    <non-terminal id="attribute" type="AttributeDefAST"/>
+    
+    <non-terminal id="terminal_or_prod_priority" type="PriorityVarAST"/>
+    <non-terminal id="production_id" type="ProductionIdAndVersionDefAST"/>
+    <non-terminal id="production_version" type="VersionVarAST"/>
+    
+    <non-terminal id="parent_version" type="VersionVarAST"/>
+    <non-terminal id="start_non_terminals" type="StartNonTerminalSetDefAST"/>
+	<non-terminal id="prod" type="Node"/>
+	<non-terminal id="separator" type="VariableVarAST"/>
+	
+	<non-terminal id="start" type="RootDefAST"/>
+	<non-terminal id="blank_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="comment_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="branch_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="directives_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="imports_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="token_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="types_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="attributes" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="production_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="priorities_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="import_" type="ImportDefAST"/>
+	<non-terminal id="priority" type="PriorityDefAST"/>
+	<non-terminal id="vartypedef" type="VariableTypeDefAST"/>
+	<non-terminal id="versions" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="version" type="VersionDefAST"/>
+	<non-terminal id="lexem" type="Node"/>
+	<non-terminal id="blank_lexem" type="Node"/>
+	<non-terminal id="comment_lexem" type="Node"/>
+	<non-terminal id="branch_lexem" type="TerminalDefAST"/>
+	<non-terminal id="error_lhs" type="SimpleNodeAST&lt;?&gt;"/>
+	<non-terminal id="decl" type="NonTerminalDefAST"/>
+</tools>

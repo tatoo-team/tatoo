@@ -1,0 +1,32 @@
+ 
+tokens:
+  service='GET|POST'
+  url= '([^ ])+'
+  httpslash= 'HTTP\/'
+  version= '([0-9])'
+  colon= ':'
+  h_key= '([^ :\r\n])+'
+  keepalive= 'Keep-Alive'
+  h_value= '[^ \r\n]([^\r\n])+'
+  eoln= '(\r)?\n'
+  dot= '\.'
+ 
+blanks:
+ space= "( |\t)+"
+
+starts:
+ start
+
+productions:
+ start = request+ { start }
+       ;
+ request = firstline 'eoln' header* 'eoln' { request }
+         ;
+ firstline = 'service' 'url' 'httpslash' 'version' 'dot' 'version' { firstline }
+           ;
+ header = 'h_key' 'colon' headervalue 'eoln' { header }
+        ;
+        
+ headervalue = 'h_value'   { headervalue }
+             | 'keepalive' { keepalive }
+             ;

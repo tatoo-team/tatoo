@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % DOUBLE "CDATA">
+<!ENTITY % NONTERMINAL "CDATA">
+<!ENTITY % TERMINAL "CDATA">
+<!ENTITY % VARIABLE "CDATA">
+<!ENTITY % PRODUCTION "CDATA">
+<!ENTITY % URI "CDATA">
+
+<!ELEMENT parser (terminal+,error?,start+,production+)>
+
+<!-- terminals -->
+
+<!ELEMENT terminal EMPTY>
+<!ATTLIST terminal id %TERMINAL; #REQUIRED
+                   priority %DOUBLE; #IMPLIED
+                   associativity (left|right|non-associative|none) #IMPLIED>
+
+<!-- start -->
+
+<!ELEMENT start EMPTY>
+<!ATTLIST start id %VARIABLE; #REQUIRED>
+
+<!-- error -->
+
+<!ELEMENT error EMPTY>
+<!ATTLIST error id %TERMINAL; #REQUIRED>
+
+<!-- productions -->
+
+<!ELEMENT production (lhs,rhs)>
+<!ATTLIST production id %PRODUCTION; #REQUIRED
+	                 priority %DOUBLE; #IMPLIED
+                  associativity (left|right|non-associative|none) #IMPLIED>
+
+<!-- lhs and rhs -->
+
+<!ELEMENT lhs EMPTY>
+<!ATTLIST lhs id %NONTERMINAL; #REQUIRED>
+
+<!ELEMENT rhs (right*)>
+
+<!ELEMENT right EMPTY>
+<!ATTLIST right id %VARIABLE; #REQUIRED>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="test" default="all" basedir=".">
+
+	<property name="tatoo.dir" location="../../lib"/>
+	<property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+	<property name="tatoo-runtime.jar" location="${tatoo.dir}/tatoo-runtime.jar"/>
+
+	<property name="src" value="src"/>
+	<property name="classes" value="classes"/>
+	<property name="gen-src" value="gen-src"/>
+
+	<target name="tasks">
+		<taskdef name="ebnf" classname="fr.umlv.tatoo.cc.ebnf.main.EBNFTask" classpath="${tatoo.jar}"/>
+	</target>
+
+	<target name="ebnf" depends="tasks">
+		<ebnf destination="${gen-src}" ebnfFile="calc-branch.ebnf" logFile="calc-branch.xhtml">
+			<package lexer="fr.umlv.tatoo.samples.partial.calc.lexer"/>
+			<package parser="fr.umlv.tatoo.samples.partial.calc.parser"/>
+			<package tools="fr.umlv.tatoo.samples.partial.calc.tools"/>
+		</ebnf>
+		<ebnf destination="${gen-src}" ebnfFile="expr.ebnf"  logFile="expr.xhtml">
+			<package lexer="fr.umlv.tatoo.samples.partial.expr.lexer"/>
+			<package parser="fr.umlv.tatoo.samples.partial.expr.parser"/>
+			<package tools="fr.umlv.tatoo.samples.partial.expr.tools"/>
+		</ebnf>
+	</target>
+
+    <target name="compile">
+	  <mkdir dir="${classes}"/>
+	  <javac srcdir="${gen-src}:${src}" destdir="${classes}">
+		<classpath path="${tatoo-runtime.jar}"/>
+	  </javac>
+    </target>
+
+	<!-- target name="all" depends="lexer,comment-lexer,parser,tools,ast"/ -->
+	<target name="all" depends="ebnf"/>
+
+	<target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<!-- not to break eclipse source folders -->
+		<mkdir dir="${gen-src}"/>
+	</target>
+
+</project>

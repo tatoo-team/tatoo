@@ -1,0 +1,19 @@
+// expression call grammar
+tokens:
+  value:int= "[0-9]+"
+  id:String= "([A-Z]|[a-z])*"
+  lpar= '\('
+  rpar= '\)'
+  comma= ','
+ 
+blanks:
+ space= "( |\t|\r|\n)+"
+
+starts:
+ expression
+
+productions:
+expression = 'value'                                          {expression_value}
+           | 'id' 'lpar' expression 'comma' expression 'rpar' {expression_call}
+           ;
+	

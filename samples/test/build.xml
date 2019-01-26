@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<project name="test" default="all" basedir=".">
+	
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  <property name="tatoo-runtime.jar" location="${tatoo.dir}/tatoo-runtime.jar"/>
+	
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="gen-src" value="gen-src"/>
+  <property name="lexer.file" value="test.xlex"/>
+  <property name="lexer-regex.file" value="test-pattern.xlex"/>
+  <property name="parser.file" value="test.xpars"/>
+  <property name="tools.file" value="test.xtls"/>
+  <property name="tools-tree.file" value="test-tree.xtls"/>
+  <property name="ebnf.file" value="test.ebnf"/>
+  	
+  <property name="lexer.package" value="fr.umlv.tatoo.samples.test.lexer"/>
+  <property name="lexer-regex.package" value="fr.umlv.tatoo.samples.test.lexer.regex"/>
+  <property name="parser.package" value="fr.umlv.tatoo.samples.test.parser"/>
+  <property name="tools.package" value="fr.umlv.tatoo.samples.test.tools"/>
+  <property name="tools-tree.package" value="fr.umlv.tatoo.samples.test.tools.tree"/>
+	
+  <property name="validating" value="false"/>
+
+  <target name="tasks">
+    <taskdef name="lexer" classname="fr.umlv.tatoo.cc.lexer.main.LexerTask" classpath="${tatoo.jar}"/> 
+    <taskdef name="parser" classname="fr.umlv.tatoo.cc.parser.main.ParserTask" classpath="${tatoo.jar}"/>
+    <taskdef name="tools" classname="fr.umlv.tatoo.cc.tools.main.ToolsTask" classpath="${tatoo.jar}"/>
+    <taskdef name="ebnf" classname="fr.umlv.tatoo.cc.ebnf.main.EBNFTask" classpath="${tatoo.jar}"/>
+  </target>
+  	
+  <target name="lexer" depends="tasks">
+   <lexer destination="${gen-src}" lexerFile="${lexer.file}" validating="${validating}">
+     <package lexer="${lexer.package}"/>
+   </lexer>
+  </target>
+	
+  <target name="lexer-regex" depends="tasks">
+   <lexer destination="${gen-src}" lexerFile="${lexer-regex.file}" validating="${validating}">
+     <package lexer="${lexer-regex.package}"/>
+   </lexer>
+  </target>
+	
+  <target name="parser" depends="tasks">
+	<parser destination="${gen-src}" parserFile="${parser.file}"  parserType="lalr" validating="${validating}"
+		logfile="log.html" loglevel="ALL">
+	 <package parser="${parser.package}"/>
+	</parser>
+  </target>
+	
+  <target name="tools" depends="tasks">
+	<tools destination="${gen-src}" lexerFile="${lexer.file}" parserFile="${parser.file}" toolsFile="${tools.file}"
+		validating="${validating}">
+	  <package lexer="${lexer.package}"/>
+	  <package parser="${parser.package}"/>
+	  <package tools="${tools.package}"/>
+	</tools>
+  </target>
+	
+  <target name="tools-tree" depends="tools">
+	  <tools destination="${gen-src}" lexerFile="${lexer.file}" parserFile="${parser.file}" toolsFile="${tools-tree.file}" validating="${validating}">
+		<package lexer="${lexer.package}"/>
+		<package parser="${parser.package}"/>
+		<package tools="${tools-tree.package}"/>
+	  	<generated generateDefault="false">
+	  	  <filealias type="Analyzers" name="TreeAnalyzers" generate="true"/>
+	  	  <filealias type="GrammarEvaluator" name="GrammarEvaluator" generate="true"/>
+	  	  <filealias type="AnalyzerProcessor" name="TreeAnalyzerProcessor" generate="true"/>
+	  	  <filealias type="TerminalEvaluator" name="fr.umlv.tatoo.samples.test.tools.TerminalEvaluator"/>
+	  	  <filealias type="ToolsDataTable" name="fr.umlv.tatoo.samples.test.tools.ToolsDataTable"/>
+	  	</generated>
+	  </tools>
+  </target>
+	
+  <target name="tools-ast" depends="tasks">
+     <tools destination="${gen-src}" lexerFile="${lexer.file}" parserFile="${parser.file}" toolsFile="${tools.file}"
+			generateast="true"
+			validating="${validating}">
+		  <package lexer="${lexer.package}"/>
+		  <package parser="${parser.package}"/>
+		  <package tools="${tools.package}.ast"/>
+		</tools>
+  </target>
+	
+  <target name="ebnf">
+	<ebnf destination="${gen-src}" ebnfFile="${ebnf.file}"  parserType="lalr"
+			logfile="log.html" loglevel="ALL">
+		<package lexer="${lexer.package}.ebnf"/>
+		<package parser="${parser.package}.ebnf"/>
+		<package tools="${tools.package}.ebnf"/>
+	</ebnf>
+  </target>
+	
+  <target name="all" depends="lexer,lexer-regex,parser,tools,tools-tree,ebnf">
+  <!-- target name="all" depends="lexer,lexer-regex,parser,tools,tools-tree,tools-ast,ebnf" -->
+  </target>
+	
+	<target name="compile">
+	  <mkdir dir="${classes}"/>
+	  <!-- due to a weird bug in javac 5.0 (it works with version 6.0) 
+	       we need to compile the AST Visitor alone first -->
+	  <javac srcdir="${gen-src}" destdir="${classes}">
+	  	<filename name="fr/umlv/tatoo/samples/calc/tools/ast/Visitor.java"/>
+		<classpath path="${tatoo-runtime.jar}"/>
+	  </javac>
+		
+	  <javac srcdir="${src}:${gen-src}" destdir="${classes}">
+		  <classpath path="${tatoo-runtime.jar}"/>
+		  <compilerarg value="-Xlint:deprecation"/>
+	  </javac>
+	</target>
+	
+  <target name="run" depends="compile">
+  	<java fork="true"
+  	      classname="fr.umlv.tatoo.samples.calc.Main">
+  	  <arg line="calc-test.txt"/>
+          <jvmarg line="-Dfr.umlv.tatoo.loggerLevel=ALL"/>
+  	  <classpath>
+  	    <pathelement location="classes"/>
+  	  	<pathelement location="${tatoo-runtime.jar}"/>
+  	  </classpath>
+  	</java>
+  	<!-- java fork="true"
+  	  	      classname="fr.umlv.tatoo.samples.calc.TreeMain">
+  	  <arg line="calc-test.txt"/>
+  	  <classpath>
+  	  	<pathelement location="classes"/>
+  	  	<pathelement location="${tatoo-runtime.jar}"/>
+  	  </classpath>
+  	 </java -->
+  </target>
+	
+	<target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<!-- not to break eclipse source folders -->
+		<mkdir dir="${gen-src}"/>
+	</target>
+
+</project>

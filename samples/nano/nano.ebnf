@@ -1,0 +1,42 @@
+// calc grammar
+priorities:
+plus_minus= 1 left
+star= 2 left
+
+tokens:
+  value:int= "[0-9]+"
+  plus= '\+'                 [plus_minus]
+  minus= '-'                 [plus_minus]
+  star= '\*'                 [star]
+  lpar= '\('
+  rpar= '\)'
+  semicolon=';'
+ 
+blanks:
+ space= "( |\t|\r|\n)+"
+ 
+comments:
+ comment="#([^\r\n])*(\r)?\n"  
+
+error:
+ error
+
+starts:
+ start
+
+productions:
+start = line*                    {start}
+      ;
+      
+line = expr   'semicolon'?       {line_expr}
+     | 'error'    'semicolon'    {line_error}
+     ;
+ 
+expr = 'value'                                 { expr_value }
+     | expr 'plus' expr         [plus_minus]   { expr_plus }
+     | expr 'minus' expr        [plus_minus]   { expr_minus }
+     | expr 'star' expr         [star]         { expr_star }
+     | 'lpar' expr 'rpar'                      { expr_parens }
+     | 'lpar' 'error' 'rpar'                   { expr_error }
+     ;
+	

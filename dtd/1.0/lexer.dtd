@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % ALLREGEX "(any|letter|interval|set|string|cat|or|star|plus|optional|at-least|range|times|macro)">
+<!ENTITY % INT "CDATA">
+<!ENTITY % URI "CDATA">
+<!ENTITY % CHAR "CDATA">
+<!ENTITY % BOOLEAN "(true|false)">
+
+<!ELEMENT lexer (define-macro|rule)*>
+
+<!-- macroes -->
+
+<!ELEMENT define-macro (%ALLREGEX;)>
+<!ATTLIST define-macro name CDATA #REQUIRED>
+
+ <!-- rules -->
+
+<!ELEMENT rule (main,(follow|end-of-line)?)>
+<!ATTLIST rule beginning-of-line %BOOLEAN; #IMPLIED
+	           id CDATA #REQUIRED>
+
+
+<!ELEMENT main (%ALLREGEX;)>
+
+<!ELEMENT follow (%ALLREGEX;)>
+
+<!ELEMENT end-of-line EMPTY>
+
+<!-- regex -->
+
+<!ELEMENT letter EMPTY>
+<!ATTLIST letter value %CHAR; #REQUIRED>
+
+<!ELEMENT string EMPTY>
+<!ATTLIST string value CDATA #REQUIRED
+	             ignore-case %BOOLEAN; #IMPLIED>
+
+<!ELEMENT any EMPTY>
+
+<!ELEMENT star (%ALLREGEX;)>
+
+<!ELEMENT plus (%ALLREGEX;)>
+
+<!ELEMENT optional (%ALLREGEX;)>
+
+<!ELEMENT range (%ALLREGEX;)>
+<!ATTLIST range from %INT; #REQUIRED
+	              to %INT; #REQUIRED>
+
+<!ELEMENT at-least (%ALLREGEX;)>
+<!ATTLIST at-least from %INT; #REQUIRED>
+
+<!ELEMENT times (%ALLREGEX;)>
+<!ATTLIST times value %INT; #REQUIRED>
+
+<!ELEMENT cat (%ALLREGEX;,(%ALLREGEX;)+)>
+
+<!ELEMENT or (%ALLREGEX;,(%ALLREGEX;)+)>
+
+<!ELEMENT set ((interval|letter)+)>
+<!ATTLIST set negate %BOOLEAN; #IMPLIED>
+
+<!ELEMENT interval EMPTY>
+<!ATTLIST interval from %CHAR; #REQUIRED
+                   to %CHAR; #REQUIRED>
+
+<!ELEMENT macro EMPTY>
+<!ATTLIST macro name CDATA #REQUIRED>

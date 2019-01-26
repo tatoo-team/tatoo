@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project name="tatoo-cc" default="all" basedir=".">
+	<!-- global properties -->
+	<property name="prop.dir" location=".."/>
+	<property file="${prop.dir}/tatoo.properties"/>
+	
+	<!-- local properties -->
+	<property name="source" value="1.5"/>
+	<property name="src" location="src"/>
+	<property name="classes" location="classes"/>
+
+	
+	<target name="all" depends="jar"/>
+	<target name="compile">
+		<mkdir dir="${classes}"/>
+		<javac target="${target}" source="${source}" debug="${debug}" srcdir="${src}" destdir="${classes}">
+			<classpath path="${motocity-path}"/>
+			<compilerarg value="-Xlint:deprecation"/>
+		</javac>
+		<copy todir="${classes}">
+			<fileset dir="${src}">
+				<exclude name="**/*.java"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="jar" depends="compile,jar-nocompile"/>
+	<target name="jar-nocompile">
+		<jar basedir="${classes}" destfile="${jar-path}">
+			<manifest>
+				<attribute name="Main-Class" value="fr.umlv.tatoo.cc.main.main.MainMain"/>
+				<attribute name="Class-Path" value="${motocity-jar}"/>
+			</manifest>
+		</jar>
+	</target>
+	<target name="clean">
+		<delete dir="${classes}"/>
+	</target>
+	<target name="flat-src">
+		<zip basedir="${src}" destfile="${lib}/${flat-src-zip}" update="true"/>
+	</target>
+</project>

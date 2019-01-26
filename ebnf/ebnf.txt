@@ -1,0 +1,92 @@
+
+imports:
+ java.util.List
+ fr.umlv.tatoo.cc.ebnf.EBNFProduction
+ fr.umlv.tatoo.cc.parser.grammar.VariableDecl
+ fr.umlv.tatoo.cc.lexer.lexer.RuleDecl
+ fr.umlv.tatoo.cc.common.generator.Type
+
+tokens:
+ importsdecl="imports"
+ tokensdecl="tokens"
+ spacesdecl="spaces"
+ startsdecl="starts"
+ productionsdecl="productions"
+  
+ lbracket ="{"
+ rbracket ="}"
+ lpar ="\("
+ rpar ="\)"
+ assign ="="
+ pipe ="|"
+ dollar ="\$"
+ star ="\*"
+ plus ="+"
+ slash ="/"
+ qmark:boolean ="\?"
+ quote ="'"
+ doublequote ='\"'
+ semicolon =";"
+ colon=':'
+ 
+ id:String ="([a-z]|[A-Z]|_)+"
+ qualifiedid:String ="([a-z]|[A-Z]|_|\.|<|>)+"
+ regexquote:String ="[^']+"
+ regexdoublequote:String ='[^"]+'
+
+blanks:
+ space ="( |\t|\r|\n)+"
+
+starts:
+ start
+
+productions:
+start = imports_lhs?
+        'tokensdecl' 'colon' lexem* 
+        'spacesdecl' 'colon' space_lexem*
+        start_non_terminals?
+        'productionsdecl' 'colon' decl* {start_def}
+      ;
+	
+imports_lhs = 'importsdecl' 'colon' import_+ {imports_def}
+            ;
+	
+import_ = 'qualifiedid' {import_def}
+        ;
+	
+lexem = 'dollar' 'id' 'assign' regex {lexem_macro}
+      | 'id' type? 'assign' regex    {lexem_terminal }
+      ;
+	
+space_lexem = 'id''assign' regex {space_lexem_def}
+            ;
+ 
+regex:String = 'quote' 'regexquote' 'quote'                   {regex_quote}
+             | 'doublequote' 'regexdoublequote' 'doublequote' {regex_doublequote}
+             ;
+	
+type:Type = 'colon' 'qualifiedid' {type_def}     
+          ;
+ 
+start_non_terminals:List<String> = 'startsdecl' 'colon' 'id'+ {start_non_terminals_def}
+                    ;
+     
+decl = 'id' type? 'assign' prod/'pipe'+ 'semicolon' {decl_productions}
+     ;
+
+prod:EBNFProduction = var* 'lbracket' 'id' 'rbracket' {prod_id}
+                    ;
+
+var:VariableDecl = 'lpar' var+ 'rpar'            {var_group}
+                 | 'quote' 'id' 'quote' 'qmark'? {var_terminal}
+                 | 'id' 'qmark'?                 {var_non_terminal}
+                 | 'quote' 'id' 'quote' separator? 'star' {var_terminal_star}
+                 | 'quote' 'id' 'quote' separator? 'plus' {var_terminal_plus}
+                 | 'id' separator? 'star'        {var_non_terminal_star}
+                 | 'id' separator? 'plus'        {var_non_terminal_plus}
+                 ; 
+    
+separator:VariableDecl = 'slash' 'quote' 'id' 'quote' {separator_terminal}
+                       | 'slash' 'id'                 {separator_non_terminal}
+                       ;
+                       

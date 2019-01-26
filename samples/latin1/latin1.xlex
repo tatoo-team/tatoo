@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+ <!-- Strings -->
+ <rule id="string" pattern='\"[^"]\"'/>
+ 
+	<!-- Comments -->
+ <rule id="comment" pattern="(\/\*([^*]|(\*+[^*/]))*\*+\/)|(\/\/[^\n\r]*)"/>
+ 
+ <!-- Others -->
+ <rule-xml id="other">
+  <main>
+   <any/>
+  </main>
+  </rule-xml>
+</lexer>

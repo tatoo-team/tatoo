@@ -1,0 +1,41 @@
+// small calc grammar 
+priorities:
+plus_minus= 1 left
+star_div=   2 left
+
+tokens:
+  value:int= "[0-9]+"
+  plus= '\+'                   [plus_minus]
+  minus= '-'                   [plus_minus]
+  star= '\*'                   [star_div]
+  div= '\/'                    [star_div]
+  lpar= '\('
+  rpar= '\)'
+  semicolon=';'
+ 
+blanks:
+ space= "( |\t|\r|\n)+"
+ 
+comments:
+ comment="#([^\r\n])*(\r)?\n"  
+
+starts:
+ start
+ line
+ expr
+
+productions:
+start = line*                                  {start}
+      ;
+      
+line = expr 'semicolon'?                       {line}
+     ;
+ 
+expr = 'value'                                 {expr_value}
+     | expr 'plus' expr       [plus_minus]     {expr_plus}
+     | expr 'minus' expr      [plus_minus]     {expr_minus}
+     | expr 'star' expr       [star_div]       {expr_star}
+     | expr 'div' expr        [star_div]       {expr_div}
+     | 'lpar' expr 'rpar'                      {expr_parens}
+     ;
+	

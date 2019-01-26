@@ -1,0 +1,17 @@
+{
+  int unused;
+  int foo=3;
+
+  {
+    int foo=4;
+    print foo;
+  }
+
+  {
+    let baz=5;
+    int bar=baz;
+    print bar;
+  }
+
+  print foo;
+}

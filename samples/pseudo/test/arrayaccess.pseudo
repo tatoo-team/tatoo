@@ -1,0 +1,17 @@
+{
+  if (length(ARGS)==0)
+    throw "no command line argument";
+  print ARGS;
+  print length(ARGS);
+  print ARGS[0];
+
+  ARGS[0]="titi";
+  print ARGS;  
+
+  let x=new string[][][1];
+  x[0]=new string[2][3];
+  x[0][0]=ARGS;
+  x[0][0][0]="zorg";
+  print x[0][0];
+}
+

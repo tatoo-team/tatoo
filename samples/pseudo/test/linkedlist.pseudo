@@ -1,0 +1,35 @@
+struct Link {
+  any element;
+  Link next;
+}
+
+struct List {
+  Link head;
+  int size;
+}
+
+void add(List list, any element) {
+  Link link=new Link();
+  link.element=element;
+  link.next=list.head;
+  list.head=link;
+  list.size = list.size +1;
+}
+
+void display(List list) {
+  display(list.head);
+}
+
+void display(Link link) {
+  if (link != null) {
+    print link.element;
+    display(link.next);
+  }
+}
+
+{
+  List list=new List();
+  add(list,2);
+  add(list,3);
+  display(list);
+}

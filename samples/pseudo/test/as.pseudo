@@ -1,0 +1,11 @@
+{
+  // test 'instanceof' and 'as'
+  let s="toto";
+  print s instanceof string;
+  any a=s;
+  print a instanceof string;
+  let t=a as string;
+  print t;
+
+  print 2+3 as any;
+}

@@ -1,0 +1,47 @@
+struct Matrix {
+  any[] data;
+  int size;
+}
+
+void init(Matrix matrix,int size) {
+  matrix.data=new any[size*size];
+  matrix.size=size;
+}
+
+int offset(Matrix matrix,int i,int j) {
+  if (i<0 || i>=matrix.size)
+    throw "i out of bounds "+i;
+  if (j<0 || j>=matrix.size)
+    throw "j out of bounds "+j;
+  return i+j*matrix.size; 
+}
+
+any get(Matrix matrix,int i,int j) {
+  return matrix.data[offset(matrix,i,j)];
+}
+
+void set(Matrix matrix,int i,int j,any value) {
+  matrix.data[offset(matrix,i,j)]=value;
+}
+
+{
+  Matrix matrix=new Matrix();
+  init(matrix,3);   // matrix 3*3
+  
+  int i=0;
+  while(i<matrix.size) {
+    int j=0;
+    while(j<matrix.size) {
+      set(matrix,i,j,0);
+      j=j+1;
+    }
+    i=i+1;
+  }
+  
+  set(matrix,0,0,1);
+  set(matrix,1,1,1);
+  set(matrix,2,2,1);
+  
+  print get(matrix,0,0);
+  print get(matrix,0,1);
+}

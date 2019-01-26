@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+ <!-- Macros -->
+ <define-macro name="space">
+  <star>
+    <or>
+     <letter value=" "/>
+     <letter value="\t"/>
+    </or>
+  </star>
+ </define-macro-xml>
+ 
+ <define-macro-xml name="number">
+  <plus>
+   <interval from="0" to="9"/>
+  </plus>
+ </define-macro-xml>
+ <define-macro-xml name="eoln">
+  <cat>
+   <optional>
+    <letter value="\r"/>
+   </optional>
+   <letter value="\n"/>
+  </cat>
+ </define-macro-xml>
+ 
+ <!-- Rules-->
+ 	<rule-xml id="space">
+        <main>
+           <macro name="space"/>
+        </main>
+	</rule-xml>
+    <rule-xml id="value">
+        <main>
+           <macro name="number"/>
+        </main>
+	</rule-xml>
+	<rule-xml id="plus">
+		<main>
+			<letter value="+"/>
+		</main>
+	</rule-xml>
+	<rule-xml id="minus">
+		<main>
+			<letter value="-"/>
+		</main>
+	</rule-xml>
+	<rule-xml id="star">
+		<main>
+			<letter value="*"/>
+		</main>
+	</rule-xml>
+	<rule-xml id="equals">
+		<main>
+			<letter value="="/>
+		</main>
+	</rule-xml>
+	<rule-xml id="semicolon">
+		<main>
+			<letter value=";"/>
+		</main>
+	</rule-xml>
+		<rule-xml id="lpar">
+		<main>
+			<letter value="("/>
+		</main>
+	</rule-xml>
+		<rule-xml id="rpar">
+		<main>
+			<letter value=")"/>
+		</main>
+	</rule-xml>
+	<rule-xml id="eoln">
+		<main>
+            <macro name="eoln"/>
+		</main>
+	</rule-xml>
+</lexer>

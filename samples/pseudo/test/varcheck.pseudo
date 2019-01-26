@@ -1,0 +1,9 @@
+{
+  int i;
+  boolean once=true;
+  loop: while(once) {
+    i=3;
+    once=false;
+  }
+  print i;
+}

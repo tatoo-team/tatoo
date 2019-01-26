@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tools SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/tools.dtd">
+<tools>
+ <rule id="plus" terminal="plus"/>
+	<rule id="star" terminal="star" />
+	<rule id="minus" terminal="minus" />
+	<rule id="equals" terminal="equals"/>
+	<rule id="value" terminal="value"/>
+	<rule id="semicolon" terminal="semicolon"/>
+	<rule id="comma" terminal="comma"/>
+	<rule id="eoln" terminal="eoln"/>
+	<rule id="rpar" terminal="rpar"/>
+	<rule id="lpar" terminal="lpar"/>
+	<rule id="space"/>
+
+ <import type="fr.umlv.tatoo.samples.test.Expr"/>
+
+	<terminal id="value" type="int"/>
+	<terminal id="comma" type="boolean"/>
+	
+	<non-terminal id="start" type="java.util.List&lt;fr.umlv.tatoo.samples.test.Expr&gt;"/>
+	<!-- non-terminal id="slist" type="java.util.List&lt;fr.umlv.tatoo.samples.test.Expr&gt;"/ -->
+	<non-terminal id="line" type="fr.umlv.tatoo.samples.test.Expr"/>
+	<non-terminal id="expr" type="fr.umlv.tatoo.samples.test.Expr"/>
+</tools>
+     

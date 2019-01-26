@@ -1,0 +1,15 @@
+{
+  int i;
+  int k;
+  loop: while(2==4/2) {
+    i=3;
+    int j=0;
+    while(j<5) {
+      break loop;
+      j=j+1;
+    }
+    k=4;
+    break;
+  }
+  print i;
+}

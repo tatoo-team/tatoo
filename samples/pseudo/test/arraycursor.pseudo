@@ -1,0 +1,32 @@
+struct ArrayCursor {
+  any[] array;
+  int position;
+}
+
+void init(ArrayCursor arrayCursor,any[] array) {
+  arrayCursor.array=array;
+  arrayCursor.position=0;
+}
+
+boolean hasNext(ArrayCursor arrayCursor) {
+  return arrayCursor.position<length(arrayCursor.array);
+}
+
+any current(ArrayCursor arrayCursor) {
+  return arrayCursor.array[arrayCursor.position];
+}
+
+void next(ArrayCursor arrayCursor) {
+  arrayCursor.position=arrayCursor.position+1;
+}
+
+{
+  let array=new string[2];
+  array[0]="hello";
+  array[1]="world";
+  
+  ArrayCursor arrayCursor=new ArrayCursor();
+  for(init(arrayCursor,array);hasNext(arrayCursor);next(arrayCursor)) {
+    print current(arrayCursor);
+  }
+}

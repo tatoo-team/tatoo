@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+ <rule id="id" pattern='[a-zA-Z]+'/>
+ <rule id="other" pattern='.'/>
+</lexer>

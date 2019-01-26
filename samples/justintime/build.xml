@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="justintime" default="all" basedir=".">
+	
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+	
+  <target name="all"/>
+  
+    <target name="compile">
+	  <mkdir dir="${classes}"/>
+	  <javac srcdir="${src}" destdir="${classes}">
+		  <classpath path="${tatoo.jar}"/>
+		  <compilerarg value="-Xlint:deprecation"/>
+	  </javac>
+	</target>
+  
+  <target name="clean">
+		<delete dir="${classes}"/>
+	</target>
+</project>

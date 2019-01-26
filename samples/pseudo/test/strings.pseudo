@@ -1,0 +1,40 @@
+string reverse1(string s) {
+  let length=length(s);
+  if (length<2)
+    return s;
+  return charAt(s,length-1)+reverse1(substring(s,0,length-1));
+}
+
+string reverse2(string s) {
+  string reverse="";
+  int i=length(s);
+  while(i>0) {
+    i=i-1;
+    reverse = reverse+charAt(s,i); 
+  }
+  return reverse;
+}
+
+void swap(any[] array,int pos1,int pos2) {
+  let tmp=array[pos1];
+  array[pos1]=array[pos2];
+  array[pos2]=tmp;
+}
+
+string reverse3(string s) {
+  let array=convertToCharArray(s);
+  let length=length(array);
+  int i=0;
+  while(i<length/2) {
+    swap(array,i,length-i-1);
+    i=i+1;
+  }
+  return convertToString(array);
+}
+
+{
+   let hello="hello";
+   print reverse1(hello);
+   print reverse2(hello);
+   print reverse3(hello);
+}

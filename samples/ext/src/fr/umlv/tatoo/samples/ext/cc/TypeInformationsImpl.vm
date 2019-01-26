@@ -1,0 +1,17 @@
+package ${currentType.packageName};
+
+import ${terminalEnum.rawName};
+import fr.umlv.tatoo.samples.ext.runtime.TypeInformations;
+
+public class TypeInformationsImpl implements TypeInformations<${terminalEnum.simpleName}> {
+  public Class<?> getTerminalType(${terminalEnum.simpleName} terminal) {
+    switch(terminal) {
+#foreach ($entry in ${terminalType.entrySet()})
+      case $entry.key.id:
+        return ${entry.value}.class;
+#end
+      default:
+    }
+    return null;
+  }
+}

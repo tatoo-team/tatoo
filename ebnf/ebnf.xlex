@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+  <rule id="space" pattern="( |\t|\r|\n)+"/>
+  
+  <rule id="directivesdecl" pattern="directives"/>
+  <rule id="importsdecl" pattern="imports"/>
+  <rule id="prioritiesdecl" pattern="priorities"/>
+  <rule id="tokensdecl" pattern="tokens"/>
+  <rule id="blanksdecl" pattern="blanks"/>
+  <rule id="commentsdecl" pattern="comments"/>
+  <rule id="branchesdecl" pattern="branches"/>
+  <rule id="errordecl" pattern="error"/>
+  <rule id="typesdecl" pattern="types"/>
+  <rule id="attributesdecl" pattern="attributes"/>
+  <rule id="startsdecl" pattern="starts"/>
+  <rule id="versionsdecl" pattern="versions"/>
+  <rule id="productionsdecl" pattern="productions"/>
+  
+  <rule id="eof" pattern="eof"/>
+  <rule id="lbracket" pattern="\{"/>
+  <rule id="rbracket" pattern="\}"/>
+  <rule id="lsqbracket" pattern="\["/>
+  <rule id="rsqbracket" pattern="\]"/>
+  <rule id="lpar" pattern="\("/>
+  <rule id="rpar" pattern="\)"/>
+  <rule id="assign" pattern="="/>
+  <rule id="pipe" pattern="\|"/>
+  <rule id="dollar" pattern="\$"/>
+  <rule id="star" pattern="\*"/>
+  <rule id="plus" pattern="\+"/>
+  <rule id="slash" pattern="\/"/>
+  <rule id="qmark" pattern="\?"/>
+  <rule id="quote" pattern="'"/>
+  <rule id="doublequote" pattern='\"'/>
+  <rule id="semicolon" pattern=";"/>
+  <rule id="colon" pattern=":"/>
+  <rule id="quoted_name" pattern="('([^']|(''))*')|(\&quot;([^&quot;]|(\&quot;\&quot;))*\&quot;)"/>
+  <rule id="assoc" pattern="left|right|none|nonassoc"/>
+  
+  <rule id="comment" pattern="\/\/([^\r\n])*(\r)?\n"/>
+  
+  <rule id="number" pattern="(-)?([0-9])+(\.[0-9]+)?"/>
+  <rule id="id" pattern="([a-z]|[A-Z]|_)([0-9]|[a-z]|[A-Z]|_)*"/>
+  <rule id="qualifiedid" pattern="([a-z]|[A-Z]|_)([0-9]|[a-z]|[A-Z]|_|\.|&lt;|&gt;|\[|\]|\?|( )+extends( )+|( )+super( )+)*"/>
+  <rule id="regexquote" pattern="[^']+"/>
+  <rule id="regexdoublequote" pattern='[^"]+'/>
+</lexer>

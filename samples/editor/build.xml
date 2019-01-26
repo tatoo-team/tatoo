@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project name="editor" default="all" basedir=".">
+	
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  <property name="tatoo-runtime.jar" location="${tatoo.dir}/tatoo-runtime.jar"/>
+	
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="gen-src" value="gen-src"/>
+  <property name="lexer.file" value="${ant.project.name}.xlex"/>
+  <property name="parser.file" value="${ant.project.name}.xpars"/>
+  <property name="tools.file" value="${ant.project.name}.xtls"/>
+  	
+  <property name="lexer.package" value="fr.umlv.tatoo.samples.${ant.project.name}.lexer"/>
+  <property name="parser.package" value="fr.umlv.tatoo.samples.${ant.project.name}.parser"/>
+  <property name="tools.package" value="fr.umlv.tatoo.samples.${ant.project.name}.tools"/>
+  
+	  <target name="tasks">
+	    <taskdef name="lexer" classname="fr.umlv.tatoo.cc.lexer.main.LexerTask" classpath="${tatoo.jar}"/> 
+	    <taskdef name="parser" classname="fr.umlv.tatoo.cc.parser.main.ParserTask" classpath="${tatoo.jar}"/>
+	    <taskdef name="tools" classname="fr.umlv.tatoo.cc.tools.main.ToolsTask" classpath="${tatoo.jar}"/>
+	  </target>
+
+	<property name="validating" value="false"/>
+  
+  <target name="lexer" depends="tasks">
+   <lexer destination="${gen-src}" lexerFile="${lexer.file}" validating="${validating}">
+    <package lexer="${lexer.package}"/>
+   </lexer>
+  </target>
+	
+  <target name="parser" depends="tasks">
+	 <parser destination="${gen-src}" parserFile="${parser.file}" parsertype="lalr" validating="${validating}">
+	  <package parser="${parser.package}"/>
+	 </parser>
+  </target>
+	
+  <target name="tools" depends="tasks">
+	 <tools destination="${gen-src}" lexerFile="${lexer.file}" parserFile="${parser.file}" toolsFile="${tools.file}" validating="${validating}">
+	  <package lexer="${lexer.package}"/>
+	  <package parser="${parser.package}"/>
+	  <package tools="${tools.package}"/>
+	 </tools>
+  </target>
+	
+  <target name="all" depends="lexer,parser,tools"/>
+  
+  <target name="compile">
+		<mkdir dir="${classes}"/>
+	  <javac srcdir="${src}:${gen-src}" destdir="${classes}">
+		  <classpath path="${tatoo.jar}"/>
+		  <compilerarg value="-Xlint:deprecation"/>
+	  </javac>
+	</target>
+  
+  <target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<!-- not to break eclipse source folders -->
+		<mkdir dir="${gen-src}"/>
+	</target>
+</project>

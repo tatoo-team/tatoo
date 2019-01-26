@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<project name="calc" default="all" basedir=".">
+	
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  <property name="tatoo-runtime.jar" location="${tatoo.dir}/tatoo-runtime.jar"/>
+  <property name="javac.jar" location="lib/javac.jar"/>
+	
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="ext-src" value="ext-src"/>
+  <property name="ext-classes" value="ext-classes"/>
+  <property name="gen-src" value="gen-src"/>
+  <property name="ebnf.file" value="jls.ebnf"/>
+  <property name="ebnf-types.file" value="types.ebnf"/>
+  	
+  <property name="lexer.package" value="fr.umlv.tatoo.samples.java.lexer"/>
+  <property name="parser.package" value="fr.umlv.tatoo.samples.java.parser"/>
+  <property name="tools.package" value="fr.umlv.tatoo.samples.java.tools"/>
+  <property name="ast.package" value="fr.umlv.tatoo.samples.java.ast"/>
+  
+  <target name="tasks" depends="prepare-extension">
+    <taskdef name="ebnf" classname="fr.umlv.tatoo.cc.ebnf.main.EBNFTask">
+  	  <classpath>
+  	    <pathelement location="${tatoo.jar}"/>
+  	    <pathelement location="${ext-classes}"/>
+  	  </classpath>
+  	</taskdef>
+  </target>
+  	
+  <target name="prepare-extension">
+  	<mkdir dir="${ext-classes}"/>
+  	
+  	<javac debug="true" srcdir="${ext-src}" destdir="${ext-classes}">
+  	  <classpath path="${tatoo.jar}"/>
+  	  <compilerarg value="-Xlint:all"/>
+  	</javac>
+  	<copy todir="${ext-classes}">
+  		<fileset dir="${ext-src}">
+  			<exclude name="**/*.java"/>
+  			<exclude name="**/.svn"/>
+  		</fileset>
+  	</copy>
+  </target>
+	
+  <target name="ebnf" depends="tasks">
+	<ebnf destination="${gen-src}" parserType="lalr"
+	      logfile="log.html"
+		  loglevel="ALL">
+		<inputfiles unit="ebnf">
+			<inputfile file="${ebnf.file}" />
+			<inputfile file="${ebnf-types.file}" />
+	    </inputfiles>
+		<package lexer="${lexer.package}"/>
+		<package parser="${parser.package}"/>
+		<package tools="${tools.package}"/>
+		<package ast="${ast.package}"/>
+		
+		<extension classname="fr.umlv.tatoo.samples.java.ext.ToolsExtension"/>
+	</ebnf>
+  </target>
+	
+  <target name="all" depends="ebnf">
+  </target>
+	
+  <target name="compile">
+	  <mkdir dir="${classes}"/>
+
+	  <javac srcdir="${src}:${gen-src}" destdir="${classes}">
+		  <classpath path="${tatoo-runtime.jar}"/>
+		  <compilerarg value="-Xlint:all"/>
+	  </javac>
+  </target>
+	
+  <target name="run" depends="compile">
+  	<java fork="true" classname="com.sun.tools.javac.Main">
+      <arg line="-XDparser=fr.umlv.tatoo.samples.java.javac.TatooParserFactory Test.java"/>
+  	  	  <classpath>
+  	  	    <pathelement location="classes"/>
+  	  	  	<pathelement location="${tatoo-runtime.jar}"/>
+  	  	    <pathelement location="${javac.jar}"/>
+  	  	  </classpath>
+  	  	</java>
+  </target>
+	
+  <target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${ext-classes}"/>
+		<delete dir="${gen-src}"/>
+		<mkdir dir="${gen-src}"/>
+  </target>
+</project>

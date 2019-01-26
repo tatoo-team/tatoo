@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project name="tatoo-plugin" default="all" basedir=".">
+	<!-- need cc, runtime -->
+	
+	<!-- global properties -->
+  <property name="prop.dir" location=".."/>
+  <property file="${prop.dir}/tatoo.properties"/>
+	
+	<!-- local properties -->
+	<property name="source" value="1.5"/>
+	<property name="src" location="src"/>
+	<property name="classes" location="classes"/>
+	
+	<target name="all" depends="jar"/>
+	
+	<target name="compile">
+		<mkdir dir="${classes}"/>
+		<javac target="${target}" source="${source}" debug="${debug}" srcdir="${src}" destdir="${classes}">
+			<classpath path="${jar-path}"/>
+			<compilerarg value="-Xlint:deprecation"/>
+			<!-- compilerarg value="-Xlint:unchecked"/ -->
+		</javac>
+		<copy todir="${classes}">
+			<fileset dir="${src}">
+				<exclude name="**/*.java"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="jar" depends="compile,jar-nocompile"/>
+	
+	<target name="jar-nocompile">
+		<!-- tempfile property="tmp-classes" suffix="-classes" destdir="."/>
+		<unzip src="${jar-runtime-path}" dest="${tmp-classes}"/ -->
+		
+		<jar basedir="${classes}" destfile="${jar-path}" update="true">
+			<include name="fr/umlv/tatoo/cc/**"/>
+		</jar>
+		<!-- jar basedir="${tmp-classes}" destfile="${jar-runtime-plugin-path}"/ -->
+		<copy file="${jar-runtime-path}" tofile="${jar-runtime-plugin-path}"/>
+		<jar basedir="${classes}" destfile="${jar-runtime-plugin-path}" update="true">
+			<include name="fr/umlv/tatoo/runtime/**"/>
+	    </jar>
+		<delete dir="${tmp-classes}"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${classes}"/>
+	</target>
+	
+	<target name="flat-src">
+		<zip basedir="${src}" destfile="${lib}/${flat-src-zip}" update="true"/>
+	</target>
+</project>

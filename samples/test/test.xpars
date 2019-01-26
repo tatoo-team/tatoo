@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE parser SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/parser.dtd">
+<parser>
+ <!-- Priorities -->
+ <priority id="plus_minus" priority="1" associativity="left"/>
+ <priority id="star" priority="2" associativity="left"/>
+	<priority id="equals" priority="0" associativity="non-associative" />
+ 
+ <!-- Terminals -->
+	<terminal id="plus" priority="plus_minus"/>
+	<terminal id="star" priority="star"/>
+	<terminal id="minus" priority="plus_minus"/>
+	<terminal id="equals" priority="equals"/>
+	<terminal id="value"/>
+	<terminal id="semicolon"/>
+	<terminal id="comma"/>
+	<terminal id="eoln"/>
+	<terminal id="rpar"/>
+	<terminal id="lpar"/>
+	
+ <!-- Errors -->
+	<error id="error"/>
+
+ <!-- Versions -->
+    <version id="V1"/> 
+    <version id="V2" implies="V1"/> 
+  
+ <!-- Starts -->
+ <start id="start"/>
+ <start id="expr"/>
+ <start id="v2"/>
+	
+ <!-- Productions -->
+	
+	<production id="v2start" version="V2">
+		<lhs id="v2"/>
+		<rhs>
+			<right id="expr"/>
+		</rhs>
+  </production>
+	
+	<production id="start_list">
+		<lhs id="start"/>
+		<rhs>
+		  <list id="slist" empty="true" element="line" associativity="left"/>
+		</rhs>
+	</production>
+ 
+	<production id="line_expr">
+		<lhs id="line"/>
+		<rhs>
+			<right id="expr"/>
+			<right optional="true" id="comma"/>
+			<right id="semicolon"/>
+			<right id="eoln"/>
+		</rhs>
+	</production>
+	
+	<production id="line_plus" version="V2">
+		<lhs id="line"/>
+		<rhs>
+			<right id="plus"/>
+		</rhs>
+	</production>
+	
+	<production id="line_expr2" version="V2">
+		<lhs id="line"/>
+		<rhs>
+			<right id="expr"/>
+			<right id="eoln"/>
+		</rhs>
+	</production>
+	
+	<production id="line_error">
+		<lhs id="line"/>
+		<rhs>
+			<right id="error"/>
+			<right id="semicolon"/>
+			<right id="eoln"/>
+		</rhs>
+	</production>
+	
+	
+ <production id="expr_value">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="value"/>
+		</rhs>
+	</production>
+	
+ <production id="expr_plus" priority="plus_minus">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="expr"/>
+			<right id="plus"/>
+			<right id="expr"/>
+		</rhs>
+	</production>
+	
+ <production id="expr_equals" priority="equals">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="expr"/>
+			<right id="equals"/>
+			<right id="expr"/>
+		</rhs>
+	</production>
+	
+ <production id="expr_minus" priority="plus_minus">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="expr"/>
+			<right id="minus"/>
+			<right id="expr"/>
+		</rhs>
+	</production>
+ 
+	<production  id="expr_star" priority="star">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="expr"/>
+			<right id="star"/>
+			<right id="expr"/>
+		</rhs>
+	</production>
+ 
+	<production  id="expr_par">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="lpar"/>
+			<right id="expr"/>
+			<right id="rpar"/>
+		</rhs>
+	</production>
+	
+ <production  id="expr_error">
+		<lhs id="expr"/>
+		<rhs>
+			<right id="lpar"/>
+			<right id="error"/>
+			<right id="rpar"/>
+		</rhs>
+	</production>
+</parser>
+     

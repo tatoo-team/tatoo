@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<project name="pseudo" default="all" basedir=".">
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  <property name="tatoo-runtime-plugin.jar" location="${tatoo.dir}/tatoo-runtime-plugin.jar"/>
+  <property name="asm.jar" location="lib/asm-all-3.1.jar"/>
+	
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="gen-src" value="gen-src"/>
+  <property name="ebnf.file" value="pseudo.ebnf"/>
+  <property name="dist.jar" location="pseudo.jar"/>
+  	
+  <property name="lexer.package" value="fr.umlv.tatoo.samples.pseudo.lexer"/>
+  <property name="parser.package" value="fr.umlv.tatoo.samples.pseudo.parser"/>
+  <property name="tools.package" value="fr.umlv.tatoo.samples.pseudo.tools"/>
+  <property name="ast.package" value="fr.umlv.tatoo.samples.pseudo.ast"/>
+  
+  <target name="tasks">
+    <taskdef name="ebnf" classname="fr.umlv.tatoo.cc.ebnf.main.EBNFTask" classpath="${tatoo.jar}"/>
+  </target>
+  	
+  <target name="ebnf" depends="tasks">
+	<ebnf destination="${gen-src}" ebnfFile="${ebnf.file}"  parserType="lalr"
+	      generateast="true"
+		  logfile="log.html" loglevel="ALL">
+		<package lexer="${lexer.package}"/>
+		<package parser="${parser.package}"/>
+		<package tools="${tools.package}"/>
+		<package ast="${ast.package}"/>
+		
+		<!-- add plugin support -->
+		<extension classname="fr.umlv.tatoo.cc.plugin.PluginExtension"/>
+	</ebnf>
+  </target>
+	
+  <target name="all" depends="ebnf">
+  </target>
+	
+	<target name="compile" depends="ebnf">
+	  <mkdir dir="${classes}"/>
+
+	  <javac debug="true" srcdir="${src}:${gen-src}" destdir="${classes}">
+		  <!-- classpath path="${tatoo-runtime.jar}"/ -->
+	  	  <classpath path="${tatoo-runtime-plugin.jar};${asm.jar}"/>
+		  <compilerarg value="-Xlint:deprecation"/>
+	  </javac>
+	</target>
+	
+	<target name="jar" depends="compile,jar-nocompile">
+	</target>
+	
+	<target name="jar-nocompile">
+			<jar basedir="${classes}" destfile="${dist.jar}">
+				<!-- manifest>
+					<attribute name="Class-Path" value="${motocity-jar}"/>
+				</manifest -->
+			</jar>
+		</target>
+	
+	<target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<!-- not to break eclipse source folders -->
+		<mkdir dir="${gen-src}"/>
+	</target>
+</project>

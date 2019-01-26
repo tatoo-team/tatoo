@@ -1,0 +1,622 @@
+imports:
+
+priorities:
+indirect  = 14 left   // array index, method call, member access
+unary     = 13 right  // pre/post operator, unary op, not, neg, cast, new
+times     = 12 left   // times, divide, remainder
+plus      = 11 left   // plus, minus
+shift     = 10 left   // signed/unsigned shift
+less      = 9  left   // less /than, greater /than, instanceof
+equals    = 8  left   // equals, not equals
+and       = 7  left   // bitwise and
+xor       = 6  left   // bitwise xor
+or        = 5  left   // bitwise or
+band      = 4  left   // boolean and
+bor       = 3  left   // boolean or
+cond      = 2  right  // conditional (? :)
+assign    = 1  right  // assign, conbination assign
+
+
+tokens:
+ times = '\*'                      [times]
+ divide = '\/'                     [times]
+ remainder ='%'                    [times]
+ plus = '\+'                       [plus]
+ minus = '-'                       [plus]
+ tilda = '~'                       [unary]
+ not = '!'                         [unary]
+ leftshift = '>>'                  [shift]
+ rightshiftsigned = '>>'           [shift]
+ rightshiftunsigned = '>>>'        [shift]
+ lt = '<'                          [less]
+ le = '<='                         [less]
+ gt = '>'                          [less]
+ ge = '>='                         [less]
+ eq = '=='                         [equals]
+ ne = '!='                         [equals]
+ xor = '\^'                        [xor]
+ and = '&'                         [and]
+ or = '\|'                         [or]
+ andand = '&&'                     [band]
+ oror = '\|\|'                     [bor]
+ plusplus = '\+\+'                 [unary]
+ minusminus = '--'                 [unary]
+ 
+ assign = '='                      [assign]
+ plusassign = '\+='                [assign]
+ minusassign = '-='                [assign]
+ timesassign = '\*='               [assign]
+ divideassign = '\/='              [assign]
+ andassign = '&='                  [assign]
+ orassign = '\|='                  [assign]
+ xorassign = '\^='                 [assign]
+ remainderassign = '%='            [assign]
+ leftshiftassign = '<<='           [assign]
+ rightshiftsignedassign = '>>='    [assign]
+ rightshiftunsignedassign = '>>>=' [assign]
+ 
+ _instanceof = 'instanceof'        [less]   
+ 
+ dot = '\.'                        [indirect]   
+ lpar = '\('                       [indirect]
+ rpar = '\)'
+ lopt = '\['                       [indirect]
+ ropt = '\]'
+ 
+ lcurl = '\{'
+ rcurl = '\}'
+ 
+ comma = ','
+ colon = ':'
+ semicolon = ';'
+ threedots = '\.\.\.'
+ questionmark = '\?'
+ at = '@'
+ 
+ identifier = "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*"
+ 
+ booleanlit = "true|false"
+ characterlit = "'([^'])'"
+ stringlit = "\u0022([^\u0022])*\u0022"
+ floatlit = "[0-9]*\.[0-9]*"
+ nulllit = "null"
+ integerlit = "[0-9]+"
+ 
+ _boolean = "boolean"
+ _byte = "byte"
+ _short = "short"
+ _char = "char"
+ _int = "int"
+ _long = "long"
+ _float = "float"
+ _double = "double"
+ _void = "void"
+ 
+ _static = "static"
+ _synchronized = "synchronized"
+ _abstract = "abstract"
+ _native = "native"
+ _strictfp = "strictfp"
+ _final = "final"
+ _volatile = "volatile"
+ _transient = "transient"
+ _throws = "throws"
+ _public = "public"
+ _private = "private"
+ _protected = "protected"
+ 
+ _package = "package"
+ _import = "import"
+ _class = "clazz"
+ _enum = "enum"
+ _interface = "interface"
+ _implements = "implements"
+ _extends = "extends"
+ 
+ _this = "this"
+ _super = "super"
+ _new = "new"
+ _assert = "assert"
+ _if = "if"
+ _else = "else"
+ _for = "for"
+ _while = "while"
+ _do = "do"
+ _switch = "switch"
+ _case = "case"
+ _default = "default"
+ _return = "return"
+ _break = "break"
+ _continue = "continue"
+ _throw = "throw"
+ _try = "try"
+ _catch = "catch"
+ _finally = "finally"
+ 
+blanks:
+ space= "( |\t|\r|\n)+"
+ 
+comments:
+
+ 
+starts:
+ compilation_unit
+
+productions:
+ compilation_unit = package_declaration? import_declaration* toplevel_declaration
+                 ;
+                  
+ package_declaration = annotation* '_package' qualified_name 'semicolon'
+                     ;
+                  
+ import_declaration = '_import' '_static'? qualified_name dottimes? 'semicolon'
+                    ;
+                    
+ dottimes = 'dot' 'times'
+          ;
+                  
+ toplevel_declaration = type_declaration
+    | enum_declaration
+    | annotation_type_declaration
+    | 'semicolon'
+    ;
+    
+ type_declaration = class_declaration
+                  | interface_declaration
+                  ;
+    
+ class_declaration = extended_modifier* '_class' 'identifier'
+                     type_parameter_declaration?
+                     extends_part?
+                     implements_part?
+                     'lcurl' body_declaration* 'rcurl'
+                   ;
+                   
+ interface_declaration = extended_modifier* '_interface' 'identifier'
+                         type_parameter_declaration?
+                         extends_part?
+                         'lcurl' body_declaration* 'rcurl'
+                       ;
+                       
+ enum_declaration = extended_modifier* '_enum' 'identifier'
+                    implements_part?
+                    'lcurl' enum_content_declaration? 'rcurl'
+                  ;
+                  
+ enum_content_declaration = enum_constant_declaration/'comma'+ 'comma'?
+                            enum_class_body?
+                          ;
+                       
+ enum_class_body = 'semicolon' body_declaration*
+                 ;
+             
+ annotation_type_declaration = extended_modifier* 'at' '_interface' 'identifier'
+                               'lcurl' body_declaration* 'rcurl'
+                             ;
+                       
+ type_parameter_declaration = 'lt' type_parameter/'comma'+ 'gt'
+                            ;
+                     
+ type_parameter = type_variable type_parameter_bounds?
+                ;
+                
+ type_variable = 'identifier'
+               ;
+               
+ type_parameter_bounds = extends_part type_parameter_implements_part*
+                       ;
+               
+ type_parameter_implements_part = 'and' type
+                                ;
+                     
+ extends_part = '_extends' type
+              ;
+             
+ implements_part = '_implements' type/'comma'+
+                 ;
+ 
+ type_body_declaration = extended_modifier* body_declaration
+                       ;
+ 
+ body_declaration = class_declaration
+                  | interface_declaration
+                  | enum_declaration
+                  | method_declaration
+                  | constructor_declaration
+                  | field_declaration
+                  | initializer
+                  | enum_constant_declaration
+                  | annotation_type_declaration
+                  | annotation_type_member_declaration
+                  | 'semicolon'
+                  ;
+ 
+ method_declaration = extended_modifier*
+                      type_parameter_declaration?
+                      return_type 'identifier'
+                      formal_parameter_declaration
+                      array_type_rest*
+                      throws_declaration
+                      block_or_semicolon
+                    ;
+          
+ constructor_declaration = extended_modifier*
+                           type_parameter_declaration?
+                           'identifier'
+                           formal_parameter_declaration
+                           throws_declaration
+                           block
+                         ;
+                         
+ field_declaration = extended_modifier* type variable_declaration_fragment+
+                     'semicolon'
+                   ;
+                   
+ variable_declaration_fragment = 'identifier' array_type_rest*
+//                                  init_variable_expression?
+                               ;
+ 
+ init_variable_expression = 'assign' expression
+                          ; 
+ 
+ initializer = '_static'? block
+             ;
+ 
+ enum_constant_declaration = extended_modifier* 'identifier'
+//                             parens_expression_list?
+                             anonymous_class_declaration
+                           ;
+                           
+ anonymous_class_declaration = 'lcurl' body_declaration 'rcurl'
+                             ;
+         
+ annotation_type_member_declaration = extended_modifier* type 'identifier' 'lpar' 'rpar'
+//                                      default_expression?
+                                      'semicolon'
+                                    ;
+                                    
+ default_expression = '_default' expression
+                    ;
+                           
+ formal_parameter_declaration = 'lpar' formal_parameter/'comma'* 'rpar'
+                              ;
+         
+ formal_parameter = extended_modifier? type 'identifier'
+                  ;        
+         
+ throws_declaration = '_throws' type_name/'comma'+
+                    ;
+         
+ block_or_semicolon = block
+                    | 'semicolon'
+                    ;
+                      
+ return_type = type
+             | '_void'
+             ;                     
+ 
+ extended_modifier = modifier
+                   | annotation
+                   ;
+ 
+ annotation =
+//  'at' type_name 'lpar' member_value_pair/'comma'* 'rpar'   { normal_annotation }
+//		    | 
+		    'at' type_name                                            { marker_annotation }
+//  		    | 'at' type_name 'lpar' expression 'rpar'                   { single_member_annotation }
+            ;
+ 
+ member_value_pair = simple_name 'assign' expression
+                   ;
+ 
+ modifier = '_public'
+          | '_protected'
+          | '_private'
+          | '_static'
+          | '_abstract'
+          | '_final'
+          | '_native'
+          | '_synchronized'
+          | '_transient'
+          | '_volatile'
+          | '_strictfp'
+          ;
+            
+ type_name = qualified_name
+           ;
+           
+ simple_name = 'identifier'
+             ;
+             
+ qualified_name = simple_name/'dot'+
+                ;
+           
+ type = primitive_type
+      | array_type
+      | simple_type
+      | parameterized_type
+      | wildcard_type
+      ;    
+           
+ primitive_type = '_byte'
+                | '_short'
+                | '_char'
+                | '_int'
+                | '_long'
+                | '_float'
+                | '_double'
+                | '_boolean'
+                ;
+                
+ array_type = type array_type_rest
+            ;         
+           
+ array_type_rest = 'lopt' 'ropt'
+                 ;          
+           
+ simple_type = type_name
+             ;
+             
+ parameterized_type = type 'lt' type/'comma'+ 'gt'
+                    ;
+                
+ wildcard_type = 'questionmark' bound_wilcard_type_rest?
+               ;
+               
+ bound_wilcard_type_rest = '_extends' type
+                         | '_super' type
+                         ;                                                      
+
+ expression = annotation
+            | 'integerlit'        
+            | 'floatlit'
+            | 'characterlit'
+            | 'nulllit'                 
+            | 'booleanlit'
+            | 'stringlit'
+            | return_type 'dot' '_class'                      { type_literal }
+            | qualified_name_dot? '_this'                     { expression_this }
+            | expression 'dot' 'identifier'                   { field_access }
+            | qualified_name_dot? '_super' 'dot' 'identifier' { super_field_access }
+            | assignment
+            | 'lpar' expression 'rpar'                        { parenthesized_expression }
+            | class_instance_creation
+            | array_creation
+            | array_initializer
+            | method_invocation
+            | super_method_invocation
+            | array_access
+            | infix_expression
+            | expression '_instanceof' type                   { instanceof_expression }
+            | expression 'questionmark' expression
+              'colon' expression                              { conditional_expression }
+            | postfix_expression
+            | prefix_expression
+            | 'lpar' type 'rpar'                              { cast_expression }
+            | variable_declaration_expression
+            ;       
+    
+ qualified_name_dot = qualified_name 'dot'
+                ;
+   
+ assignment = expression 'assign' expression
+            | expression 'plusassign' expression
+            | expression 'minusassign' expression
+            | expression 'timesassign' expression
+            | expression 'divideassign' expression
+            | expression 'andassign' expression
+            | expression 'orassign' expression
+            | expression 'xorassign' expression
+            | expression 'remainderassign' expression
+            | expression 'leftshiftassign' expression
+            | expression 'rightshiftsignedassign' expression
+            | expression 'rightshiftunsignedassign' expression
+            ;
+    
+ parens_expression_list = 'lpar' expression/'comma'* 'rpar'
+                        ;
+                        
+ type_argument_declaration = 'lt' type/'comma'+ 'gt'
+                           ;
+    
+ class_instance_creation = expression_dot '_new'
+                           type_argument_declaration? type
+                           parens_expression_list
+                           anonymous_class_declaration?
+                         ;
+    
+ array_creation = '_new' primitive_type array_index_expression+ array_type_rest*
+                | '_new' type_name type_argument_declaration? array_index_expression+ array_type_rest*
+                | '_new' primitive_type array_type_rest+ array_initializer
+                | '_new' type_name type_argument_declaration? array_type_rest+ array_initializer
+                ;
+    
+    
+ array_index_expression = 'lopt' expression 'ropt'
+                        ;
+
+ array_initializer = 'lcurl' expression/'comma'* 'comma'? 'rcurl'
+                   ;
+                   
+ expression_dot = expression 'dot'
+                ;
+                   
+ method_invocation = expression_dot? type_argument_declaration?
+                     'identifier' parens_expression_list
+                   ;
+                   
+ super_method_invocation = qualified_name_dot? '_super' 'dot'
+                           type_argument_declaration?
+                           'identifier' parens_expression_list
+                         ;
+                         
+ array_access = expression 'lopt' expression 'ropt'
+              ;
+        
+ infix_expression = expression 'times' expression
+                  | expression 'divide' expression
+                  | expression 'remainder' expression
+                  | expression 'plus' expression
+                  | expression 'minus' expression
+                  | expression 'leftshift' expression
+                  | expression 'rightshiftsigned' expression
+                  | expression 'rightshiftunsigned' expression
+                  | expression 'lt' expression
+                  | expression 'gt' expression
+                  | expression 'le' expression
+                  | expression 'ge' expression
+                  | expression 'eq' expression
+                  | expression 'ne' expression
+                  | expression 'xor' expression
+                  | expression 'and' expression 
+                  | expression 'or' expression
+                  | expression 'andand' expression
+                  | expression 'oror' expression
+                  ;
+                  
+ postfix_expression = expression 'plusplus'
+                    | expression 'minusminus'
+                    ;
+                    
+ prefix_expression = 'plusplus' expression
+                   | 'minusminus' expression
+                   | 'plus' expression
+                   | 'minus' expression
+                   | 'tilda' expression
+                   | 'not' expression
+                   ;
+                   
+ variable_declaration_expression = extended_modifier? type variable_declaration_fragment/'comma'+
+                                 ;
+ 
+ //block = 'lcurl' statement* 'rcurl'
+ //      ;
+       
+ block = 'lcurl' 'rcurl'
+       ;      
+       
+ statement = block
+           | if_statement
+           | for_statement
+           | enhanced_for_statement
+           | while_statement
+           | do_statement
+           | try_statement
+           | switch_statement
+           | synchronized_statement
+           | return_statement
+           | throw_statement
+           | break_statement
+           | continue_statement
+           | expression_statement
+           | labeled_statement
+           | assert_statement
+           | variable_declaration_statement
+           | type_declaration_statement
+           | constructor_invocation
+           | super_constructor_invocation
+           ;
+ 
+ if_statement = '_if' 'lpar' expression 'rpar' statement
+              | '_if' 'lpar' expression 'rpar' statement
+                '_else' statement
+              ;
+          
+ for_statement = '_for' 'lpar' expression/'comma'* 'semicolon'
+                 expression 'semicolon'
+                 expression/'comma'* 'rpar'
+                 statement
+               ;
+               
+ enhanced_for_statement = '_for' 'lpar' formal_parameter 'colon' expression 'rpar'
+                          statement
+                        ;
+                        
+ while_statement = '_while' 'lpar' expression 'rpar' statement
+                 ;
+    
+ do_statement = '_do' statement '_while' 'lpar' expression 'rpar' 'semicolon'
+              ;
+              
+ try_statement = '_try' block catch_clause* finally_block?
+               ;
+    
+ catch_clause = '_catch' 'lpar' formal_parameter 'rpar' block
+              ;
+                             
+ finally_block = '_finally' block
+               ;
+   
+ switch_statement = '_switch' 'lpar' expression 'rpar' 'lcurl'
+                    switch_case_or_statement*
+                    'rcurl'
+                  ;
+                  
+ switch_case_or_statement = '_case' expression 'colon'
+                          | statement
+                          | '_default' 'colon'
+                          ;
+ 
+ synchronized_statement = '_synchronized' 'lpar' expression 'rpar' block
+                        ;
+                        
+ return_statement = '_return' expression? 'semicolon'
+                  ;
+                   
+ throw_statement = '_throw' expression 'semicolon'
+                 ;
+                 
+ break_statement = '_break' 'identifier'? 'semicolon'
+                 ;
+                 
+ continue_statement = '_continue' 'identifier'? 'semicolon'
+                    ;
+                    
+ expression_statement = expression 'semicolon'
+                      ;
+ 
+ labeled_statement = 'identifier' 'semicolon' statement
+                   ;
+                   
+ assert_statement = '_assert' expression colon_expression? 'semicolon'
+                  ;
+ 
+ colon_expression = 'colon' expression
+                  ;
+ 
+ variable_declaration_statement = extended_modifier? type elipsis? variable_declaration_fragment/'comma'+
+                                ;
+                                
+ elipsis = 'threedots'
+         ;                               
+                                
+ type_declaration_statement = type_declaration
+                            ;
+                            
+ constructor_invocation = type_argument_declaration?
+                          '_this' 'lpar' expression/'comma'* 'rpar' 'semicolon'
+                        ;
+                        
+ super_constructor_invocation = expression_dot? type_argument_declaration?
+                                '_super' 'lpar' expression/'comma'* 'rpar' 'semicolon'
+                              ;
+                       
+                                 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+         
+ 
+                   
+ 
+ 
+    
+ 
+ 
+ 
+    
+    

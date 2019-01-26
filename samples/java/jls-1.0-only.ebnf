@@ -1,0 +1,680 @@
+// Java (1.0) LR grammar loosely converted from 
+// Gosling, Joy, Steele: The Java Language Specification (1st ed.).
+
+imports:
+
+priorities:
+ primary   = 14 left   // array index, method call, member access
+ unary     = 13 right  // pre/post operator, unary op, not, neg, cast, new
+ times     = 12 left   // times, divide, remainder
+ plus      = 11 left   // plus, minus
+ shift     = 10 left   // signed/unsigned shift
+ less      = 9  left   // less /than, greater /than, instanceof
+ equals    = 8  left   // equals, not equals
+ 
+ and       = 7  left   // bitwise and
+ xor       = 6  left   // bitwise xor
+ or        = 5  left   // bitwise or
+ band      = 4  left   // boolean and
+ bor       = 3  left   // boolean or
+ cond      = 2  right  // conditional (? :)
+ assign    = 1  right  // assign, operator assign
+ 
+ ifelse    = 0  right  // if ... if ... else
+ 
+tokens:
+ times('*') = '\*'                      [times]
+ divide('/') = '\/'                     [times]
+ remainder('%') ='%'                    [times]
+ plus('+') = '\+'                       [plus]
+ minus('-') = '-'                       [plus]
+ tilda('~') = '~'                       [unary]
+ not('!') = '!'                         [unary]
+ leftshift('<<') = '<<'                  [shift]
+ rightshiftsigned('>>') = '>>'           [shift]
+ rightshiftunsigned('>>>') = '>>>'        [shift]
+ lt('<') = '<'                          [less]
+ le('<=') = '<='                         [less]
+ gt('>') = '>'                          [less]
+ ge('>=') = '>='                         [less]
+ eq('==') = '=='                         [equals]
+ ne('!=') = '!='                         [equals]
+ xor('^') = '\^'                        [xor]
+ and('&') = '&'                         [and]
+ or('|') = '\|'                         [or]
+ andand('&&') = '&&'                     [band]
+ oror('||') = '\|\|'                     [bor]
+ plusplus('++') = '\+\+'                 [unary]
+ minusminus('--') = '--'                 [unary]
+ 
+ assign('=') = '='                      [assign]
+ plusassign('+=') = '\+='                [assign]
+ minusassign('-=') = '-='                [assign]
+ timesassign('*=') = '\*='               [assign]
+ divideassign('/=') = '\/='              [assign]
+ andassign('&=') = '&='                  [assign]
+ orassign('|=') = '\|='                  [assign]
+ xorassign('^=') = '\^='                 [assign]
+ remainderassign('%=') = '%='            [assign]
+ leftshiftassign('<<=') = '<<='           [assign]
+ rightshiftsignedassign('>>=') = '>>='    [assign]
+ rightshiftunsignedassign('>>>=') = '>>>=' [assign]
+ 
+ _instanceof('instanceof') = 'instanceof'        [less]   
+ 
+ dot('.') = '\.'                        
+ lpar('(') = '\('                       
+ rpar(')') = '\)'
+ lopt('[') = '\['                       
+ ropt(']') = '\]'
+ 
+ lcurl('{') = '\{'
+ rcurl('}') = '\}'
+ 
+ comma(',') = ','
+ colon(':') = ':'
+ semicolon(';') = ';'
+ threedots('...') = '\.\.\.'
+ questionmark('?') = '\?'               [cond]
+ at('@') = '@'
+ 
+ identifier = "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*"
+ 
+ booleanlit = "true|false"
+ characterlit = "'([^'])'"
+ stringlit = "\u0022([^\u0022])*\u0022"
+ floatingpointlit = "[0-9]*\.[0-9]*"
+ nulllit = "null"
+ integerlit = "[0-9]+"
+ 
+ _boolean('boolean') = "boolean"
+ _byte('byte') = "byte"
+ _short('short') = "short"
+ _char('char') = "char"
+ _int('int') = "int"
+ _long('long') = "long"
+ _float('float') = "float"
+ _double('double') = "double"
+ _void('void') = "void"
+ 
+ _static('static') = "static"
+ _synchronized('synchronized') = "synchronized"
+ _abstract('abstract') = "abstract"
+ _native('native') = "native"
+ _strictfp('strictfp') = "strictfp"
+ _final('final') = "final"
+ _volatile('volatile') = "volatile"
+ _transient('transient') = "transient"
+ _throws('throws') = "throws"
+ _public('public') = "public"
+ _private('private') = "private"
+ _protected('protected') = "protected"
+ 
+ _package('package') = "package"
+ _import('import') = "import"
+ _class('class') = "class"
+ _enum('enum') = "enum"
+ _interface('interface') = "interface"
+ _implements('implements') = "implements"
+ _extends('extends') = "extends"
+ 
+ _this('this') = "this"
+ _super('super') = "super"
+ _new('new') = "new"
+ _assert('assert') = "assert"
+ _if('if') = "if"
+ _else('else') = "else"                   [ifelse]
+ _for('for') = "for"
+ _while('while') = "while"
+ _do('do') = "do"
+ _switch('switch') = "switch"
+ _case('case') = "case"
+ _default('default') = "default"
+ _return('return') = "return"
+ _break('break') = "break"
+ _continue('continue') = "continue"
+ _throw('throw') = "throw"
+ _try('try') = "try"
+ _catch('catch') = "catch"
+ _finally('finally') = "finally"
+
+
+blanks:
+ space= "( |\t|\r|\n)+"
+
+ 
+comments:
+
+ 
+starts:
+ CompilationUnit
+
+
+productions:
+ Literal = 'integerlit'
+         | 'floatingpointlit'
+         | 'booleanlit'
+         | 'characterlit'
+         | 'stringlit'
+         | 'nulllit'
+         ;
+
+ Type = PrimitiveType
+      | ReferenceType
+      ;
+
+ PrimitiveType = NumericType
+               | '_boolean'
+               ;
+              
+ NumericType = IntegralType
+             | FloatingPointType
+             ;
+            
+ IntegralType = '_byte'
+              | '_short'
+              | '_int'
+              | '_long'
+              | '_char'
+              ;
+
+ FloatingPointType = '_float'
+                   | '_double'
+                   ;
+                  
+ ReferenceType = ClassOrInterfaceType
+               | ArrayType
+               ;
+              
+ ClassOrInterfaceType = Name
+                      ;
+
+ ClassType = ClassOrInterfaceType
+           ;
+           
+ InterfaceType = ClassOrInterfaceType
+               ;
+               
+ ArrayType = PrimitiveType 'lopt' 'ropt'
+           | Name 'lopt' 'ropt'
+           | ArrayType 'lopt' 'ropt'
+           ;
+ 
+ Name = SimpleName
+      | QualifiedName
+      ;
+      
+ SimpleName = 'identifier'
+            ;
+            
+ QualifiedName = Name 'dot' 'identifier'
+               ;
+
+CompilationUnit = PackageDeclaration
+                | ImportDeclarations
+                | PackageDeclaration ImportDeclarations
+                | TypeDeclarations
+                | PackageDeclaration TypeDeclarations
+                | ImportDeclarations TypeDeclarations
+                | PackageDeclaration ImportDeclarations TypeDeclarations
+                | 
+                ;
+
+ ImportDeclarations = ImportDeclaration
+                    | ImportDeclarations ImportDeclaration
+                    ;
+
+ TypeDeclarations = TypeDeclaration
+                  | TypeDeclarations TypeDeclaration
+                  ;
+
+ PackageDeclaration = '_package' Name 'semicolon'
+                    ;
+
+ ImportDeclaration = '_import' Name 'semicolon'
+                   | '_import' Name 'dot' 'times' 'semicolon'
+                   ;
+                               
+ TypeDeclaration = ClassDeclaration
+                 | InterfaceDeclaration
+                 | 'semicolon'
+                 ;
+ 
+ Modifiers = Modifier
+           | Modifiers Modifier
+           ;
+
+ Modifier = '_public'
+          | '_protected'
+          | '_private'
+          | '_static'
+          | '_abstract'
+          | '_final'
+          | '_native'
+          | '_synchronized'
+          | '_transient'
+          | '_volatile'
+          ;
+          
+ ClassDeclaration = '_class' 'identifier' SuperClass? ImplementsInterfaces? ClassBody
+                  | Modifiers '_class' 'identifier' SuperClass? ImplementsInterfaces? ClassBody
+                  ;
+
+ SuperClass = '_extends' ClassType
+            ;
+           
+ ImplementsInterfaces = '_implements' InterfaceList
+                      ;
+                      
+ InterfaceList = InterfaceType
+               | InterfaceList 'comma' InterfaceType
+               ;
+                  
+ ClassBody = 'lcurl' 'rcurl'
+           | 'lcurl' ClassBodyDeclarations 'rcurl'
+           ;
+           
+ ClassBodyDeclarations = ClassBodyDeclaration
+                       | ClassBodyDeclarations ClassBodyDeclaration
+                       ;
+
+ ClassBodyDeclaration = ClassMemberDeclaration
+                      | Modifiers ClassMemberDeclaration
+                      | StaticInitializer
+                      ;
+
+ ClassMemberDeclaration = FieldDeclaration
+                        | MethodDeclaration
+                        | ConstructorDeclaration
+                        ;
+                       
+ FieldDeclaration = Type VariableDeclarators 'semicolon'
+                  ;
+                  
+ VariableDeclarators = VariableDeclarator
+                     | VariableDeclarators 'comma' VariableDeclarator
+                     ;
+                     
+                    
+ VariableDeclarator = VariableDeclaratorId
+                    | VariableDeclaratorId 'assign' VariableInitializer
+                    ;
+                   
+ VariableDeclaratorId = 'identifier'
+                      | VariableDeclaratorId 'lopt' 'ropt'
+                      ;
+                     
+ VariableInitializer = Expression
+                     | ArrayInitializer
+                     ;
+
+ MethodDeclaration = MethodHeader MethodBody
+                   ;
+                  
+ MethodHeader = Type MethodDeclarator Throws?
+              | '_void' MethodDeclarator Throws?
+              ;
+
+ MethodDeclarator = 'identifier' 'lpar' FormalParameterList 'rpar'
+                  | MethodDeclarator 'lopt' 'ropt'
+                  ;
+ 
+ FormalParameterList = FormalParameterListRest
+                     |
+                     ;
+                     
+ FormalParameterListRest = FormalParameter
+                         | FormalParameterListRest FormalParameter
+                         ;
+
+ FormalParameter = Type VariableDeclaratorId
+                 ;
+ 
+ Throws = '_throws' ClassTypeList
+        ;
+        
+ ClassTypeList = ClassType
+               | ClassTypeList 'comma' ClassType
+               ;
+ 
+ MethodBody = Block
+            | 'semicolon'
+            ;
+            
+ StaticInitializer = '_static' Block
+                   ;
+                   
+ ConstructorDeclaration = ConstructorDeclarator Throws? ConstructorBody
+                        ;
+
+ ConstructorDeclarator = SimpleName 'lpar' FormalParameterList 'rpar'
+                       ;
+
+
+ ConstructorBody = 'lcurl' 'rcurl'
+                 | 'lcurl' ExplicitConstructorInvocation 'rcurl'
+                 | 'lcurl' BlockStatements 'rcurl'
+                 | 'lcurl' ExplicitConstructorInvocation BlockStatements 'rcurl'
+                 ;
+                 
+ ExplicitConstructorInvocation = '_this' 'lpar' ArgumentList 'rpar' 'semicolon'
+                               | '_super' 'lpar' ArgumentList 'rpar' 'semicolon'
+                               ;
+
+ InterfaceDeclaration = '_interface' 'identifier' ExtendsInterfaces? InterfaceBody
+                      | Modifiers '_interface' 'identifier' ExtendsInterfaces? InterfaceBody
+                      ;
+
+ ExtendsInterfaces = '_extends' InterfaceList
+                   ;
+ 
+ InterfaceBody = 'lcurl' 'rcurl'
+               | 'lcurl' InterfaceBodyDeclarations 'rcurl'
+               ;
+               
+ InterfaceBodyDeclarations = InterfaceBodyDeclaration
+                           | InterfaceBodyDeclarations InterfaceBodyDeclaration
+                           ;
+
+ InterfaceBodyDeclaration = InterfaceMemberDeclaration
+                          | Modifiers InterfaceMemberDeclaration
+                          ;
+ 
+ InterfaceMemberDeclaration = ConstantDeclaration
+                            | AbstractMethodDeclaration
+                            ;
+
+ ConstantDeclaration = FieldDeclaration
+                     ;
+                     
+ AbstractMethodDeclaration = MethodHeader 'semicolon'
+                           ;
+                           
+ ArrayInitializer = 'lcurl' 'comma'? 'rcurl'
+                  | 'lcurl' VariableInitializerList 'comma'? 'rcurl'
+                  ;
+
+ VariableInitializerList = VariableInitializer
+                         | VariableInitializerList 'comma' VariableInitializer
+                         ;
+
+ Block = 'lcurl' 'rcurl' 
+       | 'lcurl' BlockStatements 'rcurl'
+       ;
+ 
+ BlockStatements = BlockStatement
+                 | BlockStatements BlockStatement
+                 ;
+                 
+ BlockStatement = LocalVariableDeclarationStatement 
+                | Statement
+                ;
+
+ LocalVariableDeclarationStatement = LocalVariableDeclaration 'semicolon'
+                                   ;
+                                   
+ LocalVariableDeclaration = Type VariableDeclarators
+                          ;
+
+ Statement = StatementWithoutTrailingSubstatement
+           | LabeledStatement
+           | IfStatement
+           | WhileStatement
+           | ForStatement
+           ;
+
+ StatementWithoutTrailingSubstatement = Block
+                                      | EmptyStatement
+                                      | ExpressionStatement
+                                      | SwitchStatement
+                                      | DoStatement
+                                      | BreakStatement
+                                      | ContinueStatement
+                                      | ReturnStatement
+                                      | SynchronizedStatement
+                                      | ThrowStatement
+                                      | TryStatement
+                                      ;
+
+ EmptyStatement = 'semicolon'
+                ;
+
+ LabeledStatement = 'identifier' 'colon' Statement
+                  ;
+                           
+ ExpressionStatement = StatementExpression 'semicolon'
+                     ;
+                     
+ StatementExpression = Assignment
+                     | PreIncrementExpression
+                     | PreDecrementExpression
+                     | PostIncrementExpression
+                     | PostDecrementExpression
+                     | MethodInvocation
+                     | ClassInstanceCreationExpression
+                     ;
+
+ IfStatement = '_if' 'lpar' Expression 'rpar' Statement                    [ifelse]
+             | '_if' 'lpar' Expression 'rpar' Statement '_else' Statement  [ifelse]
+             ;    
+ 
+ SwitchStatement = '_switch' 'lpar' Expression 'rpar' SwitchBlock
+                 ;
+                 
+ SwitchBlock = 'lcurl' 'rcurl'
+             | 'lcurl' SwitchCases 'rcurl'
+             ;
+             
+ SwitchCases = SwitchCase
+             | SwitchCases SwitchCase
+             ;
+              
+ SwitchCase = '_case' ConstantExpression 'colon'
+            | '_default' 'colon'
+            | BlockStatement
+            ;
+
+ WhileStatement = '_while' 'lpar' Expression 'rpar' Statement
+                ;
+                         
+ DoStatement = '_do' Statement '_while' 'lpar' Expression 'rpar' 'semicolon'
+             ;
+              
+ ForStatement = '_for' 'lpar' ForInit 'semicolon' Expression? 'semicolon' ForUpdate 'rpar' Statement
+              ;
+
+ ForInit = StatementExpressionList
+         | LocalVariableDeclaration
+         |
+         ;
+ 
+ ForUpdate = StatementExpressionList
+           |
+           ;
+           
+ StatementExpressionList = StatementExpression
+                         | StatementExpressionList 'comma' StatementExpression
+                         ;
+                         
+ BreakStatement = '_break' 'semicolon'
+                | '_break' 'identifier' 'semicolon'
+                ;
+                
+ ContinueStatement = '_continue' 'semicolon'
+                   | '_continue' 'identifier' 'semicolon'
+                   ;
+                   
+ ReturnStatement = '_return' 'semicolon'
+                 | '_return' Expression 'semicolon'
+                 ;
+                 
+ ThrowStatement = '_throw' Expression 'semicolon'
+                ;
+                
+ SynchronizedStatement = '_synchronized' 'lpar' Expression 'rpar' Block
+                       ;
+ 
+ TryStatement = '_try' Block Catches
+              | '_try' Block Finally
+              | '_try' Block Catches Finally
+              ;
+              
+ Catches = CatchClause
+         | Catches CatchClause
+         ;
+         
+ CatchClause = '_catch' 'lpar' FormalParameter 'rpar' Block
+             ;
+ 
+ Finally = '_finally' Block
+         ;
+
+ Primary = PrimaryNoNewArray
+         | ArrayCreationExpression
+         ;
+
+ PrimaryNoNewArray = Literal                                        
+                   | '_this'                                        
+                   | 'lpar' Expression 'rpar'                       [primary]
+                   | ClassInstanceCreationExpression                
+                   | FieldAccess                                    
+                   | MethodInvocation                               
+                   | ArrayAccess                                    
+                   ;
+
+ ClassInstanceCreationExpression = '_new' ClassType 'lpar' ArgumentList 'rpar'
+                                 ;
+                                 
+ ArgumentList = ArgumentListRest
+              |
+              ;
+              
+ ArgumentListRest = Expression
+                  | ArgumentListRest 'comma' Expression
+                  ;
+              
+ ArrayCreationExpression = '_new' PrimitiveType DimExprs              
+                         | '_new' PrimitiveType DimExprs Dims         
+                         | '_new' ClassOrInterfaceType DimExprs       
+                         | '_new' ClassOrInterfaceType DimExprs Dims  
+                         ;          
+                   
+ DimExprs = DimExpr
+          | DimExprs DimExpr
+          ;
+         
+ DimExpr = 'lopt' Expression 'ropt'
+         ;
+        
+ Dims = 'lopt' 'ropt'
+      | Dims 'lopt' 'ropt'
+      ;
+ 
+ FieldAccess = Primary 'dot' 'identifier'      
+             | '_super' 'dot' 'identifier'     
+             ;
+
+ MethodInvocation = Name 'lpar' ArgumentList 'rpar'                           
+                  | Primary 'dot' 'identifier' 'lpar' ArgumentList 'rpar'
+                  | '_super' 'dot' 'identifier' 'lpar' ArgumentList 'rpar'    
+                  ;
+                  
+ ArrayAccess = Name 'lopt' Expression 'ropt'
+             | PrimaryNoNewArray 'lopt' Expression 'ropt'
+             ;
+ 
+ PrimaryOrName = Primary
+               | Name
+               ;
+ 
+ PostIncrementExpression = PrimaryOrName 'plusplus'               [unary]
+                         ;
+                         
+ PostDecrementExpression = PrimaryOrName 'minusminus'             [unary]
+                         ;
+                         
+ PreIncrementExpression = 'plusplus' PrimaryOrName                [unary]
+                        ;
+                        
+ PreDecrementExpression = 'minusminus' PrimaryOrName              [unary]
+                        ;
+ 
+ CastExpression = 'lpar' PrimitiveType Dims? 'rpar' Expression    [unary]
+                | 'lpar' Expression 'rpar' Expression             [unary]
+                | 'lpar' Name Dims 'rpar' Expression              [unary]
+                ;
+                
+ Assignment = LeftHandSide AssignmentOperator Expression          [assign]
+            ;
+            
+ LeftHandSide = Name
+              | FieldAccess
+              | ArrayAccess
+              ;
+              
+ AssignmentOperator = 'assign'
+                    | 'plusassign'
+                    | 'minusassign'
+                    | 'timesassign'
+                    | 'divideassign'
+                    | 'remainderassign'
+                    | 'leftshiftassign'
+                    | 'rightshiftsignedassign'
+                    | 'rightshiftunsignedassign'
+                    | 'andassign'
+                    | 'orassign'
+                    | 'xorassign'
+                    ;
+ 
+ ConstantExpression = Expression
+                    ;
+                    
+ Expression = PrimaryOrName                                             
+ 
+            | PostIncrementExpression                                   
+            | PostDecrementExpression                                   
+            
+            | PreIncrementExpression                                    
+            | PreDecrementExpression                                    
+            | 'plus' Expression                                         [unary]
+            | 'minus' Expression                                        [unary]
+                 
+            | 'not' Expression                                          [unary]
+            | 'tilda' Expression                                        [unary]
+            | CastExpression
+            
+            | Expression 'times' Expression                             [times]
+            | Expression 'divide' Expression                            [times]
+            | Expression 'remainder' Expression                         [times]
+            
+            | Expression 'plus' Expression                              [plus]
+            | Expression 'minus' Expression                             [plus]
+            
+            | Expression 'leftshift' Expression                         [shift]
+            | Expression 'rightshiftsigned' Expression                  [shift]
+            | Expression 'rightshiftunsigned' Expression                [shift]
+            
+            | Expression 'lt' Expression                                [less]
+            | Expression 'gt' Expression                                [less]
+            | Expression 'le' Expression                                [less]
+            | Expression 'ge' Expression                                [less]
+            | Expression '_instanceof' ReferenceType                    [less]
+            
+            | Expression 'eq' Expression                                [equals]
+            | Expression 'ne' Expression                                [equals]
+            
+            | Expression 'and' Expression                               [and]
+            
+            | Expression 'xor' Expression                               [xor]
+            
+            | Expression 'or' Expression                                [or]
+            
+            | Expression 'andand' Expression                            [band]
+            
+            | Expression 'oror' Expression                              [bor]      
+            
+            | Expression 'questionmark' Expression 'colon' Expression   [cond]
+            
+            | Assignment                                                
+            ;
+                                          

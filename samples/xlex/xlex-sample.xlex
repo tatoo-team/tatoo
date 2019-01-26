@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+  <define-macro name="ab" pattern="a|b"/>
+  <rule id="un" pattern='^"ici"[lL][aA][uU][rR][eE][nN][tT]!{ab}{6,}'/>
+  <rule id="deux" pattern='(t{5}|.)/[^\-d-z]+'/>
+  <rule id="trois" pattern="[!]?"/>
+  <rule id="aLetter" pattern="{ab}"/>
+</lexer>

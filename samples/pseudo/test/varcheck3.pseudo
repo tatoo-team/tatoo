@@ -1,0 +1,8 @@
+{
+  int i;
+  loop: while(true) {
+    i=3;
+    break;
+  }
+  print i;
+}

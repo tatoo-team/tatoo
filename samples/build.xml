@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project name="samples" default="all" basedir=".">	
+  <property name="calc.dir" location="calc"/>
+  <property name="ast.dir" location="ast"/>
+  <property name="editor.dir" location="editor"/>
+  <property name="ext.dir" location="ext"/>
+  <property name="justintime.dir" location="justintime"/>
+  <property name="latin1.dir" location="latin1"/>
+  <property name="regex.dir" location="regex"/>
+  <property name="scanner.dir" location="scanner"/>
+  <property name="xlex.dir" location="xlex"/>
+  <property name="tutorial.dir" location="tutorial"/>
+  <property name="httpserver.dir" location="httpserver"/>
+  
+  <macrodef name="samples">
+    <attribute name="target"/>
+    <sequential>
+      <subant target="@{target}">
+        <fileset dir="." includes="*/build.xml" excludes="ast/**"/>
+      </subant>	
+    </sequential>
+  </macrodef>
+
+  <target name="all">
+    <samples target="all"/>
+  </target>
+	
+  <target name="compile">
+    <samples target="compile"/>
+  </target>
+	
+  <target name="clean">
+    <samples target="clean"/>
+  </target>
+	
+</project>

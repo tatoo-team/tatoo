@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+  <define-macro-xml name="ab">
+    <or>
+      <letter value="a"/>
+      <letter value="b"/>
+    </or>
+  </define-macro-xml>
+  <rule-xml beginning-of-line="true" id="un">
+    <main>
+      <cat>
+        <string value="ici"/>
+        <string ignore-case="true" value="laurent"/>
+        <letter value="!"/>
+        <at-least from="6">
+           <macro name="ab"/>
+        </at-least>
+      </cat>
+    </main>
+  </rule-xml>
+  <rule-xml id="deux">
+    <main>
+      <star>
+        <or>
+          <range from="1" to="3">
+            <any/>
+          </range>
+          <times value="5">
+            <letter value="t"/>
+          </times>
+          <any/>
+        </or>
+      </star>
+    </main>
+    <follow>
+      <plus>
+        <set negate="true">
+          <letter value="-"/>
+          <interval from="a" to="z"/>
+        </set>
+      </plus>
+    </follow>
+  </rule-xml>
+  <rule-xml id="trois">
+    <main>
+      <optional>
+        <set>
+          <letter value="!"/>
+        </set>
+      </optional>
+    </main>
+    <end-of-line/>
+  </rule-xml>
+</lexer>

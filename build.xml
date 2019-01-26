@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<project name="tatoo" default="all" basedir=".">
+	<!-- sub directories -->
+	<property name="cc" location="cc"/>
+	<property name="runtime" location="runtime"/>
+	<property name="regex" location="regex"/>
+	<property name="ebnf" location="ebnf"/>
+	<property name="plugin" location="plugin"/>
+	
+	<!-- global properties -->
+    <property name="prop.dir" location="."/>
+	<property file="${prop.dir}/tatoo.properties"/>
+	
+	<!-- distrib files -->
+	<property name="doc" location="doc"/>
+	<property name="distrib-file" location="tatoo.zip"/>
+	<property name="samples" location="samples"/>
+	
+	<target name="all" depends="runtime,cc,regex,ebnf,plugin"/>
+	
+	<target name="runtime">
+		<ant dir="${runtime}"/>
+    </target>
+	
+	<target name="cc">
+		<ant dir="${cc}"/>
+	</target>
+	
+	<target name="regex">
+		<ant dir="${regex}"/>
+	</target>
+		
+	<target name="ebnf">
+		<ant dir="${ebnf}"/>
+	</target>
+	
+	<target name="plugin">
+		<ant dir="${plugin}"/>
+	</target>
+	
+	<target name="toAll">
+		<fail unless="target-call" message="toAll must be called with property target-call defined"/>
+		<ant dir="${cc}" target="${target-call}"/>
+		<ant dir="${runtime}" target="${target-call}"/>
+		<ant dir="${regex}" target="${target-call}"/>
+		<ant dir="${ebnf}" target="${target-call}"/>
+		<ant dir="${plugin}" target="${target-call}"/>
+	</target>
+	
+	<target name="clean" depends="dist-clean">
+		<delete file="${lib}/${jar}"/>
+		<delete file="${lib}/${jar-runtime}"/>
+		<delete file="${lib}/${jar-runtime-plugin}"/>
+		<delete file="${lib}/${flat-src-zip}"/>
+		<delete dir="${doc}/api"/>
+		<delete dir="${doc}/rt/api"/>
+	</target>
+	
+	<target name="dist-clean">
+		<antcall target="toAll">
+			<param name="target-call" value="clean"/>
+		</antcall>
+		<delete file="${distrib-file}"/>
+	</target>
+	
+	<target name="flat-src">
+		<delete file="${lib}/${flat-src-zip}"/>
+		<antcall target="toAll">
+			<param name="target-call" value="flat-src"/>
+		</antcall>
+	</target>
+	
+	<target name="javadoc-rt">
+		<delete dir="${doc}/rt-api"/>
+		<mkdir dir="${doc}/rt-api"/>
+		<javadoc access="protected" author="true"
+			classpath="${runtime}/classes"
+			destdir="${doc}/rt-api" nodeprecated="false"
+		        nodeprecatedlist="false" noindex="false"
+		        packagenames="fr.umlv.tatoo.runtime.*"
+		        nonavbar="false" notree="false" source="1.5"
+			sourcepath="${runtime}/src"
+		        splitindex="true" use="true" version="true">
+		     <link href="http://java.sun.com/j2se/1.5.0/docs/api"/>
+		     <link href="http://tatoo.univ-mlv.fr/doc/api"/>
+		</javadoc>
+	</target>
+	
+	<target name="javadoc" depends="all,javadoc-rt">
+		<delete dir="${doc}/api"/>
+		<mkdir dir="${doc}/api"/>
+		<javadoc access="protected" author="true"
+			classpath="${cc}/classes;${runtime}/classes;${regex}/classes;${ebnf}/classes;${plugin}/classes;${motocity-path}"
+			destdir="${doc}/api" nodeprecated="false"
+	    	        nodeprecatedlist="false" noindex="false"
+	    	        packagenames="fr.umlv.tatoo.*"
+	                nonavbar="false" notree="false" source="1.5"
+			sourcepath="${cc}/src;${runtime}/src;${regex}/src;${ebnf}/src;${plugin}/src"
+	                splitindex="true" use="true" version="true">
+		     <link href="http://java.sun.com/j2se/1.5.0/docs/api"/>
+		</javadoc>
+	</target>
+	
+	<target name="distrib">
+		<delete dir="tatoo"/>
+		<mkdir dir="tatoo"/>
+		<copy todir="tatoo" includeemptydirs="true">
+			<fileset dir="." excludes="**/.svn/**,tatoo/**"/>
+		</copy>
+		<ant dir="tatoo" target="dist-distrib" inheritall="false"/>
+		<zip destfile="${distrib-file}" basedir="." includes="tatoo/**"/>
+		<delete dir="tatoo"/>
+	</target>
+	
+	<target name="clean-samples">
+		<!--subant target="clean" inheritall="false">
+			<fileset dir="${samples}" includes="*/build.xml"/>
+		</subant-->
+		<exec osfamily="windows" executable="cmd.exe" dir="${samples}">
+			<arg line="/c ant clean"/>
+		</exec>
+		<exec osfamily="unix" executable="sh" dir="${samples}">
+			<arg line="-c 'ant clean'"/>
+		</exec>
+	</target>
+	
+	<target name="dist-distrib" depends="clean,all,javadoc,flat-src,clean-samples">
+		<antcall target="dist-clean"/>
+	</target>
+	
+	<target name="clean-and-distrib" depends="clean,clean-samples,distrib"/>
+	<target name="jar" depends="all"/>
+	<target name="jar-nocompile">
+		<antcall target="toAll">
+			<param name="target-call" value="jar-nocompile"/>
+		</antcall>
+	</target>
+</project>

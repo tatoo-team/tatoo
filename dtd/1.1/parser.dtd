@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % DOUBLE "CDATA">
+<!ENTITY % PRIORITY "CDATA">
+<!ENTITY % DOUBLE_OR_ID "CDATA">
+<!ENTITY % NONTERMINAL "CDATA">
+<!ENTITY % TERMINAL "CDATA">
+<!ENTITY % VARIABLE "CDATA">
+<!ENTITY % PRODUCTION "CDATA">
+<!ENTITY % VERSION "CDATA">
+<!ENTITY % URI "CDATA">
+<!ENTITY % BOOL "(true|false)">
+
+<!ELEMENT parser (priority*,terminal+,error?,version*,start+,production+)>
+<!ATTLIST parser xmlns %URI; #FIXED 'http://www.umlv.fr/2005/parser'>
+
+<!-- priority -->
+<!ELEMENT priority EMPTY>
+<!ATTLIST priority id %PRIORITY; #REQUIRED
+                   priority %DOUBLE; #REQUIRED
+                   associativity (left|right|non-associative|none) #IMPLIED>
+
+<!-- terminals -->
+<!ELEMENT terminal EMPTY>
+<!ATTLIST terminal id %TERMINAL; #REQUIRED
+                   priority %PRIORITY; #IMPLIED>
+
+<!-- versions -->
+<!ELEMENT version EMPTY>
+<!ATTLIST version id %VERSION; #REQUIRED
+                  implies %VERSION; #IMPLIED>
+
+<!-- start -->
+<!ELEMENT start EMPTY>
+<!ATTLIST start id %VARIABLE; #REQUIRED>
+
+<!-- error -->
+<!ELEMENT error EMPTY>
+<!ATTLIST error id %TERMINAL; #REQUIRED>
+
+<!-- productions -->
+<!ELEMENT production (lhs,rhs)>
+<!ATTLIST production id %PRODUCTION; #REQUIRED
+	                 priority %PRIORITY; #IMPLIED
+	                 version %VERSION; #IMPLIED>
+
+<!-- lhs and rhs -->
+<!ELEMENT lhs EMPTY>
+<!ATTLIST lhs id %NONTERMINAL; #REQUIRED>
+
+<!ELEMENT rhs ((right|list)*)>
+
+<!ELEMENT right EMPTY>
+<!ATTLIST right id %VARIABLE; #REQUIRED
+                optional %BOOL; #IMPLIED>
+
+<!ELEMENT list EMPTY>
+<!ATTLIST list id %VARIABLE; #REQUIRED
+               empty %BOOL; #REQUIRED
+               element %VARIABLE; #REQUIRED
+               separator %VARIABLE; #IMPLIED
+               associativity (left|right) #IMPLIED>

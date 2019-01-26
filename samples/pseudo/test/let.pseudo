@@ -1,0 +1,6 @@
+{
+  let x=3;
+  let y=x+4;
+  x.u=5;
+  print y;
+}

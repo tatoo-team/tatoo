@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project name="fastred" default="all" basedir=".">
+	
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  <property name="tatoo-runtime.jar" location="${tatoo.dir}/tatoo-runtime.jar"/>
+	
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="gen-src" value="gen-src"/>
+  <property name="ebnf.file" value="t.ebnf"/>
+  	
+  <property name="package" value="fr.umlv.tatoo.samples.fastred"/>
+
+  <target name="tasks">
+    <taskdef name="ebnf" classname="fr.umlv.tatoo.cc.ebnf.main.EBNFTask" classpath="${tatoo.jar}"/>
+  </target>
+  	
+  <target name="all" depends="ebnf">
+  </target>
+	
+  <target name="ebnf" depends="tasks">
+	<ebnf destination="${gen-src}" ebnfFile="${ebnf.file}"  parserType="slr"
+			logfile="log.html" loglevel="ALL" packageprefix="${package}"/>
+  </target>
+	
+	<target name="compile" depends="ebnf,compile-nogen"/>
+	
+	<target name="compile-nogen">
+		<mkdir dir="${classes}"/>
+		<javac srcdir="${gen-src}:${src}" destdir="${classes}" classpath="${tatoo-runtime.jar}"/>
+	</target>
+	
+	<target name="test">
+		<java classname="${package}.Test" classpath="${tatoo-runtime.jar}:${classes}"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<!-- not to break eclipse source folders -->
+		<mkdir dir="${gen-src}"/>
+	</target>
+
+</project>

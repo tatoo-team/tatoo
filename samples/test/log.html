@@ -1,0 +1,1435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+	<title>Parser Table</title>
+	<style type="text/css">
+		body {font-family: sans-serif; background:white}
+		h1 {border-style: solid;border-width: 1px;background: #E0E0FF;padding: 0.5cm;font: 180% sans-serif;text-align: center;}
+		h2 {font: 150% sans-serif;text-decoration: underline;}
+		h3 {font: 130% sans-serif;}td{background: #EEEEEE;}
+		td.g {background:white}
+		span.terminal { font-style:italic; color:#881122; }
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Parser Table</h1>
+<h2>Grammar</h2>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g" id="line_star_0">line_star_0</td> <td class="g" align="center">::=</td>
+<td class="g">
+<i>*empty*</i></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;</td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<a href="#line_star_0">line_star_0</a>&#160;<a href="#line">line</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">eoln</span></td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g" id="expr">expr</td> <td class="g" align="center">::=</td>
+<td class="g">
+<span class="terminal">value</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">plus</span>&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">minus</span>&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">star</span>&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">equals</span>&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<span class="terminal">lpar</span>&#160;<a href="#expr">expr</a>&#160;<span class="terminal">rpar</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">lpar</span>&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">rpar</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<span class="terminal">lpar</span>&#160;<span class="terminal">error</span>&#160;<span class="terminal">rpar</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">lpar</span>&nbsp;<span class="terminal">error</span>&nbsp;<span class="terminal">rpar</span></td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g">-root-1</td> <td class="g" align="center">::=</td>
+<td class="g">
+<a href="#start">start</a>&#160;<span class="terminal">␄</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;</td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g">-root-0</td> <td class="g" align="center">::=</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">␄</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span></td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g" id="comma_optional_1">comma_optional_1</td> <td class="g" align="center">::=</td>
+<td class="g">
+<i>*empty*</i></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">semicolon</span>&nbsp;<span class="terminal">eoln</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<span class="terminal">comma</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">comma</span>&nbsp;<span class="terminal">semicolon</span>&nbsp;<span class="terminal">eoln</span></td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g" id="line">line</td> <td class="g" align="center">::=</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<a href="#comma_optional_1">comma_optional_1</a>&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">semicolon</span>&nbsp;<span class="terminal">eoln</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">eoln</span></td>
+<td class="g">v2</td>
+<td class="g">start:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">eoln</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<span class="terminal">error</span>&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;<span class="terminal">error</span>&nbsp;<span class="terminal">semicolon</span>&nbsp;<span class="terminal">eoln</span></td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g" id="start">start</td> <td class="g" align="center">::=</td>
+<td class="g">
+<a href="#line_star_0">line_star_0</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">start:&nbsp;</td>
+</tr>
+</table>
+
+
+<h2>Non Terminals</h2>
+<table border="1">
+<tr><th>Non terminal</th><th>Epsilon</th><th>First</th><th>Result</th><th>Last</th><th>Result</th><th>Follow</th><th>Result</th></tr>
+<tr id="NT:line_star_0"><td>line_star_0</td><td>true</td>
+<td><table border="0">
+<tr><td><span title='line_star_0&#160;::=&#160;line_star_0&#160;line'>First(<a href='#NT:line'>line</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>error</td></tr><tr><td>lpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='line_star_0&#160;::=&#160;line_star_0&#160;line'>Last(<a href='#NT+line'>line</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>eoln</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='start&#160;::=&#160;line_star_0'>Follow(<a href='#NT+start'>start</a>)</span></td></tr><tr><td><span title='line_star_0&#160;::=&#160;line_star_0&#160;line'>First(<a href='#NT+line'>line</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>error</td></tr><tr><td>__eof__</td></tr><tr><td>lpar</td></tr></table></td>
+</tr>
+<tr id="NT:expr"><td>expr</td><td>false</td>
+<td><table border="0">
+<tr><td><span title='expr&#160;::=&#160;&apos;value&apos;'>value</span></td></tr><tr><td><span title='expr&#160;::=&#160;&apos;lpar&apos;&#160;expr&#160;&apos;rpar&apos;, expr&#160;::=&#160;&apos;lpar&apos;&#160;&apos;error&apos;&#160;&apos;rpar&apos;'>lpar</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>lpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='expr&#160;::=&#160;&apos;value&apos;'>value</span></td></tr><tr><td><span title='expr&#160;::=&#160;&apos;lpar&apos;&#160;expr&#160;&apos;rpar&apos;, expr&#160;::=&#160;&apos;lpar&apos;&#160;&apos;error&apos;&#160;&apos;rpar&apos;'>rpar</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>rpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='line&#160;::=&#160;expr&#160;comma_optional_1&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;'>First(<a href='#NT+comma_optional_1'>comma_optional_1</a>)</span></td></tr><tr><td><span title='line&#160;::=&#160;expr&#160;comma_optional_1&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;'>semicolon</span></td></tr><tr><td><span title='expr&#160;::=&#160;expr&#160;&apos;plus&apos;&#160;expr'>plus</span></td></tr><tr><td><span title='line&#160;::=&#160;expr&#160;&apos;eoln&apos;'>eoln</span></td></tr><tr><td><span title='expr&#160;::=&#160;&apos;lpar&apos;&#160;expr&#160;&apos;rpar&apos;'>rpar</span></td></tr><tr><td><span title='-root-0&#160;::=&#160;expr&#160;&apos;␄&apos;'>__eof__</span></td></tr><tr><td><span title='expr&#160;::=&#160;expr&#160;&apos;equals&apos;&#160;expr'>equals</span></td></tr><tr><td><span title='expr&#160;::=&#160;expr&#160;&apos;star&apos;&#160;expr'>star</span></td></tr><tr><td><span title='expr&#160;::=&#160;expr&#160;&apos;minus&apos;&#160;expr'>minus</span></td></tr></table></td><td><table border="0">
+<tr><td>semicolon</td></tr><tr><td>comma</td></tr><tr><td>eoln</td></tr><tr><td>plus</td></tr><tr><td>rpar</td></tr><tr><td>equals</td></tr><tr><td>__eof__</td></tr><tr><td>star</td></tr><tr><td>minus</td></tr></table></td>
+</tr>
+<tr id="NT:-root-1"><td>-root-1</td><td>false</td>
+<td><table border="0">
+<tr><td><span title='-root-1&#160;::=&#160;start&#160;&apos;␄&apos;'>First(<a href='#NT:start'>start</a>)</span></td></tr><tr><td><span title='-root-1&#160;::=&#160;start&#160;&apos;␄&apos;'>␄</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>error</td></tr><tr><td>␄</td></tr><tr><td>lpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='-root-1&#160;::=&#160;start&#160;&apos;␄&apos;'>␄</span></td></tr></table></td><td><table border="0">
+<tr><td>␄</td></tr></table></td>
+
+<td colspan="2" class="g"/>
+</tr>
+<tr id="NT:-root-0"><td>-root-0</td><td>false</td>
+<td><table border="0">
+<tr><td><span title='-root-0&#160;::=&#160;expr&#160;&apos;␄&apos;'>First(<a href='#NT:expr'>expr</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>lpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='-root-0&#160;::=&#160;expr&#160;&apos;␄&apos;'>␄</span></td></tr></table></td><td><table border="0">
+<tr><td>␄</td></tr></table></td>
+
+<td colspan="2" class="g"/>
+</tr>
+<tr id="NT:comma_optional_1"><td>comma_optional_1</td><td>true</td>
+<td><table border="0">
+<tr><td><span title='comma_optional_1&#160;::=&#160;&apos;comma&apos;'>comma</span></td></tr></table></td><td><table border="0">
+<tr><td>comma</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='comma_optional_1&#160;::=&#160;&apos;comma&apos;'>comma</span></td></tr></table></td><td><table border="0">
+<tr><td>comma</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='line&#160;::=&#160;expr&#160;comma_optional_1&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;'>semicolon</span></td></tr></table></td><td><table border="0">
+<tr><td>semicolon</td></tr></table></td>
+</tr>
+<tr id="NT:line"><td>line</td><td>false</td>
+<td><table border="0">
+<tr><td><span title='line&#160;::=&#160;expr&#160;comma_optional_1&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;, line&#160;::=&#160;expr&#160;&apos;eoln&apos;'>First(<a href='#NT:expr'>expr</a>)</span></td></tr><tr><td><span title='line&#160;::=&#160;&apos;error&apos;&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;'>error</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>error</td></tr><tr><td>lpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='line&#160;::=&#160;expr&#160;comma_optional_1&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;, line&#160;::=&#160;&apos;error&apos;&#160;&apos;semicolon&apos;&#160;&apos;eoln&apos;, line&#160;::=&#160;expr&#160;&apos;eoln&apos;'>eoln</span></td></tr></table></td><td><table border="0">
+<tr><td>eoln</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='line_star_0&#160;::=&#160;line_star_0&#160;line'>Follow(<a href='#NT+line_star_0'>line_star_0</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>error</td></tr><tr><td>__eof__</td></tr><tr><td>lpar</td></tr></table></td>
+</tr>
+<tr id="NT:start"><td>start</td><td>true</td>
+<td><table border="0">
+<tr><td><span title='start&#160;::=&#160;line_star_0'>First(<a href='#NT:line_star_0'>line_star_0</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>error</td></tr><tr><td>lpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='start&#160;::=&#160;line_star_0'>Last(<a href='#NT+line_star_0'>line_star_0</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>eoln</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='-root-1&#160;::=&#160;start&#160;&apos;␄&apos;'>__eof__</span></td></tr></table></td><td><table border="0">
+<tr><td>__eof__</td></tr></table></td>
+</tr>
+</table>
+
+<h2>Start States</h2>
+<table border="1">
+<tr><th>Non terminal</th><th>Start State</th></tr>
+<tr><td>start</td><td><a href="#state0">state0</a></td></tr>
+<tr><td>expr</td><td><a href="#state28">state28</a></td></tr>
+</table>
+
+<h2>States</h2>
+<h3 id="state0">state0 - state 0:</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-1">-root-1</a>&#160;::=&#160;&#8226;&#160;<a href="#start">start</a>&#160;<span class="terminal">␄</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+<a href='javascript:history.go(-0);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= ɛ</td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+<a href='javascript:history.go(-0);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= ɛ</td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-0);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= ɛ</td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-0);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= ɛ</td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-0);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= ɛ</td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>line_star_0</td><td>:</td><td><a href="#state1">state1</a></td></tr>
+<tr><td>start</td><td>:</td><td><a href="#state26">state26</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state1">state1 - state 0:</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#start">start</a>&#160;::=&#160;<a href="#line_star_0">line_star_0</a>&#160;&#8226;</b></td></tr>
+<tr><td><b><a href="#line_star_0">line_star_0</a>&#160;::=&#160;<a href="#line_star_0">line_star_0</a>&#160;&#8226;&#160;<a href="#line">line</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+shift to <a href="#state3">state3</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#start'>start</a> ::= <a href="#line_star_0">line_star_0</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#start'>start</a> ::= <a href="#line_star_0">line_star_0</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state19">state19</a></td></tr>
+<tr><td>line</td><td>:</td><td><a href="#state25">state25</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state2">state2 - state 28: value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">value</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state3">state3 - state 0: error</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<span class="terminal">error</span>&#160;&#8226;&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+shift to <a href="#state4">state4</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state4">state4 - state 0: error semicolon</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<span class="terminal">error</span>&#160;<span class="terminal">semicolon</span>&#160;&#8226;&#160;<span class="terminal">eoln</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+shift to <a href="#state5">state5</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state5">state5 - state 0: error semicolon eoln</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<span class="terminal">error</span>&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#line'>line</a> ::= <span class="terminal">error</span> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#line'>line</a> ::= <span class="terminal">error</span> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#line'>line</a> ::= <span class="terminal">error</span> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#line'>line</a> ::= <span class="terminal">error</span> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#line'>line</a> ::= <span class="terminal">error</span> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state6">state6 - state 28: lpar</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;&#8226;&#160;<a href="#expr">expr</a>&#160;<span class="terminal">rpar</span></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;&#8226;&#160;<span class="terminal">error</span>&#160;<span class="terminal">rpar</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+shift to <a href="#state7">state7</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state9">state9</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state7">state7 - state 28: lpar error</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;<span class="terminal">error</span>&#160;&#8226;&#160;<span class="terminal">rpar</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+shift to <a href="#state8">state8</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state8">state8 - state 28: lpar error rpar</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;<span class="terminal">error</span>&#160;<span class="terminal">rpar</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <span class="terminal">error</span> <span class="terminal">rpar</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state9">state9 - state 28: lpar value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">rpar</span></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+shift to <a href="#state10">state10</a></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+shift to <a href="#state18">state18</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+shift to <a href="#state12">state12</a></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+shift to <a href="#state14">state14</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+shift to <a href="#state16">state16</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state10">state10 - state 28: value plus</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">plus</span>&#160;&#8226;&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state11">state11</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state11">state11 - state 28: value plus value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a>&#160;&#8226;</b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a>,shift to <a href="#state10">state10</a></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a>,shift to <a href="#state12">state12</a></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a>,shift to <a href="#state14">state14</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a>,shift to <a href="#state16">state16</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state12">state12 - state 28: value equals</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">equals</span>&#160;&#8226;&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state13">state13</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state13">state13 - state 28: value equals value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a>&#160;&#8226;</b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+shift to <a href="#state10">state10</a>,<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+shift to <a href="#state12">state12</a>,<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+shift to <a href="#state14">state14</a>,<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+shift to <a href="#state16">state16</a>,<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">equals</span> <a href="#expr">expr</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state14">state14 - state 28: value star</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">star</span>&#160;&#8226;&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state15">state15</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state15">state15 - state 28: value star value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a>&#160;&#8226;</b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a>,shift to <a href="#state10">state10</a></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a>,shift to <a href="#state12">state12</a></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a>,shift to <a href="#state14">state14</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+shift to <a href="#state16">state16</a>,<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">star</span> <a href="#expr">expr</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state16">state16 - state 28: value minus</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">minus</span>&#160;&#8226;&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state17">state17</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state17">state17 - state 28: value minus value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a>&#160;&#8226;</b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a>,shift to <a href="#state10">state10</a></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a>,shift to <a href="#state12">state12</a></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a>,shift to <a href="#state14">state14</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+shift to <a href="#state16">state16</a>,<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <a href="#expr">expr</a> <span class="terminal">minus</span> <a href="#expr">expr</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state18">state18 - state 28: lpar value rpar</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;<a href="#expr">expr</a>&#160;<span class="terminal">rpar</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state19">state19 - state 0: value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<a href="#comma_optional_1">comma_optional_1</a>&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span></b></td></tr>
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">eoln</span></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-0);'>reduce</a> by <a href='#comma_optional_1'>comma_optional_1</a> ::= ɛ</td></tr>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+shift to <a href="#state20">state20</a></td></tr>
+<tr>
+<td>comma</td><td>:</td>
+<td>
+shift to <a href="#state21">state21</a></td></tr>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+shift to <a href="#state10">state10</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+shift to <a href="#state12">state12</a></td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+shift to <a href="#state14">state14</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+shift to <a href="#state16">state16</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>comma_optional_1</td><td>:</td><td><a href="#state22">state22</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state20">state20 - state 0: value eoln</h3>
+<p>Compatible versions :
+ v2
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">eoln</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <span class="terminal">eoln</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <span class="terminal">eoln</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state21">state21 - state 0: value comma</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#comma_optional_1">comma_optional_1</a>&#160;::=&#160;<span class="terminal">comma</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#comma_optional_1'>comma_optional_1</a> ::= <span class="terminal">comma</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state22">state22 - state 0: value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<a href="#comma_optional_1">comma_optional_1</a>&#160;&#8226;&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>semicolon</td><td>:</td>
+<td>
+shift to <a href="#state23">state23</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state23">state23 - state 0: value semicolon</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<a href="#comma_optional_1">comma_optional_1</a>&#160;<span class="terminal">semicolon</span>&#160;&#8226;&#160;<span class="terminal">eoln</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>eoln</td><td>:</td>
+<td>
+shift to <a href="#state24">state24</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state24">state24 - state 0: value semicolon eoln</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line">line</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<a href="#comma_optional_1">comma_optional_1</a>&#160;<span class="terminal">semicolon</span>&#160;<span class="terminal">eoln</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+<a href='javascript:history.go(-4);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <a href="#comma_optional_1">comma_optional_1</a> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+<a href='javascript:history.go(-4);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <a href="#comma_optional_1">comma_optional_1</a> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-4);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <a href="#comma_optional_1">comma_optional_1</a> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-4);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <a href="#comma_optional_1">comma_optional_1</a> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-4);'>reduce</a> by <a href='#line'>line</a> ::= <a href="#expr">expr</a> <a href="#comma_optional_1">comma_optional_1</a> <span class="terminal">semicolon</span> <span class="terminal">eoln</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state25">state25 - state 0: value eoln</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#line_star_0">line_star_0</a>&#160;::=&#160;<a href="#line_star_0">line_star_0</a>&#160;<a href="#line">line</a>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= <a href="#line_star_0">line_star_0</a> <a href="#line">line</a></td></tr>
+<tr>
+<td>error</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= <a href="#line_star_0">line_star_0</a> <a href="#line">line</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= <a href="#line_star_0">line_star_0</a> <a href="#line">line</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= <a href="#line_star_0">line_star_0</a> <a href="#line">line</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-2);'>reduce</a> by <a href='#line_star_0'>line_star_0</a> ::= <a href="#line_star_0">line_star_0</a> <a href="#line">line</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state26">state26 - state 0:</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-1">-root-1</a>&#160;::=&#160;<a href="#start">start</a>&#160;&#8226;&#160;<span class="terminal">␄</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+accept</td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+exit exit</td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state27">state27 - state 0: ␄</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-1">-root-1</a>&#160;::=&#160;<a href="#start">start</a>&#160;<span class="terminal">␄</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+accept</td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+exit exit</td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state28">state28 - state 28:</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-0">-root-0</a>&#160;::=&#160;&#8226;&#160;<a href="#expr">expr</a>&#160;<span class="terminal">␄</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state29">state29</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state29">state29 - state 28: value</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">star</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#-root-0">-root-0</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">␄</span></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">minus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">equals</span>&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+shift to <a href="#state10">state10</a></td></tr>
+<tr>
+<td>equals</td><td>:</td>
+<td>
+shift to <a href="#state12">state12</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+accept</td></tr>
+<tr>
+<td>star</td><td>:</td>
+<td>
+shift to <a href="#state14">state14</a></td></tr>
+<tr>
+<td>minus</td><td>:</td>
+<td>
+shift to <a href="#state16">state16</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+exit exit</td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state30">state30 - state 28: value ␄</h3>
+<p>Compatible versions :
+ v2
+ v1
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-0">-root-0</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">␄</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+accept</td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+exit exit</td></tr>
+</table></td>
+ 
+</tr>
+</table>
+  <p style="margin-bottom: 100%">
+    <a href="http://validator.w3.org"><img
+        src="http://www.w3.org/Icons/valid-xhtml11"
+        alt="Valid XHTML 1.1" height="31" width="88" /></a>
+  </p>
+</body>
+</html>

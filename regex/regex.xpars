@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE parser SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/parser.dtd">
+<parser>
+ <priority id="or" priority="0" associativity="left"/>
+ <priority id="concat" priority="1" associativity="left"/>
+ <priority id="interval" priority="2"/>
+ <priority id="iterate" priority="2" associativity="left"/>
+
+ <terminal id="plus" priority="iterate"/>
+ <terminal id="star" priority="iterate"/>
+ <terminal id="question" priority="iterate"/>
+ <terminal id="minus" priority="interval"/>
+ <terminal id="slash"/>
+ <terminal id="comma"/>
+ <terminal id="hat"/>
+ <terminal id="dollar"/>
+ <terminal id="pipe" priority="or"/>
+ <terminal id="integer"/>
+ <terminal id="lbrac" priority="iterate"/>
+ <terminal id="rbrac"/>
+ <terminal id="lpar" priority="concat"/>
+ <terminal id="rpar"/>
+ <terminal id="lbrak" priority="concat"/>
+ <terminal id="rbrak"/>
+ <terminal id="quote" priority="concat"/>
+ <terminal id="dot" priority="concat"/>
+ <terminal id="name" priority="concat"/>
+ <terminal id="specialLetter" priority="concat"/>
+ <terminal id="normalLetter" priority="concat"/>
+ <terminal id="stringLetter" priority="concat"/>
+ <terminal id="intervalLetter" priority="concat"/>
+ 
+ <start id="pattern"/>
+ 
+ <start id="macro"/>
+ 
+ <production id="initial">
+  <lhs id="pattern"/>
+  <rhs>
+   <right id="hatOpt"/>
+   <right id="main"/>
+   <right id="follow"/>
+  </rhs>
+ </production>
+	
+	<production id="macro">
+		<lhs id="macro"/>
+		<rhs>
+			<right id="regex"/>
+		</rhs>
+	</production>
+ 
+ <production id="mainRegex">
+  <lhs id="main"/>
+  <rhs>
+   <right id="regex"/>
+  </rhs>
+ </production>
+
+	
+ <production id="followEmpty">
+  <lhs id="follow"/>
+  <rhs/>
+ </production>
+ 
+ <production id="followDollar">
+  <lhs id="follow"/>
+  <rhs>
+   <right id="dollar"/>
+  </rhs>
+ </production>
+ 
+ <production id="followRegex">
+  <lhs id="follow"/>
+  <rhs>
+   <right id="slash"/>
+   <right id="regex"/>
+  </rhs>
+ </production>
+ 
+ <production id="hatEmpty">
+  <lhs id="hatOpt"/>
+  <rhs/>
+ </production>
+ 
+ <production id="hatPresent">
+  <lhs id="hatOpt"/>
+  <rhs>
+   <right id="hat"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexMacro" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="name"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexAny" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="dot"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexLetter">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="specialOrNormalLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="normalLetter" priority="concat">
+  <lhs id="specialOrNormalLetter"/>
+  <rhs>
+   <right id="normalLetter"/>
+  </rhs>
+ </production>
+
+  <production id="normalSpecialLetter" priority="concat">
+  <lhs id="specialOrNormalLetter"/>
+  <rhs>
+   <right id="specialLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexString" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="quote"/>
+   <right id="string"/>
+   <right id="quote"/>
+  </rhs>
+ </production>
+  
+ <production id="string">
+  <lhs id="string"/>
+  <rhs>
+    <right id="string"/>
+   	<right id="specialOrStringLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="specialOrStringLetter">
+  <lhs id="string"/>
+  <rhs>
+   	<right id="specialOrStringLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="stringSpecialLetter" priority="concat">
+  <lhs id="specialOrStringLetter"/>
+  <rhs>
+   	<right id="specialLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="stringLetter" priority="concat">
+  <lhs id="specialOrStringLetter"/>
+  <rhs>
+   	<right id="stringLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexInterval" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="lbrak"/>
+   <right id="intervals"/>
+   <right id="rbrak"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexIntervalNegate" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="lbrak"/>
+   <right id="hat"/>
+   <right id="intervals"/>
+   <right id="rbrak"/>
+  </rhs>
+ </production>
+ 
+ <production id="interval" priority="concat">
+  <lhs id="intervals"/>
+  <rhs>
+   <right id="interval"/>
+  </rhs>
+ </production>
+ 
+ <production id="intervals" priority="concat">
+  <lhs id="intervals"/>
+  <rhs>
+   <right id="intervals"/>
+   <right id="interval"/>
+  </rhs>
+ </production>
+ 
+ <production id="intervalSet" priority="interval">
+  <lhs id="interval"/>
+  <rhs>
+   <right id="specialOrIntervalLetter"/>
+   <right id="minus"/>
+   <right id="specialOrIntervalLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="intervalSingleton">
+  <lhs id="interval"/>
+  <rhs>
+   <right id="specialOrIntervalLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="intervalSpecialLetter" priority="concat">
+  <lhs id="specialOrIntervalLetter"/>
+  <rhs>
+   <right id="specialLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="intervalLetter" priority="concat">
+  <lhs id="specialOrIntervalLetter"/>
+  <rhs>
+   <right id="intervalLetter"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexStar" priority="iterate">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="star"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexPlus" priority="iterate">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="plus"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexOptional" priority="iterate">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="question"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexRange" priority="iterate">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="lbrac"/>
+   <right id="integer"/>
+   <right id="comma"/>
+   <right id="integer"/>
+   <right id="rbrac"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexAtLeast" priority="iterate">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="lbrac"/>
+   <right id="integer"/>
+   <right id="comma"/>
+   <right id="rbrac"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexTimes" priority="iterate">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="lbrac"/>
+   <right id="integer"/>
+   <right id="rbrac"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexPar" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="lpar"/>
+   <right id="regex"/>
+   <right id="rpar"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexCat" priority="concat">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="regex"/>
+  </rhs>
+ </production>
+ 
+ <production id="regexOr" priority="or">
+  <lhs id="regex"/>
+  <rhs>
+   <right id="regex"/>
+   <right id="pipe"/>
+   <right id="regex"/>
+  </rhs>
+ </production>
+ 
+</parser>

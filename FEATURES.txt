@@ -1,0 +1,70 @@
+Tatoo FEATURES
+
+Features version 4.0 :
+
+ Clean separation of lexer, parser, generated evaluators (tools)
+ and generated AST (tools AST)
+ 
+ - common features
+ 
+   - specification (lexer, parser, tools) can use XML format or EBNF like format
+   - lexer accepts blocking and non-blocking buffer, pull/push parser (Tutorial)
+   
+   - runtime support (share parser/lexer implementations) :
+     at runtime SimpleLexer/SimpleParser for simple task,
+     Lexer and Parser for more complex task. (Tutorial)
+   - generation used enumeration (dual representation
+     integer/object) used as input or output
+   - lexer and parser used listener.
+   
+   - branching of subgrammar to simulate grammar inclusion
+
+ - lexer
+   - rules specified
+     - using XML tags
+     - using usual regex format (Tutorial)
+     
+   - rule as enumeration
+   - ability to indicate a sub selection of
+     matching rules (RuleActivator)
+   - scanner implementation (Tutorial)
+   - ability to inform the parser about
+     reset() and close() (LifecycleHandler) ...
+ 
+ - parser
+   - BNF grammar with star, plus and optional. (Tutorial)
+   - priority on terminal and production,
+     associativity on terminal.
+     production priority can be guessed.
+   - ability to specify a version for a production
+     and to choose version at runtime. (Tutorial)
+   - three grammar analysis algorithms (lr, slr, lalr)
+   - generate LR table as a HTML page with debugging information:
+     - shortest path to each LR state
+     - LR conflicts
+     - first/follow
+     - lookaheads  
+   - autodetection of useless non terminals
+   - productions, terminals and non terminals as enums
+   - plugable error recovery mechanism  (Tutorial)
+ 
+ - tools
+   - two ways to specify semantics
+     - called in case of shift/reduce/accept (ToolsListener)
+     - called in case of reduction
+       with managed synthetized values
+   - can specify type for terminal and non-terminal
+   - standard error recovery mechanism implemented
+   - auto-generated evaluator with star and plus views
+     as java.util.List (Tutorial)
+   - parser can inform the lexer about witch rule to accept
+     (RuleActivator and expected lookahead set)
+   - lexer token attribute parse when token shifted by parser
+ 
+ - tools AST (Tutorial)
+   - generate a class for each production and each terminal (with a possible value)
+     and an interface for each non-terminal
+   - auto-detection of :
+     - useless non-terminal
+   - typed and generic read-only view of the same AST
+   - generated visitor

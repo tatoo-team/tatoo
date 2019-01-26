@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project name="emitter" default="all" basedir=".">
+  <property name="tatoo.dir" location="../../lib"/>
+  <property name="tatoo.jar" location="${tatoo.dir}/tatoo.jar"/>
+  <property name="tatoo-runtime.jar" location="${tatoo.dir}/tatoo-runtime.jar"/>
+	
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="gen-src" value="gen-src"/>
+  <property name="calc.ebnf" value="calc.ebnf"/>
+  <property name="expr-call.ebnf" value="expr-call.ebnf"/>
+  	
+  <property name="calc.lexer.package" value="fr.umlv.tatoo.samples.emitter.calc.lexer"/>
+  <property name="calc.parser.package" value="fr.umlv.tatoo.samples.emitter.calc.parser"/>
+  <property name="calc.tools.package" value="fr.umlv.tatoo.samples.emitter.calc.tools"/>
+  <property name="calc.ast.package" value="fr.umlv.tatoo.samples.emitter.calc.ast"/>
+	
+  <property name="exprcall.lexer.package" value="fr.umlv.tatoo.samples.emitter.exprcall.lexer"/>
+  <property name="exprcall.parser.package" value="fr.umlv.tatoo.samples.emitter.exprcall.parser"/>
+  <property name="exprcall.tools.package" value="fr.umlv.tatoo.samples.emitter.exprcall.tools"/>
+  <property name="exprcall.ast.package" value="fr.umlv.tatoo.samples.emitter.exprcall.ast"/>
+  
+  <target name="tasks">
+    <taskdef name="ebnf" classname="fr.umlv.tatoo.cc.ebnf.main.EBNFTask" classpath="${tatoo.jar}"/>
+  </target>
+  	
+  <target name="ebnf" depends="tasks">
+	<ebnf destination="${gen-src}" ebnfFile="${calc.ebnf}"  parserType="lalr" generateast="true"
+	      logfile="log.html" loglevel="ALL">
+		<package lexer="${calc.lexer.package}"/>
+		<package parser="${calc.parser.package}"/>
+		<package tools="${calc.tools.package}"/>
+		<package ast="${calc.ast.package}"/>
+	</ebnf>
+  	<ebnf destination="${gen-src}" ebnfFile="${expr-call.ebnf}"  parserType="lalr" generateast="true"
+  	          logfile="log.html" loglevel="ALL">
+  	    <package lexer="${exprcall.lexer.package}"/>
+  	    <package parser="${exprcall.parser.package}"/>
+  	    <package tools="${exprcall.tools.package}"/>
+  	    <package ast="${exprcall.ast.package}"/>
+  	</ebnf>
+  </target>
+	
+  <target name="all" depends="ebnf">
+  </target>
+	
+	<target name="compile">
+	  <mkdir dir="${classes}"/>
+
+	  <javac srcdir="${src}:${gen-src}" destdir="${classes}">
+		  <classpath path="${tatoo-runtime.jar}"/>
+		  <compilerarg value="-Xlint:deprecation"/>
+	  </javac>
+	</target>
+	
+  <target name="run" depends="compile">
+  	<java fork="true"
+  	      classname="fr.umlv.tatoo.samples.emitter.Main">
+  	  <arg line="calc-test.txt"/>
+          <jvmarg line="-Dfr.umlv.tatoo.loggerLevel=ALL"/>
+  	  <classpath>
+  	    <pathelement location="classes"/>
+  	  	<pathelement location="${tatoo-runtime.jar}"/>
+  	  </classpath>
+  	</java>
+  </target>
+	
+	<target name="clean">
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<!-- not to break eclipse source folders -->
+		<mkdir dir="${gen-src}"/>
+	</target>
+
+</project>

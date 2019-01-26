@@ -1,0 +1,231 @@
+imports:
+  com.sun.tools.javac.tree.JCTree
+  com.sun.tools.javac.tree.JCTree.JCAnnotation
+  com.sun.tools.javac.tree.JCTree.JCArrayAccess
+  com.sun.tools.javac.tree.JCTree.JCArrayTypeTree
+  com.sun.tools.javac.tree.JCTree.JCAssert
+  com.sun.tools.javac.tree.JCTree.JCAssign
+  com.sun.tools.javac.tree.JCTree.JCBlock
+  com.sun.tools.javac.tree.JCTree.JCBreak
+  com.sun.tools.javac.tree.JCTree.JCCase
+  com.sun.tools.javac.tree.JCTree.JCCatch
+  com.sun.tools.javac.tree.JCTree.JCClassDecl
+  com.sun.tools.javac.tree.JCTree.JCContinue
+  com.sun.tools.javac.tree.JCTree.JCCompilationUnit
+  com.sun.tools.javac.tree.JCTree.JCDoWhileLoop
+  com.sun.tools.javac.tree.JCTree.JCExpression
+  com.sun.tools.javac.tree.JCTree.JCExpressionStatement
+  com.sun.tools.javac.tree.JCTree.JCFieldAccess
+  com.sun.tools.javac.tree.JCTree.JCForLoop
+  com.sun.tools.javac.tree.JCTree.JCIdent
+  com.sun.tools.javac.tree.JCTree.JCIf
+  com.sun.tools.javac.tree.JCTree.JCImport
+  com.sun.tools.javac.tree.JCTree.JCLiteral
+  com.sun.tools.javac.tree.JCTree.JCMethodDecl
+  com.sun.tools.javac.tree.JCTree.JCMethodInvocation
+  com.sun.tools.javac.tree.JCTree.JCModifiers
+  com.sun.tools.javac.tree.JCTree.JCNewArray
+  com.sun.tools.javac.tree.JCTree.JCNewClass
+  com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree
+  com.sun.tools.javac.tree.JCTree.JCReturn
+  com.sun.tools.javac.tree.JCTree.JCStatement
+  com.sun.tools.javac.tree.JCTree.JCSwitch
+  com.sun.tools.javac.tree.JCTree.JCTry
+  com.sun.tools.javac.tree.JCTree.JCTypeCast
+  com.sun.tools.javac.tree.JCTree.JCVariableDecl
+  com.sun.tools.javac.tree.JCTree.JCWhileLoop
+  
+  com.sun.tools.javac.util.List
+  com.sun.tools.javac.util.ListBuffer
+  
+  fr.umlv.tatoo.samples.java.javac.MethodDeclarator
+  fr.umlv.tatoo.samples.java.javac.VariableDeclarator
+
+tokens:
+
+types:
+  'integerlit':String
+  'floatingpointlit':String
+  'booleanlit':boolean
+  'characterlit':char
+  'stringlit':String
+  
+  'identifier':String
+
+  Literal:JCExpression
+  
+  Name:JCExpression
+  SimpleName:JCIdent
+  QualifiedName:JCFieldAccess
+  
+  Type:JCExpression
+  ReferenceType:JCExpression
+  PrimitiveType:JCPrimitiveTypeTree
+  ClassType:JCExpression
+  ArrayType:JCArrayTypeTree
+  
+  
+  // compilation unit
+  CompilationUnit: JCCompilationUnit
+  PackageDeclaration: JCExpression
+  ImportDeclarations: ListBuffer<JCImport>
+  ImportDeclaration: JCImport
+  TypeDeclarations: ListBuffer<JCClassDecl>
+  TypeDeclaration: JCClassDecl
+  
+  ModifiersOpt: JCModifiers
+  Modifiers: JCModifiers
+  Modifier: Object
+  
+  AnnotationsOpt: List<JCAnnotation>
+  Annotations: ListBuffer<JCAnnotation>
+  Annotation: JCAnnotation
+  ElementValuePairs: ListBuffer<JCExpression>
+  ElementValuePair: JCAssign
+  ElementValue: JCExpression
+  ElementValueArrayInitializer: JCNewArray
+  ElementValues: ListBuffer<JCExpression>
+  
+  
+  // class declaration
+  ClassDeclaration: JCClassDecl
+  SuperClass: JCTree
+  ImplementsInterfaces: List<JCExpression>
+  ClassTypeList: ListBuffer<JCExpression>
+  
+  ClassBody: List<JCTree>
+  ClassBodyDeclarations: ListBuffer<JCTree>
+  ClassBodyDeclaration: ListBuffer<JCTree>
+  ClassMemberDeclaration: ListBuffer<JCTree>
+  InnerMemberDeclaration: JCClassDecl
+  
+  // method declaration
+  MethodDeclaration: JCMethodDecl
+  MethodHeader: JCMethodDecl
+  MethodDeclarator: MethodDeclarator
+  FormalParameterList: List<JCVariableDecl>
+  FormalParameterListRest: ListBuffer<JCVariableDecl>
+  FormalParameter:JCVariableDecl
+  Throws: List<JCExpression>
+  MethodBody: JCBlock
+  
+  
+  // constructor declaration
+  ConstructorDeclaration: JCMethodDecl
+  ConstructorDeclarator: MethodDeclarator
+  ConstructorBody: JCBlock
+  ExplicitConstructorInvocation: JCStatement
+  
+  // field declaration
+  FieldDeclaration:ListBuffer<JCTree>
+  VariableDeclarators:ListBuffer<VariableDeclarator>
+  VariableDeclarator:VariableDeclarator
+  VariableDeclaratorRest:JCExpression
+  VariableInitializer:JCExpression
+  ArrayInitializer:List<JCExpression>
+  VariableInitializerList:ListBuffer<JCExpression>
+  
+  
+  // interface declaration
+  InterfaceDeclaration: JCClassDecl
+  ExtendsInterfaces: List<JCExpression>
+  InterfaceBody: List<JCTree>
+  InterfaceBodyDeclarations: ListBuffer<JCTree>
+  InterfaceMemberDeclaration: ListBuffer<JCTree>
+  AbstractMethodDeclaration: JCMethodDecl
+  
+  
+  // enum declaration
+  EnumDeclaration: JCClassDecl
+  EnumBody: List<JCTree>
+  EnumConstantsOpt: List<JCTree>
+  EnumConstants: ListBuffer<JCTree>
+  EnumConstant: JCVariableDecl
+  EnumBodyDeclarations: ListBuffer<JCTree>
+  
+  
+  // annotation declaration
+  AnnotationTypeDeclaration: JCClassDecl
+  AnnotationTypeBody: List<JCTree>
+  AnnotationTypeMemberDeclarations: ListBuffer<JCTree>
+  AnnotationTypeMemberDeclaration: ListBuffer<JCTree>
+  AnnotationMethodDeclaration: JCMethodDecl
+  DefaultValue: JCExpression
+  
+  // block and statement
+  
+  Block:JCBlock
+  BlockStatements:ListBuffer<JCStatement>
+  BlockStatement:List<JCStatement>
+  
+  
+  Statement:JCStatement
+  
+  LocalVariableDeclaration: List<JCStatement>
+  
+  StatementExpression: JCExpressionStatement
+  AssertStatement: JCAssert
+  AssertExpressionRest: JCExpression
+  IfStatement: JCIf
+  
+  BreakStatement:JCBreak
+  ContinueStatement:JCContinue
+  ReturnStatement:JCReturn
+  
+  SwitchStatement:JCSwitch
+  SwitchBlock:List<JCCase>
+  SwitchCases:ListBuffer<JCCase>
+  SwitchCase:JCCase
+  
+  ForStatement: JCStatement
+  ForEnhancedInit: JCVariableDecl
+  ForInit:List<JCStatement>
+  ForUpdate:List<JCExpressionStatement>
+  StatementExpressionList:ListBuffer<JCExpressionStatement>
+  
+  WhileStatement:JCWhileLoop
+  DoStatement:JCDoWhileLoop
+  
+  TryStatement:JCTry
+  Catches:ListBuffer<JCCatch>
+  CatchClause:JCCatch
+  Finally:JCBlock
+  
+  
+  Primary: JCExpression
+  PrimaryNoNewArray: JCExpression
+  ClassLiteral: JCFieldAccess
+  
+  ClassInstanceCreationExpression: JCNewClass
+  AnonymousClassDeclaration: JCClassDecl
+  ArgumentList: List<JCExpression>
+  ArgumentListRest: ListBuffer<JCExpression>
+  
+  ArrayCreationExpression: JCNewArray
+  DimExprs: ListBuffer<JCExpression>
+  DimExpr: JCExpression
+  DimsOpt: int
+  Dims: int
+  
+  FieldAccess:JCFieldAccess
+  MethodInvocation:JCMethodInvocation
+  ArrayAccess:JCArrayAccess
+  
+  
+  
+  
+  // expression
+  
+  Expression:JCExpression
+  ConstExpression:JCExpression
+  PrimaryOrName:JCExpression
+  CastExpression:JCTypeCast
+  LeftHandSide:JCExpression
+  Assignment:JCExpression
+  AssignmentOperator:int
+  PreIncrementExpression:JCExpression
+  PreDecrementExpression:JCExpression
+  PostIncrementExpression:JCExpression
+  PostDecrementExpression:JCExpression
+
+productions:

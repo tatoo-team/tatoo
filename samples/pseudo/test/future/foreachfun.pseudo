@@ -1,0 +1,33 @@
+
+
+void foreach(List l) block(Link link) {
+   Link link=l.head;
+   while(link!=null) {
+     invoke link;
+     link=link.next;
+   }
+}
+
+void twice() block() {
+  invoke;
+  invoke;
+}
+
+{
+  let array=ARGS;
+  foreach(any a:array) {
+    print a;
+  }
+  
+  List l=new List();
+  init(l);
+  foreach(Link link:l) {
+    print link.element;
+  }
+  
+  int sum=0;
+  foreach(Link link:l) {
+    sum=sum+(link.element as Integer);
+  }
+  print sum;
+}

@@ -1,0 +1,5 @@
+// comment1
+text1 "string/* sdd*/" /** /*****
+ comment2***/ // comment3 /*
+ text2 */
+text3 // "comment4" 

@@ -1,0 +1,782 @@
+// Java (1.0) LR grammar loosely converted from 
+// Gosling, Joy, Steele: The Java Language Specification (1st ed.).
+
+directives:
+ autoalias
+
+priorities:
+ primary   = 14 left   // array index, method call, member access
+ unary     = 13 right  // pre/post operator, unary op, not, neg, cast, new
+ times     = 12 left   // times, divide, remainder
+ plus      = 11 left   // plus, minus
+ shift     = 10 left   // signed/unsigned shift
+ less      = 9  left   // less /than, greater /than, instanceof
+ equals    = 8  left   // equals, not equals
+ 
+ and       = 7  left   // bitwise and
+ xor       = 6  left   // bitwise xor
+ or        = 5  left   // bitwise or
+ band      = 4  left   // boolean and
+ bor       = 3  left   // boolean or
+ cond      = 2  right  // conditional (? :)
+ assign    = 1  right  // assign, operator assign
+ 
+ ifelse    = 0  right  // if ..., if ... else
+ 
+ 
+tokens:
+ times = '\*'                      [times]
+ divide = '\/'                     [times]
+ remainder ='%'                    [times]
+ plus = '\+'                       [plus]
+ minus = '-'                       [plus]
+ tilda = '~'                       [unary]
+ not = '!'                         [unary]
+ leftshift = '<<'                  [shift]
+ rightshiftsigned = '>>'           [shift]
+ rightshiftunsigned = '>>>'        [shift]
+ lt = '<'                          [less]
+ le = '<='                         [less]
+ gt = '>'                          [less]
+ ge = '>='                         [less]
+ eq = '=='                         [equals]
+ ne = '!='                         [equals]
+ xor = '\^'                        [xor]
+ and = '&'                         [and]
+ or = '\|'                         [or]
+ andand = '&&'                     [band]
+ oror = '\|\|'                     [bor]
+ plusplus = '\+\+'                 [unary]
+ minusminus = '--'                 [unary]
+ 
+ assign = '='                      [assign]
+ plusassign = '\+='                [assign]
+ minusassign = '-='                [assign]
+ timesassign = '\*='               [assign]
+ divideassign = '\/='              [assign]
+ andassign = '&='                  [assign]
+ orassign = '\|='                  [assign]
+ xorassign = '\^='                 [assign]
+ remainderassign = '%='            [assign]
+ leftshiftassign = '<<='           [assign]
+ rightshiftsignedassign = '>>='    [assign]
+ rightshiftunsignedassign = '>>>=' [assign]
+ 
+ _instanceof = 'instanceof'        [less]   
+ 
+ dot = '\.'                        
+ lpar = '\('                       
+ rpar = '\)'
+ lopt = '\['                       
+ ropt = '\]'
+ 
+ lcurl = '\{'
+ rcurl = '\}'
+ 
+ comma = ','
+ colon = ':'
+ semicolon = ';'
+ threedots = '\.\.\.'
+ questionmark = '\?'               [cond]
+ at = '@'
+ 
+ _boolean = "boolean"
+ _byte = "byte"
+ _short = "short"
+ _char = "char"
+ _int = "int"
+ _long = "long"
+ _float = "float"
+ _double = "double"
+ _void = "void"
+ 
+ _static = "static"
+ _synchronized = "synchronized"
+ _abstract = "abstract"
+ _native = "native"
+ _strictfp = "strictfp"
+ _final = "final"
+ _volatile = "volatile"
+ _transient = "transient"
+ _throws = "throws"
+ _public = "public"
+ _private = "private"
+ _protected = "protected"
+ 
+ _package = "package"
+ _import = "import"
+ _class = "class"
+ _enum = "enum"
+ _interface = "interface"
+ _implements = "implements"
+ _extends = "extends"
+ 
+ _this = "this"
+ _super = "super"
+ _new = "new"
+ _assert = "assert"
+ _if = "if"
+ _else = "else"                   [ifelse]
+ _for = "for"
+ _while = "while"
+ _do = "do"
+ _switch = "switch"
+ _case = "case"
+ _default = "default"
+ _return = "return"
+ _break = "break"
+ _continue = "continue"
+ _throw = "throw"
+ _try = "try"
+ _catch = "catch"
+ _finally = "finally"
+ 
+ booleanlit = "true|false"
+ characterlit = "'([^'])'"
+ stringlit = "\u0022([^\u0022])*\u0022"
+ floatingpointlit = "[0-9]*\.[0-9]*"
+ nulllit = "null"
+ integerlit = "[0-9]+"
+ 
+ identifier = "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*"
+ 
+
+blanks:
+ space= "( |\t|\r|\n)+"
+
+ 
+comments:
+
+versions:
+ jdk1_0
+ jdk1_1:jdk1_0
+ jdk1_2:jdk1_1
+ jdk1_3:jdk1_2
+ jdk1_4:jdk1_3
+ jdk1_5:jdk1_4
+ jdk1_6:jdk1_5
+ jdk1_7:jdk1_6
+ 
+starts:
+ CompilationUnit
+ Expression
+ Statement
+ Type
+
+productions:
+ Literal = 'integerlit'                { literal_integer }
+         | 'floatingpointlit'          { literal_floatingpoint }
+         | 'booleanlit'                { literal_boolean }
+         | 'characterlit'              { literal_character }
+         | 'stringlit'                 { literal_string }
+         | 'nulllit'                   { literal_null }
+         ;
+
+ Type = PrimitiveType                  { type_primitive }
+      | ReferenceType                  { type_reference }
+      ;
+
+ PrimitiveType = '_boolean'            { primitive_type_boolean } 
+               | '_byte'               { primitive_type_byte } 
+               | '_short'              { primitive_type_short } 
+               | '_int'                { primitive_type_int } 
+               | '_long'               { primitive_type_long } 
+               | '_char'               { primitive_type_char } 
+               | '_float'              { primitive_type_float } 
+               | '_double'             { primitive_type_double } 
+               ;
+                  
+ ReferenceType = ClassType             { reference_type_class_type }
+               | ArrayType             { reference_type_array_type }
+               ;
+              
+ ClassType = Name           { class_type }
+           ;
+               
+ ArrayType = PrimitiveType Dims      { array_type_primitive }
+           | Name Dims               { array_type_name }
+           ;
+ 
+ Name = SimpleName                        { name_simple }
+      | QualifiedName                     { name_qualified }
+      ;
+      
+ SimpleName = 'identifier'                { simple_name_identifier }
+            ;
+            
+ QualifiedName = Name 'dot' 'identifier'  { qualified_name_identifier }
+               ;
+
+ // in front of a package declaration only annotations are valid, this will be catch by semantics
+ CompilationUnit = ModifiersOpt PackageDeclaration                                      { compilation_unit_package }
+                 | ImportDeclarations                                                   { compilation_unit_imports }
+                 | ModifiersOpt PackageDeclaration ImportDeclarations                   { compilation_unit_package_imports }
+                 | TypeDeclarations                                                     { compilation_unit_type_declaration }
+                 | ModifiersOpt PackageDeclaration TypeDeclarations                     { compilation_unit_package_type_declaration }
+                 | ImportDeclarations TypeDeclarations                                  { compilation_unit_imports_type_declaration }
+                 | ModifiersOpt PackageDeclaration ImportDeclarations TypeDeclarations  { compilation_unit_package_imports_type_declaration }
+                 |                                                                      { compilation_unit_empty }
+                 ;
+
+ ImportDeclarations = ImportDeclaration                      { import_declarations_import_declaration }
+                    | ImportDeclarations ImportDeclaration   { import_declarations_import_declarations_import_declaration }
+                    ;
+
+ TypeDeclarations = TypeDeclaration                          { type_declarations_type_declaration }
+                  | TypeDeclarations TypeDeclaration         { type_declarations_type_declarations_type_declaration }
+                  ;
+ 
+ PackageDeclaration = '_package' Name 'semicolon'            { package_declaration }
+                    ;
+
+ ImportDeclaration = '_import' Name 'semicolon'                { import_declaration }
+                   | '_import' Name 'dot' 'times' 'semicolon'  { import_declaration_all }
+                   ;
+                               
+ TypeDeclaration = ClassDeclaration           { type_declaration_class_declaration }
+                 | InterfaceDeclaration       { type_declaration_interface_declaration }
+                 | EnumDeclaration            { type_declaration_enum_declaration: jdk1_5 }
+                 | AnnotationTypeDeclaration  { type_declaration_annotation_type_declaration: jdk1_5 }
+                 | 'semicolon'                { type_declaration_semicolon }
+                 ;
+ 
+ ModifiersOpt = Modifiers      { modifiers_opt_modifiers }
+              |                { modifiers_opt_empty }
+              ;
+ 
+ Modifiers = Modifier              { modifiers_singleton }
+           | Modifiers Modifier    { modifiers_recursive }
+           ;
+
+ Modifier = Annotation         { modifier_annotation: jdk1_5 }
+          | '_public'          { modifier_public }
+          | '_protected'       { modifier_protected }
+          | '_private'         { modifier_private }
+          | '_static'          { modifier_static }
+          | '_abstract'        { modifier_abstract }
+          | '_final'           { modifier_final }
+          | '_native'          { modifier_native }
+          | '_synchronized'    { modifier_synchronized }
+          | '_transient'       { modifier_transient }
+          | '_volatile'        { modifier_volatile }
+          | '_strictfp'        { modifier_strictfp: jdk1_2 }
+          ;
+ 
+ AnnotationsOpt = Annotations   { annotations_opt_annotations: jdk1_5 }
+                |               { annotations_opt_empty: jdk1_5 }
+                ;
+          
+ Annotations = Annotation              { annotations_singleton: jdk1_5 }
+             | Annotations Annotation  { annotations_recursive: jdk1_5 }
+             ;
+
+ Annotation = 'at' Name                                  { annotation_marker: jdk1_5 }
+            | 'at' Name 'lpar' ElementValue 'rpar'       { annotation_element: jdk1_5 }
+            | 'at' Name 'lpar' ElementValuePairs 'rpar'  { annotation_pairs: jdk1_5 }
+            ;           
+            
+ ElementValuePairs = ElementValuePair                            { element_value_pairs_singleton: jdk1_5 }
+                   | ElementValuePairs 'comma' ElementValuePair  { element_value_pairs_recursive: jdk1_5 }
+                   ;
+                  
+ ElementValuePair = 'identifier' 'assign' ElementValue   { element_value_pair: jdk1_5 }  
+                  ;                            
+
+ ElementValue = ConstExpression                  { element_value_expression: jdk1_5 }
+              | Annotation                       { element_value_annotation: jdk1_5 }
+              | ElementValueArrayInitializer     { element_value_array_initializer: jdk1_5 }
+              ;
+
+ ElementValueArrayInitializer = 'lcurl' 'rcurl'                { element_value_array_initializer_empty: jdk1_5 }
+                              | 'lcurl' ElementValues 'rcurl'  { element_value_array_initializer_element_values: jdk1_5 } 
+                              ;
+
+ ElementValues = ElementValue                         { element_values_singleton: jdk1_5 }
+               | ElementValues 'comma' ElementValue   { element_values_recursive: jdk1_5 }
+               ;
+               
+          
+ ClassDeclaration = ModifiersOpt '_class' 'identifier' SuperClass ImplementsInterfaces ClassBody      { class_declaration }
+                  ;         
+
+ SuperClass = '_extends' ClassType   { super_class_type }
+            |                        { super_class_empty }
+            ;
+           
+ ImplementsInterfaces = '_implements' ClassTypeList  { implements_class_type_list }
+                      |                              { implements_empty }
+                      ;
+                      
+ ClassTypeList = ClassType                           { class_type_list_class_type }
+               | ClassTypeList 'comma' ClassType     { class_type_list_class_type_list_class_type }
+               ;
+                  
+ ClassBody = 'lcurl' 'rcurl'                           { class_body_empty }
+           | 'lcurl' ClassBodyDeclarations 'rcurl'     { class_body_class_body_declarations }
+           ;
+           
+ ClassBodyDeclarations = ClassBodyDeclaration                        { class_body_declarations_class_body_declaration }
+                       | ClassBodyDeclarations ClassBodyDeclaration  { class_body_declarations_class_body_declarations_class_body_declaration }
+                       ;
+
+ ClassBodyDeclaration = ClassMemberDeclaration                 { class_body_declaration_class_member }
+                      | '_static' Block                        { class_body_declaration_static_block }
+                      | Block                                  { class_body_declaration_init_block:jdk1_1 }
+                      ;
+
+ ClassMemberDeclaration = FieldDeclaration           { class_member_declaration_field }
+                        | MethodDeclaration          { class_member_declaration_method }
+                        | ConstructorDeclaration     { class_member_declaration_constructor }
+                        | InnerMemberDeclaration     { class_member_declaration_inner: jdk1_1 }
+                        ;
+                        
+ InnerMemberDeclaration = ClassDeclaration           { inner_member_declaration_class: jdk1_1 }
+                        | InterfaceDeclaration       { inner_member_declaration_interface: jdk1_1 }
+                        | EnumDeclaration            { inner_member_declaration_enum: jdk1_5 }
+                        | AnnotationTypeDeclaration  { inner_member_declaration_annotation: jdk1_5 }
+                        ;
+                       
+ FieldDeclaration = ModifiersOpt Type VariableDeclarators 'semicolon'   { field_declaration }
+                  ;
+                  
+ VariableDeclarators = VariableDeclarator                              { variable_declarators_variable_declarator }
+                     | VariableDeclarators 'comma' VariableDeclarator  { variable_declarators_variable_declarators_variable_declarator }
+                     ;
+                     
+                    
+ VariableDeclarator = 'identifier' DimsOpt VariableDeclaratorRest      { variable_declarator_identifier }
+                    ;
+                 
+ VariableDeclaratorRest = 'assign' VariableInitializer  { variable_declarator_rest_init }
+                        |                               { variable_declarator_rest_empty }
+                        ;
+                     
+ VariableInitializer = Expression        { variable_initializer_expression }
+                     | ArrayInitializer  { variable_initializer_array }
+                     ;
+
+ MethodDeclaration = MethodHeader MethodBody   { method_declaration }
+                   ;
+                  
+ MethodHeader = ModifiersOpt Type MethodDeclarator Throws     { method_header_type }
+              | ModifiersOpt '_void' MethodDeclarator Throws  { method_header_void }
+              ;
+
+ MethodDeclarator = 'identifier' 'lpar' FormalParameterList 'rpar' DimsOpt  { method_declarator }
+                  ;
+ 
+ FormalParameterList = FormalParameterListRest        { formal_parameter_list_rest }
+                     |                                { formal_parameter_list_empty }
+                     ;
+                     
+ FormalParameterListRest = FormalParameter                           { formal_parameter_list_rest_formal_parameter }
+                         | FormalParameterListRest FormalParameter   { formal_parameter_list_rest_formal_parameter_list_rest_formal_parameter }
+                         ;
+
+ FormalParameter = AnnotationsOpt Type 'identifier' DimsOpt  { formal_parameter }
+                 ;
+ 
+ Throws = '_throws' ClassTypeList   { throws_class_type_list }
+        |                           { throws_empty }
+        ;
+ 
+ MethodBody = Block         { method_body_block }
+            | 'semicolon'   { method_body_empty }
+            ;
+                   
+                   
+ ConstructorDeclaration = ModifiersOpt ConstructorDeclarator Throws ConstructorBody    { constructor_declaration }
+                        ;
+
+ ConstructorDeclarator = 'identifier' 'lpar' FormalParameterList 'rpar'     { constructor_declarator }
+                       ;
+
+ ConstructorBody = 'lcurl' 'rcurl'                                                 { constructor_body_empty }
+                 | 'lcurl' ExplicitConstructorInvocation 'rcurl'                   { constructor_body_super }
+                 | 'lcurl' BlockStatements 'rcurl'                                 { constructor_body_block }
+                 | 'lcurl' ExplicitConstructorInvocation BlockStatements 'rcurl'   { constructor_body_super_block }
+                 ;
+                 
+ ExplicitConstructorInvocation = '_this' 'lpar' ArgumentList 'rpar' 'semicolon'                 { explicit_constructor_invocation_this }
+                               | '_super' 'lpar' ArgumentList 'rpar' 'semicolon'                { explicit_constructor_invocation_super }
+                               | Primary 'dot' '_this' 'lpar' ArgumentList 'rpar' 'semicolon'   { explicit_constructor_invocation_primary_this: jdk1_1 }
+                               | Primary 'dot' '_super' 'lpar' ArgumentList 'rpar' 'semicolon'  { explicit_constructor_invocation_primary_super: jdk1_1 }
+                               ;
+
+ InterfaceDeclaration = ModifiersOpt '_interface' 'identifier' ExtendsInterfaces InterfaceBody  { interface_declaration }
+                      ;
+
+ ExtendsInterfaces = '_extends' ClassTypeList  { extends_interfaces_class_type_list }
+                   |                           { extends_interfaces_empty }
+                   ;
+ 
+ InterfaceBody = 'lcurl' 'rcurl'                            { interface_body_empty }
+               | 'lcurl' InterfaceBodyDeclarations 'rcurl'  { interface_body_declarations }
+               ;
+               
+ InterfaceBodyDeclarations = InterfaceMemberDeclaration                            { interface_body_declarations_interface_body_declaration }
+                           | InterfaceBodyDeclarations InterfaceMemberDeclaration  { interface_body_declarations_interface_body_declarations_interface_body_declaration }
+                           ;
+ 
+ InterfaceMemberDeclaration = FieldDeclaration           { interface_member_declaration_constant }
+                            | AbstractMethodDeclaration  { interface_member_declaration_abstract_method }
+                            | InnerMemberDeclaration     { interface_member_declaration_inner: jdk1_1 }
+                            ;
+                     
+ AbstractMethodDeclaration = MethodHeader 'semicolon'  { abstract_method_declaration }
+                           ;
+                           
+ EnumDeclaration =  ModifiersOpt '_enum' 'identifier' ImplementsInterfaces EnumBody  { enum_declaration: jdk1_5 }
+                 ;
+                           
+ EnumBody = 'lcurl' EnumConstantsOpt EnumBodyDeclarations 'rcurl'   { enum_body: jdk1_5 }
+          ;
+          
+ EnumConstantsOpt = EnumConstants           { enum_constants_opt_enum_constants }
+                  | EnumConstants 'comma'   { enum_constants_opt_enum_constants_trailing_comma }
+                  |                         { enum_constants_opt_empty }
+                 ;        
+          
+ EnumConstants  = EnumConstant                         { enum_constants_singleton }
+                | EnumConstants 'comma' EnumConstant   { enum_constants_recursive }
+                ;
+
+ EnumConstant=  AnnotationsOpt 'identifier'                                        { enum_constant_identifier }
+             |  AnnotationsOpt 'identifier'  ClassBody                             { enum_constant_identifier_anonymous }
+             |  AnnotationsOpt 'identifier' 'lpar' ArgumentList 'rpar'             { enum_constant_constructor_invocation }
+             |  AnnotationsOpt 'identifier' 'lpar' ArgumentList 'rpar' ClassBody   { enum_constant_constructor_invocation_anonymous }
+             ;                            
+                           
+ EnumBodyDeclarations = 'semicolon' ClassBodyDeclarations   { enum_body_declarations_body } 
+                      |                                     { enum_body_declarations_empty }
+                      ;                          
+                      
+                      
+ AnnotationTypeDeclaration = 'at' '_interface' 'identifier' AnnotationTypeBody            { annotation_type_declaration_default: jdk1_5 }
+                           | Modifiers 'at' '_interface' 'identifier' AnnotationTypeBody  { annotation_type_declaration_modifiers: jdk1_5 }
+                           ;
+ 
+ AnnotationTypeBody = 'lcurl' 'rcurl'                                   { annotation_type_body_empty: jdk1_5 }
+                    | 'lcurl' AnnotationTypeMemberDeclarations 'rcurl'  { annotation_type_body_annotation_member_type_declarations: jdk1_5 }
+                    ;
+                    
+ AnnotationTypeMemberDeclarations = AnnotationTypeMemberDeclaration                                   { annotation_type_member_declarations_singleton }
+                                  | AnnotationTypeMemberDeclarations AnnotationTypeMemberDeclaration  { annotation_type_member_declarations_recursive }
+                                  ;
+
+ AnnotationTypeMemberDeclaration = FieldDeclaration             { annotation_type_member_declaration_field }
+                                 | AnnotationMethodDeclaration  { annotation_type_member_declaration_annotation_method }
+                                 | InnerMemberDeclaration       { annotation_type_member_declaration_inner }
+                                 ;
+                                  
+ AnnotationMethodDeclaration = ModifiersOpt Type 'identifier' 'lpar' 'rpar' DimsOpt DefaultValue 'semicolon'     { annotation_method_declaration_type } 
+                             ;                                
+                                  
+ DefaultValue = '_default' ElementValue   { default_value_element_value }
+              |                           { default_value_empty }
+              ;
+             
+                           
+ ArrayInitializer = 'lcurl' 'comma'? 'rcurl'                           { array_initializer_empty }
+                  | 'lcurl' VariableInitializerList 'comma'? 'rcurl'   { array_initializer_variable_initializer_list }
+                  ;
+
+ VariableInitializerList = VariableInitializer                                   { variable_initializer_list_variable_initializer }
+                         | VariableInitializerList 'comma' VariableInitializer   { variable_initializer_list_variable_initializer_list_variable_initializer }
+                         ;
+
+ Block = 'lcurl' 'rcurl'                   { block_empty }
+       | 'lcurl' BlockStatements 'rcurl'   { block_statements }
+       ;
+ 
+ BlockStatements = BlockStatement                    { block_statements_block_statement }
+                 | BlockStatements BlockStatement    { block_statements_block_statements_block_statement }
+                 ;
+                 
+ // local interface, local enum or local annotation type are allowed here but will be rejected by semantics                 
+ BlockStatement = LocalVariableDeclaration 'semicolon'  { block_statement_locals_declaration }
+                | Statement                             { block_statement_statement }
+                | ClassDeclaration                      { block_statement_declaration_local_class: jdk1_1 } 
+                | InterfaceDeclaration                  { block_statement_declaration_local_interface: jdk1_1 }
+                | EnumDeclaration                       { block_statement_declaration_local_enum: jdk1_5 }
+                | AnnotationTypeDeclaration             { block_statement_declaration_local_annotation_type: jdk1_5 }
+                ;
+                                   
+ LocalVariableDeclaration = Type VariableDeclarators                 { local_variable_declaration_default }
+                          | Modifiers Type VariableDeclarators       { local_variable_declaration_final: jdk1_1 } 
+                          ;
+
+ Statement = 'identifier' 'colon' Statement                   { statement_label }
+           | '_synchronized' 'lpar' Expression 'rpar' Block   { statement_synchronized }
+           | '_throw' Expression 'semicolon'                  { statement_throw }
+           | 'semicolon'                                      { statement_empty }
+           | AssertStatement 'semicolon'                      { statement_assert: jdk1_4 }
+           | IfStatement                                      { statement_if }
+           | WhileStatement                                   { statement_while }
+           | ForStatement                                     { statement_for }
+           | DoStatement                                      { statement_do }
+           | Block                                            { statement_block }
+           | StatementExpression 'semicolon'                  { statement_expression }
+           | SwitchStatement                                  { statement_switch }
+           | BreakStatement                                   { statement_break }
+           | ContinueStatement                                { statement_continue }
+           | ReturnStatement                                  { statement_return }
+           | TryStatement                                     { statement_try }
+           ;
+                     
+ StatementExpression = Assignment                       { statement_expression_assignment }
+                     | PreIncrementExpression           { statement_expression_pre_increment }
+                     | PreDecrementExpression           { statement_expression_pre_decrement }
+                     | PostIncrementExpression          { statement_expression_post_increment }
+                     | PostDecrementExpression          { statement_expression_post_decrement }
+                     | MethodInvocation                 { statement_expression_method_invocation }
+                     | ClassInstanceCreationExpression  { statement_expression_instance_creation }
+                     ;
+
+ AssertStatement = '_assert' Expression AssertExpressionRest { assert_statement: jdk1_4 }
+                 ;
+                 
+ AssertExpressionRest = 'colon' Expression  { assert_expression_rest_expression: jdk1_4 }
+                      |                     { assert_expression_rest_empty: jdk1_4 }
+                      ;
+
+ IfStatement = '_if' 'lpar' Expression 'rpar' Statement                    [ifelse]  { if_statement_if }
+             | '_if' 'lpar' Expression 'rpar' Statement '_else' Statement  [ifelse]  { if_statement_else }
+             ;    
+ 
+ SwitchStatement = '_switch' 'lpar' Expression 'rpar' SwitchBlock  { switch_statement }
+                 ;
+                 
+ SwitchBlock = 'lcurl' 'rcurl'               { switch_block_empty }
+             | 'lcurl' SwitchCases 'rcurl'   { switch_block_switch_cases}
+             ;
+             
+ SwitchCases = SwitchCase                    { switch_cases_switch_case }
+             | SwitchCases SwitchCase        { switch_cases_switch_cases_switch_case }
+             ;
+              
+ SwitchCase = '_case' Expression 'colon' BlockStatements   { switch_case_case }
+            | '_default' 'colon' BlockStatements           { switch_case_default }
+            ;
+
+ WhileStatement = '_while' 'lpar' Expression 'rpar' Statement  { while_statement }
+                ;
+                         
+ DoStatement = '_do' Statement '_while' 'lpar' Expression 'rpar' 'semicolon'  { do_statement }
+             ;
+              
+ ForStatement = '_for' 'lpar' ForInit 'semicolon' Expression? 'semicolon' ForUpdate 'rpar' Statement  { for_statement_classical }
+              | '_for' 'lpar' ForEnhancedInit 'colon' Expression 'rpar' Statement                     { for_statement_enhanced: jdk1_5 }
+              ;
+
+ ForEnhancedInit = Type 'identifier'             { for_enhanced_init_identifier: jdk1_5 }
+                 | Modifiers Type 'identifier'   { for_enhanced_init_modifiers: jdk1_5 }
+                 ;
+
+ ForInit = StatementExpressionList    { for_init_statement_expression_list }
+         | LocalVariableDeclaration   { for_init_local_variable_declaration }
+         |                            { for_init_empty }
+         ;
+ 
+ ForUpdate = StatementExpressionList  { for_update_statement_expression_list }
+           |                          { for_update_empty }
+           ;
+           
+ StatementExpressionList = StatementExpression                                   { statement_expression_list_statement_expression }
+                         | StatementExpressionList 'comma' StatementExpression   { statement_expression_list_statement_expression_list_statement_expression }
+                         ;
+                         
+ BreakStatement = '_break' 'semicolon'                     { break_statement_unamed }
+                | '_break' 'identifier' 'semicolon'        { break_statement_identifier }
+                ;
+                
+ ContinueStatement = '_continue' 'semicolon'               { continue_statement_unamed }
+                   | '_continue' 'identifier' 'semicolon'  { continue_statement_identifier }
+                   ;
+                   
+ ReturnStatement = '_return' 'semicolon'                   { return_statement_void }
+                 | '_return' Expression 'semicolon'        { return_statement_expression }
+                 ;
+ 
+ TryStatement = '_try' Block Catches           { try_statement_catches }
+              | '_try' Block Finally           { try_statement_finally }
+              | '_try' Block Catches Finally   { try_statement_cacthes_finally }
+              ;
+              
+ Catches = CatchClause           { catches_catch_clause }
+         | Catches CatchClause   { catches_catches_catch_clause }
+         ;
+         
+ CatchClause = '_catch' 'lpar' FormalParameter 'rpar' Block  { catch_clause }
+             ;
+ 
+ Finally = '_finally' Block  { _finally }
+         ;
+
+ Primary = PrimaryNoNewArray        { primary_no_new_array }
+         | ArrayCreationExpression  { primary_array_creation_expression }
+         ;
+
+ PrimaryNoNewArray = Literal                                        { primary_literal }
+                   | '_this'                                        { primary_this }
+                   | 'lpar' Expression 'rpar'            [primary]  { primary_parenthesis_expression }
+                   | ClassInstanceCreationExpression                { primary_instance_creation_expression }
+                   | FieldAccess                                    { primary_field_access }
+                   | MethodInvocation                               { primary_method_invocation }
+                   | ArrayAccess                                    { primary_array_access }
+                   | Name 'dot' '_this'                             { primary_name_this: jdk1_1 }
+                   | ClassLiteral                                   { primary_class_literal: jdk1_1 }
+                   ;
+                   
+ ClassLiteral = PrimitiveType 'dot' '_class'                   { class_literal_primitive: jdk1_1 }
+	          | '_void' 'dot' '_class'                         { class_literal_void: jdk1_1 }
+	          | ArrayType 'dot' '_class'                       { class_literal_array_type: jdk1_1 }
+	          | Name 'dot' '_class'                            { class_literal_name: jdk1_1 }
+              ;                 
+                   
+ PrimaryOrName = Primary       { primary_or_name_primary }
+               | Name          { primary_or_name_name }
+               ;                  
+
+ ClassInstanceCreationExpression = '_new' ClassType 'lpar' ArgumentList 'rpar'                                          { class_instance_creation_expression_default }
+                                 | '_new' ClassType 'lpar' ArgumentList 'rpar' AnonymousClassDeclaration                { class_instance_creation_expression_anonymous: jdk1_1 }
+                                 | Primary 'dot' '_new' ClassType 'lpar' ArgumentList 'rpar'                            { class_instance_creation_expression_expression_dot: jdk1_1 }
+                                 | Primary 'dot' '_new' ClassType 'lpar' ArgumentList 'rpar' AnonymousClassDeclaration  { class_instance_creation_expression_anonymous_expression_dot: jdk1_1 }
+                                 ;     
+                                 
+ AnonymousClassDeclaration = ClassBody   { anonymous_class_declaration }
+                           ;                                
+                                 
+ ArgumentList = ArgumentListRest  { argument_list_rest }
+              |                   { argument_list_empty }
+              ;
+              
+ ArgumentListRest = Expression                           { argument_list_rest_expression }
+                  | ArgumentListRest 'comma' Expression  { argument_list_rest_argument_list_rest_expression }
+                  ;
+              
+ ArrayCreationExpression = '_new' PrimitiveType DimExprs DimsOpt                { array_creation_expression_primive }
+                         | '_new' ClassType DimExprs DimsOpt                    { array_creation_expression_reference }
+                         | '_new' PrimitiveType DimExprs Dims ArrayInitializer  { array_creation_expression_primitive_initializer }
+                         | '_new' ClassType DimExprs Dims ArrayInitializer      { array_creation_expression_reference_initializer }
+                         ;
+                   
+ DimExprs = DimExpr                   { dim_exprs_dim_expr }
+          | DimExprs DimExpr          { dim_exprs_dim_exprs_dim_expr }
+          ;
+         
+ DimExpr = 'lopt' Expression 'ropt'   { dim_expr }
+         ;
+ 
+ DimsOpt = Dims                       { dims_opt_dims }
+         |                            { dims_opt_empty }
+         ;
+        
+ Dims = 'lopt' 'ropt'                 { dims_singleton }
+      | Dims 'lopt' 'ropt'            { dims_recursive }
+      ;
+ 
+ FieldAccess = Primary 'dot' 'identifier'      { field_access_primary }
+             | '_super' 'dot' 'identifier'     { field_access_super }
+             ;
+
+ MethodInvocation = Name 'lpar' ArgumentList 'rpar'                           { method_invocation_name }
+                  | Primary 'dot' 'identifier' 'lpar' ArgumentList 'rpar'     { method_invocation_primary_dot }
+                  | '_super' 'dot' 'identifier' 'lpar' ArgumentList 'rpar'    { method_invocation_super_dot }
+                  ;
+                  
+ ArrayAccess = Name 'lopt' Expression 'ropt'               { array_access_name }
+             | PrimaryNoNewArray 'lopt' Expression 'ropt'  { array_access_primary }
+             ;
+ 
+ PostIncrementExpression = PrimaryOrName 'plusplus'               [unary]      { post_increment_expression }
+                         ;
+                         
+ PostDecrementExpression = PrimaryOrName 'minusminus'             [unary]      { post_decrement_expression }
+                         ;
+                         
+ PreIncrementExpression = 'plusplus' PrimaryOrName                [unary]      { pre_increment_expression }
+                        ;
+                        
+ PreDecrementExpression = 'minusminus' PrimaryOrName              [unary]      { pre_decrement_expression }
+                        ;
+ 
+ CastExpression = 'lpar' PrimitiveType DimsOpt 'rpar' ConstExpression  [unary]      { cast_expression_primitive }
+                | 'lpar' Expression 'rpar' ConstExpression             [unary]      { cast_expression_expression }
+                | 'lpar' Name Dims 'rpar' ConstExpression              [unary]      { cast_expression_name }
+                ;
+                
+ Assignment = LeftHandSide AssignmentOperator Expression      [assign]     { assignment }
+            ;
+            
+ LeftHandSide = Name                   { lef_hand_side_name }
+              | FieldAccess            { lef_hand_side_field_access }
+              | ArrayAccess            { lef_hand_side_array_access }
+              ;
+              
+ AssignmentOperator = 'assign'                    { assign_op_assign }
+                    | 'plusassign'                { assign_op_plus }
+                    | 'minusassign'               { assign_op_minus }
+                    | 'timesassign'               { assign_op_times }
+                    | 'divideassign'              { assign_op_divide }
+                    | 'remainderassign'           { assign_op_remainder }
+                    | 'leftshiftassign'           { assign_op_left_shift }
+                    | 'rightshiftsignedassign'    { assign_op_right_sift_signed }
+                    | 'rightshiftunsignedassign'  { assign_op_right_sift_unsigned }
+                    | 'andassign'                 { assign_op_and }
+                    | 'orassign'                  { assign_op_or }
+                    | 'xorassign'                 { assign_op_xor }
+                    ;
+                    
+ ConstExpression = 
+       PrimaryOrName                                                                 { expression_primary }
+ 
+     | PostIncrementExpression                                                       { expression_post_increment }
+     | PostDecrementExpression                                                       { expression_post_decrement }
+            
+     | PreIncrementExpression                                                        { expression_pre_increment }
+     | PreDecrementExpression                                                        { expression_pre_decrement }
+     | 'plus' ConstExpression                                              [unary]   { expression_unary_plus }
+     | 'minus' ConstExpression                                             [unary]   { expression_unary_minus }
+                 
+     | 'not' ConstExpression                                               [unary]   { expression_not }
+     | 'tilda' ConstExpression                                             [unary]   { expression_complement }
+     | CastExpression                                                                { expression_cast }
+            
+     | ConstExpression 'times' ConstExpression                             [times]   { expression_times }
+     | ConstExpression 'divide' ConstExpression                            [times]   { expression_divide }
+     | ConstExpression 'remainder' ConstExpression                         [times]   { expression_remainder }
+            
+     | ConstExpression 'plus' ConstExpression                              [plus]    { expression_plus }
+     | ConstExpression 'minus' ConstExpression                             [plus]    { expression_minus }
+            
+     | ConstExpression 'leftshift' ConstExpression                         [shift]   { expression_left_shift }
+     | ConstExpression 'rightshiftsigned' ConstExpression                  [shift]   { expression_right_shift_signed }
+     | ConstExpression 'rightshiftunsigned' ConstExpression                [shift]   { expression_right_shift_unsigned }
+            
+     | ConstExpression 'lt' ConstExpression                                [less]    { expression_lt }
+     | ConstExpression 'gt' ConstExpression                                [less]    { expression_gt }
+     | ConstExpression 'le' ConstExpression                                [less]    { expression_le }
+     | ConstExpression 'ge' ConstExpression                                [less]    { expression_ge }
+     | ConstExpression '_instanceof' ReferenceType                         [less]    { expression_instanceof }
+            
+     | ConstExpression 'eq' ConstExpression                                [equals]  { expression_eq }
+     | ConstExpression 'ne' ConstExpression                                [equals]  { expression_ne }
+            
+     | ConstExpression 'and' ConstExpression                               [and]     { expression_bitwise_and }
+            
+     | ConstExpression 'xor' ConstExpression                               [xor]     { expression_bitwise_xor }
+            
+     | ConstExpression 'or' ConstExpression                                [or]      { expression_bitwise_or }
+            
+     | ConstExpression 'andand' ConstExpression                            [band]    { expression_boolean_and }
+            
+     | ConstExpression 'oror' ConstExpression                              [bor]     { expression_boolean_or }
+            
+     | ConstExpression 'questionmark' Expression 'colon' ConstExpression   [cond]    { expression_condition }
+            
+     ;
+                                                     
+ Expression = ConstExpression         { expression_const_expression }
+            | Assignment              { expression_assignment }
+            ;

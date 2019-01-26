@@ -1,0 +1,26 @@
+// simple calc grammar
+priorities:
+  low=0 none
+  high=1 none
+
+tokens:
+  semicolon= ';'
+ 
+blanks:
+  space= "( |\t|\n|\r)+"
+  
+branches:
+  expr    [ high ]
+  eof     [ low ]
+  
+types:
+  expr:int
+ 
+starts:
+  start
+
+productions:    
+  start = instr*                              { start }
+        ;
+  instr= expr 'semicolon'                     { instr }
+       ;

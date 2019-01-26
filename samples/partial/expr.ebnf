@@ -1,0 +1,22 @@
+// simple calc grammar
+tokens:
+  value= "[0-9]+"   
+  plus= '\+'             
+  lpar= '\('
+  rpar= '\)'
+ 
+blanks:
+  space= "( |\t|\n|\r)+"
+  
+types:
+  'value':int
+  expr:int
+ 
+starts:
+  expr
+
+productions:    
+  expr= 'value'                               { value }
+      | 'value' 'plus' expr                   { plus }
+      | 'lpar' expr 'rpar'                    { parens }
+      ;

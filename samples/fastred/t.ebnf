@@ -1,0 +1,11 @@
+tokens:
+ get = 'get'
+ id= 'id'
+ eoln = '\n'
+
+blanks:
+space= "( |\t)*"
+
+productions:
+start = request+ ;    request = 'get' 'eoln' header* endofline ;
+header= 'id' 'eoln' ;  endofline= 'eoln' ; 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+ 
+ <!-- Macros -->
+ <define-macro pattern="[ \t\r\n]*" name="space"/>
+ 
+ <define-macro pattern="[0-9]+" name="number"/>
+ 
+ <!-- Rules-->
+ <rule pattern="{space}" id="space"/>
+ 
+ <rule pattern="{number}" id="value"/>
+ 
+ <rule pattern="\+" id="plus"/>
+  
+ <rule pattern="-" id="minus"/>
+ 
+ <rule pattern="\*" id="star"/>
+  
+ <rule pattern=";" id="semicolon"/>
+ 
+ <rule pattern="\(" id="lpar"/>
+ 
+ <rule pattern="\)" id="rpar"/>
+ 
+</lexer>

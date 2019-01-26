@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+	<title>Parser Table</title>
+	<style type="text/css">
+		body {font-family: sans-serif; background:white}
+		h1 {border-style: solid;border-width: 1px;background: #E0E0FF;padding: 0.5cm;font: 180% sans-serif;text-align: center;}
+		h2 {font: 150% sans-serif;text-decoration: underline;}
+		h3 {font: 130% sans-serif;}td{background: #EEEEEE;}
+		td.g {background:white}
+		span.terminal { font-style:italic; color:#881122; }
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Parser Table</h1>
+<h2>Grammar</h2>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g">-root-1</td> <td class="g" align="center">::=</td>
+<td class="g">
+<a href="#expr">expr</a>&#160;<span class="terminal">␄</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span></td>
+</tr>
+</table>
+<table border="0" style="padding: 0.2cm">
+<tr>
+<td class="g" id="expr">expr</td> <td class="g" align="center">::=</td>
+<td class="g">
+<span class="terminal">value</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<span class="terminal">value</span>&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">plus</span>&nbsp;<span class="terminal">value</span></td>
+</tr>
+<tr><td class="g"></td><td class="g" align="center">|</td>
+<td class="g">
+<span class="terminal">lpar</span>&#160;<a href="#expr">expr</a>&#160;<span class="terminal">rpar</span></td>
+<td class="g"><i>all</i></td>
+<td class="g">expr:&nbsp;<span class="terminal">lpar</span>&nbsp;<span class="terminal">value</span>&nbsp;<span class="terminal">rpar</span></td>
+</tr>
+</table>
+
+
+<h2>Non Terminals</h2>
+<table border="1">
+<tr><th>Non terminal</th><th>Epsilon</th><th>First</th><th>Result</th><th>Last</th><th>Result</th><th>Follow</th><th>Result</th></tr>
+<tr id="NT:-root-1"><td>-root-1</td><td>false</td>
+<td><table border="0">
+<tr><td><span title='-root-1&#160;::=&#160;expr&#160;&apos;␄&apos;'>First(<a href='#NT:expr'>expr</a>)</span></td></tr></table></td><td><table border="0">
+<tr><td>lpar</td></tr><tr><td>value</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='-root-1&#160;::=&#160;expr&#160;&apos;␄&apos;'>␄</span></td></tr></table></td><td><table border="0">
+<tr><td>␄</td></tr></table></td>
+
+<td colspan="2" class="g"/>
+</tr>
+<tr id="NT:expr"><td>expr</td><td>false</td>
+<td><table border="0">
+<tr><td><span title='expr&#160;::=&#160;&apos;lpar&apos;&#160;expr&#160;&apos;rpar&apos;'>lpar</span></td></tr><tr><td><span title='expr&#160;::=&#160;&apos;value&apos;&#160;&apos;plus&apos;&#160;expr, expr&#160;::=&#160;&apos;value&apos;'>value</span></td></tr></table></td><td><table border="0">
+<tr><td>lpar</td></tr><tr><td>value</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='expr&#160;::=&#160;&apos;value&apos;'>value</span></td></tr><tr><td><span title='expr&#160;::=&#160;&apos;lpar&apos;&#160;expr&#160;&apos;rpar&apos;'>rpar</span></td></tr></table></td><td><table border="0">
+<tr><td>value</td></tr><tr><td>rpar</td></tr></table></td>
+
+<td><table border="0">
+<tr><td><span title='-root-1&#160;::=&#160;expr&#160;&apos;␄&apos;'>__eof__</span></td></tr><tr><td><span title='expr&#160;::=&#160;&apos;lpar&apos;&#160;expr&#160;&apos;rpar&apos;'>rpar</span></td></tr></table></td><td><table border="0">
+<tr><td>__eof__</td></tr><tr><td>rpar</td></tr></table></td>
+</tr>
+</table>
+
+<h2>Start States</h2>
+<table border="1">
+<tr><th>Non terminal</th><th>Start State</th></tr>
+<tr><td>expr</td><td><a href="#state0">state0</a></td></tr>
+</table>
+
+<h2>States</h2>
+<h3 id="state0">state0 - state 0:</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-1">-root-1</a>&#160;::=&#160;&#8226;&#160;<a href="#expr">expr</a>&#160;<span class="terminal">␄</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state1">state1</a></td></tr>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state7">state7</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state1">state1 - state 0: lpar</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;&#8226;&#160;<a href="#expr">expr</a>&#160;<span class="terminal">rpar</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state1">state1</a></td></tr>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state5">state5</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state2">state2 - state 0: value</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">value</span>&#160;&#8226;&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a></b></td></tr>
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">value</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>plus</td><td>:</td>
+<td>
+shift to <a href="#state3">state3</a></td></tr>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-1);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state3">state3 - state 0: value plus</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+<th>Gotoes</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">value</span>&#160;<span class="terminal">plus</span>&#160;&#8226;&#160;<a href="#expr">expr</a></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>lpar</td><td>:</td>
+<td>
+shift to <a href="#state1">state1</a></td></tr>
+<tr>
+<td>value</td><td>:</td>
+<td>
+shift to <a href="#state2">state2</a></td></tr>
+</table></td>
+<td><table border="0">
+<tr><td>expr</td><td>:</td><td><a href="#state4">state4</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state4">state4 - state 0: value plus value</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">value</span>&#160;<span class="terminal">plus</span>&#160;<a href="#expr">expr</a>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">value</span> <span class="terminal">plus</span> <a href="#expr">expr</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state5">state5 - state 0: lpar value</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">rpar</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+shift to <a href="#state6">state6</a></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state6">state6 - state 0: lpar value rpar</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#expr">expr</a>&#160;::=&#160;<span class="terminal">lpar</span>&#160;<a href="#expr">expr</a>&#160;<span class="terminal">rpar</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr>
+<td>rpar</td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+<a href='javascript:history.go(-3);'>reduce</a> by <a href='#expr'>expr</a> ::= <span class="terminal">lpar</span> <a href="#expr">expr</a> <span class="terminal">rpar</span></td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state7">state7 - state 0: value</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-1">-root-1</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;&#8226;&#160;<span class="terminal">␄</span></b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+accept</td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+exit exit</td></tr>
+</table></td>
+ 
+</tr>
+</table>
+<h3 id="state8">state8 - state 0: value ␄</h3>
+<p>Compatible versions :
+ DEFAULT
+</p>
+
+<table border="1">
+<tr><th>Kernel items</th><th>Actions</th>
+</tr>
+<tr><td>
+<table border="0">
+<tr><td><b><a href="#-root-1">-root-1</a>&#160;::=&#160;<a href="#expr">expr</a>&#160;<span class="terminal">␄</span>&#160;&#8226;</b></td></tr>
+</table></td>
+<td><table>
+<tr>
+<td>__eof__</td><td>:</td>
+<td>
+accept</td></tr>
+<tr><td><i>branch</i></td><td>:</td>
+<td>
+exit exit</td></tr>
+</table></td>
+ 
+</tr>
+</table>
+  <p style="margin-bottom: 100%">
+    <a href="http://validator.w3.org"><img
+        src="http://www.w3.org/Icons/valid-xhtml11"
+        alt="Valid XHTML 1.1" height="31" width="88" /></a>
+  </p>
+</body>
+</html>

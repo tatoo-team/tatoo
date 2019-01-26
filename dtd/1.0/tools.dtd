@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % TYPE "CDATA">
+<!ENTITY % BOOL "(true|false)">
+
+<!ELEMENT tools (rule+,import*,(terminal|non-terminal)+)>
+
+<!-- Rules -->
+
+<!ELEMENT rule EMPTY>
+<!ATTLIST rule id CDATA #REQUIRED
+ 											terminal-part CDATA #IMPLIED
+	           terminal CDATA #IMPLIED
+	           discard %BOOL; "true">
+
+<!-- Imports -->	 
+            
+<!ELEMENT import EMPTY>
+<!ATTLIST import type %TYPE; #REQUIRED>
+
+<!-- Terminals -->
+
+<!ELEMENT terminal EMPTY>
+<!ATTLIST terminal id CDATA #REQUIRED
+	               type %TYPE; #IMPLIED>
+
+<!-- Non-terminals-->
+
+<!ELEMENT non-terminal EMPTY>
+<!ATTLIST non-terminal id CDATA #REQUIRED
+	                   type %TYPE; #IMPLIED>
+	                     

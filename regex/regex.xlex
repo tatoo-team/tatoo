@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE lexer SYSTEM "http://tatoo.univ-mlv.fr/dtd/1.1/lexer.dtd">
+<lexer>
+ <rule-xml id="dot">
+  <main>
+   <letter value="."/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="hat">
+  <main>
+   <letter value="^"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="quote">
+  <main>
+   <letter value="&quot;"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="comma">
+  <main>
+   <letter value=","/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="star">
+  <main>
+   <letter value="*"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="plus">
+  <main>
+   <letter value="+"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="minus">
+  <main>
+   <letter value="-"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="slash">
+  <main>
+   <letter value="/"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="dollar">
+  <main>
+   <letter value="$"/>
+  </main>
+ </rule-xml>
+  
+ <rule-xml id="question">
+  <main>
+   <letter value="?"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="lbrak">
+  <main>
+   <letter value="["/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="rbrak">
+  <main>
+   <letter value="]"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="lbrac">
+  <main>
+   <letter value="{"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="rbrac">
+  <main>
+   <letter value="}"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="lpar">
+  <main>
+   <letter value="("/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="rpar">
+  <main>
+   <letter value=")"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="pipe">
+  <main>
+   <letter value="|"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="eoln">
+  <main>
+   <string value="\\n"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="cr">
+  <main>
+   <string value="\\r"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="formfeed">
+  <main>
+   <string value="\\f"/>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="tab">
+  <main>
+   <string value="\\t"/>
+  </main>
+ </rule-xml>
+
+  <rule-xml id="backspace">
+  <main>
+   <string value="\\b"/>
+  </main>
+ </rule-xml>
+
+ <rule-xml id="unicodeChar">
+  <main>
+   <cat>
+    <letter value="\\"/>
+    <letter value="u"/>
+    <range from="1" to="4">
+     <set>
+      <interval from="0" to="9"/>
+      <interval from="A" to="F"/>
+      <interval from="a" to="f"/>
+     </set>
+    </range>
+   </cat>
+  </main>
+ </rule-xml>
+
+ <rule-xml id="escapedChar">
+  <main>
+   <cat>
+    <letter value="\\"/>
+    <or>
+     <letter value="^"/>
+     <letter value="."/>
+     <letter value="["/>
+     <letter value="$"/>
+     <letter value="("/>
+     <letter value=")"/>
+     <letter value="|"/>
+     <letter value="*"/>
+     <letter value="+"/>
+     <letter value="?"/>
+     <letter value="{"/>
+     <letter value="\\"/>
+     <letter value="/"/>
+     <letter value="}"/>
+     <letter value="]"/>
+     <letter value=","/>
+     <letter value="&quot;"/>
+    </or>
+   </cat>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="stringEscapedChar">
+  <main>
+   <cat>
+    <letter value="\\"/>
+    <or>
+     <letter value="\\"/>
+     <letter value="&quot;"/>
+    </or>
+   </cat>  
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="intervalEscapedChar">
+  <main>
+   <cat>
+    <letter value="\\"/>
+    <or>
+     <letter value="\\"/>
+     <letter value="]"/>
+     <letter value="-"/>
+     <letter value="^"/>
+    </or>
+   </cat>  
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="normalChar">
+  <main>
+   <set negate="true">
+    <letter value="^"/>
+    <letter value="$"/>
+    <letter value="\\"/>
+    <letter value="|"/>
+    <letter value="*"/>
+    <letter value="?"/>
+    <letter value="+"/>
+    <letter value=")"/>
+    <letter value="]"/>    
+    <letter value="}"/>
+    <letter value="{"/>
+    <letter value="/"/>
+    </set>
+  </main>
+ </rule-xml>
+ 
+ <rule-xml id="stringChar">
+  <main>
+   <set negate="true">
+    <letter value="&quot;"/>
+				<letter value="\\"/>
+   </set>
+  </main>
+ </rule-xml>
+
+ <rule-xml id="intervalChar">
+  <main>
+   <set negate="true">
+    <letter value="]"/>
+				<letter value="\\"/>
+    <letter value="-"/>
+    <letter value="^"/>
+   </set>
+  </main>
+ </rule-xml>
+
+ <rule-xml id="integer">
+  <main>
+   <cat>
+    <interval from="1" to="9"/>
+    <star>
+     <set>
+      <interval from="0" to="9"/>
+     </set>
+    </star>
+   </cat>
+  </main>
+ </rule-xml>
+
+ <rule-xml id="macro">
+  <main>
+   <cat>
+    <letter value="{"/>
+    <set>
+     <interval from="a" to="z"/>
+     <interval from="A" to="Z"/>
+     <letter value="_"/>
+    </set>
+    <star>
+     <set>
+      <interval from="a" to="z"/>
+      <interval from="A" to="Z"/>
+      <interval from="0" to="9"/>
+      <letter value="_"/>
+     </set>
+    </star>
+    <letter value="}"/>
+   </cat>
+  </main>
+ </rule-xml>
+
+</lexer>

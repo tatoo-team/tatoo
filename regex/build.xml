@@ -1,0 +1,74 @@
+<project name="tatoo-cc-regex" default="all" basedir=".">
+	<!-- need cc and runtime -->
+	
+	<!-- global properties -->
+  <property name="prop.dir" location=".."/>
+  <property file="${prop.dir}/tatoo.properties"/>
+	
+	<!-- local properties -->
+	<property name="source" value="1.5"/>
+	<property name="src" location="src"/>
+	<property name="gen-src" location="gen-src"/>
+	<property name="classes" location="classes"/>
+	<!-- property name="logfile" location="log.html"/-->
+	<property name="packagePrefix" value="fr.umlv.tatoo.cc.lexer.regex.pattern"/>
+	
+	<target name="all" depends="jar"/>
+	<target name="generate">
+		<!-- because taskdef prohibits update of tatoo.jar which need deletion first -->
+		<tempfile property="tmp-tatoo" suffix="-tmp.jar" destdir="." deleteOnExit="true"/>
+		<echo message="${tmp-tatoo}"/>
+		<copy file="${jar-path}" tofile="${tmp-tatoo}"/>
+		<taskdef name="lexer" classname="fr.umlv.tatoo.cc.lexer.main.LexerTask" classpath="${tmp-tatoo}:${motocity-path}"/>
+		<taskdef name="parser" classname="fr.umlv.tatoo.cc.parser.main.ParserTask" classpath="${tmp-tatoo}:${motocity-path}"/>
+		<taskdef name="tools" classname="fr.umlv.tatoo.cc.tools.main.ToolsTask" classpath="${tmp-tatoo}:${motocity-path}"/>
+		<lexer destination="${gen-src}" lexerFile="regex.xlex" validating="${validating}"
+			packageprefix="${packagePrefix}"/>
+		<parser destination="${gen-src}" parserFile="regex.xpars" parsertype="lalr" validating="${validating}"
+		    	  loglevel="FINE"
+			  packageprefix="${packagePrefix}"/>
+		<tools destination="${gen-src}" lexerFile="regex.xlex" parserFile="regex.xpars" toolsFile="regex.xtls"
+		      validating="${validating}" packageprefix="${packagePrefix}"/>
+	</target>
+	
+	<target name="compile" depends="generate">
+		<mkdir dir="${classes}"/>
+		<javac target="${target}" source="${source}" debug="${debug}" srcdir="${src}:${gen-src}" destdir="${classes}">
+			<classpath path="${jar-runtime-path}:${jar-path}"/>
+			<compilerarg value="-Xlint:deprecation"/>
+			<!-- compilerarg value="-Xlint:unchecked"/ -->
+		</javac>
+		<copy todir="${classes}">
+			<fileset dir="${src}">
+				<exclude name="**/*.java"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+			<fileset dir="${gen-src}">
+				<exclude name="**/*.java"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="jar" depends="compile,jar-nocompile"/>
+	
+	<target name="jar-nocompile">
+		<tempfile property="tmp-classes" suffix="-classes" destdir="." deleteOnExit="true"/>
+		<unzip src="${jar-runtime-path}" dest="${tmp-classes}"/>
+		<jar basedir="${classes}" destfile="${jar-path}" update="true"/>
+		<jar basedir="${tmp-classes}" destfile="${jar-path}" update="true"/>
+		<delete dir="${tmp-classes}"/>
+	</target>
+	
+	<target name="clean">
+		<!-- delete file="${logfile}"/-->
+		<delete dir="${classes}"/>
+		<delete dir="${gen-src}"/>
+		<mkdir dir="${gen-src}"/>
+	</target>
+	
+	<target name="flat-src">
+		<zip basedir="${src}" destfile="${lib}/${flat-src-zip}" update="true"/>
+		<zip basedir="${gen-src}" destfile="${lib}/${flat-src-zip}" update="true"/>
+	</target>
+</project>

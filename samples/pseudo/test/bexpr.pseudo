@@ -1,0 +1,6 @@
+{
+  let index=0;
+  boolean b=(new boolean[index+1])[index];
+
+
+}

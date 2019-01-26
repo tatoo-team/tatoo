@@ -1,0 +1,27 @@
+// calculatrice infixe (polonaise inverse)
+// + 2 3
+
+double parse() {
+  if (canScanDouble()) {
+     return scanDouble();
+  }
+  let operator=scanWord();
+  if (operator=="+") {
+    return parse()+parse();
+  }
+  if (operator=="-") {
+    return parse()-parse();
+  }
+  if (operator=="/") {
+    return parse()/parse();
+  }
+  if (operator=="*") {
+    return parse()*parse();
+  }
+  throw "unknown operator "+operator;
+}
+
+{
+  let value=parse();
+  print "= "+value;
+}

@@ -1,0 +1,206 @@
+// pseudo language grammar
+directives:
+  autoalias
+
+imports:
+ 
+priorities:
+assign=           0 nonassoc
+as =              1 right
+neg =             2 right
+boolean_and_or =  3 left 
+eq =              4 left
+boolean_to_expr = 5 nonassoc
+plus_minus=       6 left
+star_slash=       7 left
+dot =             8 left
+arrayindex =      9 left 
+if_else=          0 right
+
+tokens:
+  plus= '\+'                 [plus_minus]
+  minus= '-'                 [plus_minus]
+  star= '\*'                 [star_slash]
+  slash='\/'                 [star_slash]
+  mod='%'                    [star_slash]
+  band='&&'                  [boolean_and_or]
+  bor='\|\|'                 [boolean_and_or]
+  eq='=='                    [eq]
+  neq='!='                   [eq]
+  lt='<'                     [eq]
+  gt='>'                     [eq]
+  le='<='                    [eq]
+  ge='>='                    [eq]
+  assign= '='                [assign]
+  lpar= '\('
+  rpar= '\)'
+  lcurl='\{'
+  rcurl='\}'
+  bang='!'                   [neg]
+  angle_brackets:void='\[\]'
+  langle='\['                [arrayindex]
+  rangle='\]'
+  dot='\.'                   [dot]
+  colon=':'
+  semicolon=';'
+  comma=','
+  struct="struct"
+  let="let"
+  _new='new'
+  as="as"                     [as]
+  _instanceof="instanceof"    [eq]
+  _if='if'
+  _while='while'
+  _for='for'
+  _do='do'
+  _break='break'
+  _continue='continue'
+  _else='else'                [if_else]
+  _null='null'
+  print="print"
+  _throw="throw"
+  _return="return"
+  _void="void"
+  boolean_const:boolean="true|false"
+  string_const:String='\u0022([^\u0022])*\u0022'
+  value:int= "[0-9]+"
+  id:String= "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*"
+ 
+blanks:
+ space= "( |\t|\r|\n)+"
+
+comments:
+ comment="\/\/([^\r\n])*(\r)?\n"
+
+error:
+ error
+
+starts:
+ script
+
+productions:
+  script = member* block { script }
+         ;
+ 
+  member = function_decl { member_function }
+         | struct_decl   { member_struct_decl }
+         ;
+                     
+  struct_decl = 'struct' 'id' 'lcurl' field_decl* 'rcurl' { struct_decl }
+              ;
+                     
+  type_name = 'id' 'angle_brackets'* { type_name }
+            ;
+                     
+  field_decl = type_name 'id' 'semicolon' { field_decl_id }
+             | 'error' 'semicolon'        { field_decl_error }
+             ;
+ 
+  function_decl = rtype 'id' 'lpar' param/'comma'* 'rpar' block { function_decl }
+               ;
+               
+  rtype = type_name  { rtype_type_name }
+        | '_void'    { rtype_void }
+        ;
+               
+  param = type_name 'id' { param }
+              ;
+ 
+ block = 'lcurl' block_instr* 'rcurl' { block }
+           ;
+
+ conditional = '_if' 'lpar' expr 'rpar' instr '_else' instr   [if_else] { conditional_if_else }
+             | '_if' 'lpar' expr 'rpar' instr                 [if_else] { conditional_if }
+             ;
+                                                      
+ instr = assignation 'semicolon'           { instr_assignation }
+         | builtin 'semicolon'             { instr_builtin }
+         | funcall 'semicolon'             { instr_funcall }
+         | conditional                     { instr_conditional }
+         | loop_label? loop                { instr_loop }
+         |  '_break' 'id'? 'semicolon'     { instr_break }
+         |  '_continue' 'id'? 'semicolon'  { instr_continue }  
+         | '_return' expr? 'semicolon'     { instr_return }
+         |  '_throw' expr 'semicolon'      { instr_throw }
+         | block                           { instr_block }
+         | 'semicolon'                     { instr_empty }
+         | 'error' 'semicolon'             { instr_error }
+         ;
+         
+ block_instr = decl 'semicolon'         { block_instr_decl }
+             | instr                    { block_instr_instr } 
+             ;
+
+ decl = type_name 'id' var_init?        { decl_var_type }
+      |  'let' 'id' 'assign' expr    { decl_var_let }
+      ;
+         
+  var_init = 'assign' expr   { var_init }
+        ;
+         
+ assignation = lvalue 'assign' expr   { assignation }
+                    ;  
+                    
+ lvalue = 'id'                    { lvalue_id }
+            | expr 'dot' 'id'     { lvalue_field }
+            | expr array_index    { lvalue_array_index }
+            ;
+                    
+ builtin = 'print' expr   { builtin_print }
+         ;
+
+ funcall = 'id' 'lpar' expr/'comma'* 'rpar' { funcall }   
+         ;
+ 
+ array_index = 'langle' expr 'rangle'    [arrayindex] { array_index }
+             ;
+ 
+ allocation = '_new' 'id' 'lpar' 'rpar'                                { allocation_object }
+            | '_new' 'id' 'angle_brackets'* array_index+ [arrayindex]  { allocation_array }
+            ;
+ 
+ loop = '_while' 'lpar' expr 'rpar' instr                                                       { loop_while }
+      | '_for' 'lpar' for_loop_init? 'semicolon' expr? 'semicolon' for_loop_incr? 'rpar' instr  { loop_for}
+      ;
+ 
+ for_loop_init = decl           { for_loop_init_decl }
+               | assignation    { for_loop_init_assignation }
+               | funcall        { for_loop_init_funcall }
+               ;
+ 
+ for_loop_incr = assignation     { for_loop_incr_assignation }
+               |  funcall        { for_loop_incr_funcall }
+               ;
+ 
+ loop_label = 'id' 'colon'       { loop_label }
+            ;
+ 
+ expr = 'boolean_const'                                  { expr_boolean_const }
+      | 'id'                                             { expr_var }
+      | expr 'dot' 'id'                [dot]             { expr_field_access }
+      | expr array_index                                 { expr_array_index }
+      | funcall                                          { expr_funcall }
+      | expr '_instanceof' type_name                     { expr_instanceof } 
+      | expr 'eq' expr                 [eq]              { expr_eq }
+      | expr 'neq' expr                [eq]              { expr_neq }
+      | expr 'lt' expr                 [eq]              { expr_lt }
+      | expr 'le' expr                 [eq]              { expr_le }
+      | expr 'gt' expr                 [eq]              { expr_gt }
+      | expr 'ge' expr                 [eq]              { expr_ge }
+      | 'bang' expr                    [neg]             { expr_neg }
+      | expr 'band' expr               [boolean_and_or]  { expr_band }
+      | expr 'bor' expr                [boolean_and_or]  { expr_bor }
+      | 'lpar' expr 'rpar'                               { expr_parens }
+      | 'lpar' 'error' 'rpar'                            { expr_error }
+      | 'value'                                          { expr_value }
+      | 'string_const'                                   { expr_string }
+      | '_null'                                          { expr_null }
+      | allocation                                       { expr_allocation }
+      | expr 'as' type_name            [as]              { expr_as }
+      | expr 'plus' expr               [plus_minus]      { expr_plus }
+      | expr 'minus' expr              [plus_minus]      { expr_minus }
+      | expr 'star' expr               [star_slash]      { expr_star }
+      | expr 'slash' expr              [star_slash]      { expr_slash }
+      | expr 'mod' expr                [star_slash]      { expr_mod }
+      ;
+	
