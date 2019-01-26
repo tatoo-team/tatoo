@@ -1,4 +1,4 @@
-#![tatoo logo](tatoo.gif) Tatoo compiler compiler ![animated tatoo logo](tatoo-anim.gif)
+# ![tatoo logo](tatoo.gif) Tatoo compiler compiler ![animated tatoo logo](tatoo-anim.gif)
 
 ## Tatoo is a compiler compiler which features:
 
