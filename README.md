@@ -1,6 +1,6 @@
 # ![tatoo logo](tatoo.gif) Tatoo compiler compiler ![animated tatoo logo](tatoo-anim.gif)
 
-## Tatoo is a compiler compiler which features:
+### Tatoo is a compiler compiler which features:
 
 - separate specifications for lexer (regular expression based rules), parser (grammar) and semantics (java interface implementation);
 - push analyzer: the characters are fed to the analyzer so it allows asynchronous usage (for instance with thread pool and selectors);
